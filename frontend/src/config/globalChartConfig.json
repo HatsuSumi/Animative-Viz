@@ -1,0 +1,41 @@
+{
+  "layout": {
+    "margin": { 
+      "top": 50, 
+      "right": 50, 
+      "bottom": 50, 
+      "left": 200 
+    }
+  },
+  
+  "style": {
+    "fontSize": "24px",
+    "fontWeight": "bold",
+    "axis": {
+      "fontSize": "16px",
+      "fontWeight": "normal",
+      "color": "#1976D2"
+    }
+  },
+  
+  "labels": {
+    "xAxis": "累计得票数",
+    "yAxis": "名次"
+  },
+  
+  "limits": {
+    "maxDisplay": 50
+  },
+
+  "trend": {
+    "equal": "#FFC107",
+    "down": "#F44336"
+  },
+
+  "finalRank": {
+    "top1": "#FF9800",
+    "top2": "#FF69B4",
+    "top3": "#32CD32",
+    "other": "#2196F3"
+  }
+}

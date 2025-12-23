@@ -1,0 +1,76 @@
+/* 确认模态框样式 */
+.confirmation-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.confirmation-modal-content {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  max-width: 90%;
+  padding: 0;
+  overflow: hidden;
+}
+
+.confirmation-modal-header {
+  background-color: #f0f0f0;
+  padding: 15px 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.confirmation-modal-title {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+  text-align: center;
+}
+
+.confirmation-modal-body {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.confirmation-modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.confirmation-modal-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.confirmation-modal-button:hover {
+  transform: scale(1.05);
+}
+
+.confirmation-modal-button:active {
+  transform: scale(0.95);
+}
+
+.confirmation-modal-confirm {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.confirmation-modal-cancel {
+  background-color: #f44336;
+  color: white;
+}

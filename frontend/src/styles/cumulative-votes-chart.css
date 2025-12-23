@@ -1,0 +1,98 @@
+.cumulative-votes-chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  height: 90vh;
+  margin: 0;
+  padding: 0;
+}
+
+.chart-page-header {
+  text-align: center;
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.bar, .bar-label {
+  transform: translateZ(0);
+  will-change: transform, opacity, width;
+  backface-visibility: hidden;
+}
+
+.bar {
+  transition: all 0.3s ease;
+}
+
+.bar:hover {
+  opacity: 0.7;
+}
+
+.domain {
+  stroke: #888;
+  stroke-width: 1px;
+}
+
+.tick line {
+  stroke: #ccc;
+  stroke-width: 1px;
+}
+
+.tick text {
+  font-size: 12px;
+  fill: #666;
+}
+
+.chart-page-header h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 24px;
+  color: #FF6B35;
+  font-weight: bold;
+}
+
+svg {
+  margin: auto;
+  overflow: visible;
+}
+
+.axis-label {
+  font-size: 12px;
+  fill: #666;
+  font-weight: normal;
+}
+
+.progress-container {
+  width: 1000px;
+  height: 4px;
+  background-color: #eee;
+  border-radius: 2px;
+  margin: 12px auto 20px;
+  position: relative;
+  z-index: 9999;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 2px;
+  position: absolute;
+  left: 0;
+  width: 0;
+  transition: none; 
+}
+
+.progress-bar.green {
+  background-color: #4CAF50;
+}
+
+.progress-bar.yellow {
+  background-color: #FFC107;
+}
+
+.progress-bar.red {
+  background-color: #F44336;
+}
