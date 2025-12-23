@@ -24,6 +24,7 @@ backend/vote_tracker_info.log
 
 # 数据文件
 backend/data/.latest
+backend/data/2024_season.csv
 
 # 环境变量
 .env
