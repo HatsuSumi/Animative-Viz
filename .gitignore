@@ -41,6 +41,7 @@ Thumbs.db
 # IDE 配置文件
 .vscode/
 .idea/
+.specstory/
 *.suo
 *.ntvs*
 *.njsproj
