@@ -20,6 +20,7 @@ const CumulativeVotesChart = ({
 
   const svgRef = useRef(null);
   const animationTimeoutsRef = useRef([]);
+  const animationStartRoundIndexRef = useRef(currentRoundIndex);
   const [processedData, setProcessedData] = useState([]);
   const [animationKey, setAnimationKey] = useState(0);
   const [currentMilestone, setCurrentMilestone] = useState(null);
@@ -48,6 +49,10 @@ const CumulativeVotesChart = ({
     setAnimationKey(prev => prev + 1);
   }, [data, voteRounds]);
 
+  useEffect(() => {
+    animationStartRoundIndexRef.current = currentRoundIndex;
+  }, [currentRoundIndex]);
+
   const clearAnimationTimeouts = useCallback(() => {
     animationTimeoutsRef.current.forEach(timeoutId => {
       clearTimeout(timeoutId);
@@ -63,7 +68,7 @@ const CumulativeVotesChart = ({
       processedData,
       svgRef,
       voteRounds,
-      currentRoundIndex,
+      currentRoundIndex: animationStartRoundIndexRef.current,
       participatingCounts,
       currentSeason,
       currentSeasonConfig,

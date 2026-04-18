@@ -5,7 +5,6 @@ import FileUploader from '../components/FileUploader';
 import ColumnExclusionModal from '../components/ColumnExclusionModal';
 import ConfirmationModal from '../components/ConfirmationModal';
 import ExcludeSpecialRoundsModal from '../components/ExcludeSpecialRoundsModal';
-import CumulativeVotesChart from '../components/CumulativeVotesChart';
 import RecordVideoModal from '../components/RecordVideoModal';
 import { getVotesByRounds } from '../services/api';
 import '../styles/global.css';
@@ -18,19 +17,27 @@ const HomePage = () => {
   const [showSpecialRoundsModal, setShowSpecialRoundsModal] = useState(false);
   const [showRecordModal, setShowRecordModal] = useState(false);
   const [selectedColumns, setSelectedColumns] = useState([]);
-  const [processedData, setProcessedData] = useState(null);
   const [excludeWildcard, setExcludeWildcard] = useState(false);
   const [excludeRanking, setExcludeRanking] = useState(false);
   const [shouldRecord, setShouldRecord] = useState(false);
 
-  const navigateToChart = useCallback((navigationState) => {
-    navigate('/cumulative-votes', { 
+  const navigateWithVotesData = useCallback(async (filterOptions, shouldRecordValue) => {
+    const data = await getVotesByRounds(filterOptions);
+
+    if (!data.votes_data || !data.vote_rounds) {
+      throw new Error('获取的数据不完整');
+    }
+
+    navigate('/cumulative-votes', {
       state: {
-        ...navigationState,
-        shouldRecord
+        votesData: data.votes_data,
+        voteRounds: data.vote_rounds,
+        participatingCounts: data.participating_counts || {},
+        filterOptions,
+        shouldRecord: shouldRecordValue
       }
     });
-  }, [navigate, shouldRecord]);
+  }, [navigate]);
 
   const handleUploadSuccess = async () => {
     setShowConfirmationModal(true);
@@ -42,17 +49,7 @@ const HomePage = () => {
       setShowColumnExclusionModal(true);
     } else {
       try {
-        const data = await getVotesByRounds({});
-        
-        if (!data.votes_data || !data.vote_rounds) {
-          throw new Error('获取的数据不完整');
-        }
-        const navigationState = {
-          votesData: data.votes_data,
-          voteRounds: data.vote_rounds,
-          participatingCounts: data.participating_counts || {}, 
-        };
-        navigateToChart(navigationState);
+        await navigateWithVotesData({}, shouldRecord);
       } catch (error) {
         setError(error.message || '获取数据失败，请重试');
       }
@@ -94,23 +91,8 @@ const HomePage = () => {
         excludeWildcard,
         excludeRanking
       };
-      
-      // 获取投票数据
-      const data = await getVotesByRounds(filterOptions);
-      
-      if (!data.votes_data || !data.vote_rounds) {
-        throw new Error('获取的数据不完整');
-      }
-      
-      // 传递完整的数据到图表页面
-      const navigationState = {
-        votesData: data.votes_data,
-        voteRounds: data.vote_rounds,
-        participatingCounts: data.participating_counts || {},
-        filterOptions
-      };
-      
-      navigateToChart(navigationState);
+
+      await navigateWithVotesData(filterOptions, true);
     } catch (error) {
       console.error('Error navigating to chart:', error);
     }
@@ -125,23 +107,8 @@ const HomePage = () => {
         excludeWildcard,
         excludeRanking
       };
-      
-      // 获取投票数据
-      const data = await getVotesByRounds(filterOptions);
-      
-      if (!data.votes_data || !data.vote_rounds) {
-        throw new Error('获取的数据不完整');
-      }
-      
-      // 传递完整的数据到图表页面
-      const navigationState = {
-        votesData: data.votes_data,
-        voteRounds: data.vote_rounds,
-        participatingCounts: data.participating_counts || {},
-        filterOptions
-      };
-      
-      navigateToChart(navigationState);
+
+      await navigateWithVotesData(filterOptions, false);
     } catch (error) {
       console.error('Error navigating to chart:', error);
     }
@@ -164,7 +131,7 @@ const HomePage = () => {
             </div>
           )}
 
-          <FileUploader onUploadSuccess={handleUploadSuccess} onDataProcessed={setProcessedData} />
+          <FileUploader onUploadSuccess={handleUploadSuccess} />
 
           <ConfirmationModal
             isOpen={showConfirmationModal}
@@ -191,14 +158,6 @@ const HomePage = () => {
             onCancel={handleRecordCancel}
             onConfirm={handleRecordConfirm}
           />
-
-          {processedData && (
-            <div className="cumulative-votes-container">
-              <CumulativeVotesChart 
-                data={processedData}
-              />
-            </div>
-          )}
         </>
     </div>
   );
