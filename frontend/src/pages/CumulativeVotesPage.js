@@ -37,7 +37,10 @@ const CumulativeVotesPage = () => {
 
   // 计算总动画时间
   const totalAnimationTime = useMemo(() => {
-    
+    if (!votesData?.length) {
+      return 0;
+    }
+
     return chartAnimation.duration + 
            (chartAnimation.delayFactor * (votesData.length - 1)) + 
            chartAnimation.bufferTime + 
@@ -150,7 +153,7 @@ const CumulativeVotesPage = () => {
     };
 
     fetchAllData();
-  }, []); // 移除所有依赖，只在组件首次挂载时执行
+  }, [filterOptions, location.state]); // 移除所有依赖，只在组件首次挂载时执行
 
   useEffect(() => {
     const container = document.createElement('div');

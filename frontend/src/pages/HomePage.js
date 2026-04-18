@@ -13,13 +13,11 @@ import '../styles/global.css';
 const HomePage = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
-  const [excludedColumns, setExcludedColumns] = useState([]);
   const [showColumnExclusionModal, setShowColumnExclusionModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showSpecialRoundsModal, setShowSpecialRoundsModal] = useState(false);
   const [showRecordModal, setShowRecordModal] = useState(false);
   const [selectedColumns, setSelectedColumns] = useState([]);
-  const [chartContainer, setChartContainer] = useState(null);
   const [processedData, setProcessedData] = useState(null);
   const [excludeWildcard, setExcludeWildcard] = useState(false);
   const [excludeRanking, setExcludeRanking] = useState(false);
@@ -151,8 +149,7 @@ const HomePage = () => {
 
   return (
     <div className="home-page">
-      {chartContainer || (
-        <>
+      <>
           <motion.h1 
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -198,13 +195,11 @@ const HomePage = () => {
           {processedData && (
             <div className="cumulative-votes-container">
               <CumulativeVotesChart 
-                data={processedData} 
-                excludedColumns={excludedColumns}
+                data={processedData}
               />
             </div>
           )}
         </>
-      )}
     </div>
   );
 };

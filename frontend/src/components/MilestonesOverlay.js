@@ -4,7 +4,7 @@ import '../styles/milestones-overlay.css';
 import { milestoneAnimation } from '../config/animationConfig';
 
 const MilestonesOverlay = ({ currentMilestone, currentSeasonConfig }) => {
-  const milestones = currentMilestone || [];
+  const milestones = useMemo(() => currentMilestone || [], [currentMilestone]);
   const [currentGroup, setCurrentGroup] = useState(0);
   const timerRef = useRef([]);
   const nodeRefs = useRef(new Map());

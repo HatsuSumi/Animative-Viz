@@ -1,11 +1,11 @@
 import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import * as d3 from 'd3';
-import PropTypes from 'prop-types';  
+import PropTypes from 'prop-types';
 import '../styles/cumulative-votes-chart.css';
 import globalChartConfig from '../config/globalChartConfig.json';
 import seasonsConfig from '../config/seasonsConfig.json';
-import { chartAnimation, milestoneAnimation } from '../config/animationConfig';
+import { chartAnimation } from '../config/animationConfig';
 import MilestonesOverlay from './MilestonesOverlay';
 
 const CumulativeVotesChart = ({
@@ -22,7 +22,6 @@ const CumulativeVotesChart = ({
   const svgRef = useRef(null);
   const [processedData, setProcessedData] = useState([]);
   const [animationKey, setAnimationKey] = useState(0);
-  const [prevRanks, setPrevRanks] = useState(new Map());
   const [currentMilestone, setCurrentMilestone] = useState(null);
   const [isChartDrawn, setIsChartDrawn] = useState(false);
 
@@ -32,7 +31,7 @@ const CumulativeVotesChart = ({
   }, [currentSeason]);
 
   // 处理图表数据并计算累积票数
-  const processChartData = (data, voteRounds) => {
+  const processChartData = useCallback((data, voteRounds) => {
     // 如果数据或轮次为空，返回空数组
     if (!data || !data.length || !voteRounds || voteRounds.length === 0) {
       return [];
@@ -88,7 +87,7 @@ const CumulativeVotesChart = ({
     });
 
     return sortedData;
-  };
+  }, []);
 
   // 缓存当前赛季的配置
   const currentSeasonConfig = useMemo(() => 
@@ -123,9 +122,9 @@ const CumulativeVotesChart = ({
   }, [data, currentSeasonConfig.colors]);
 
   // 获取角色颜色的函数
-  const getCharacterColor = (character) => {
+  const getCharacterColor = useCallback((character) => {
     return characterColors.get(character) || currentSeasonConfig.colors.default;
-  };
+  }, [characterColors, currentSeasonConfig.colors.default]);
 
   // 缓存动画配置
   const animationConfig = useMemo(() => ({
@@ -137,7 +136,7 @@ const CumulativeVotesChart = ({
   }), []);
 
   // 计算每行的垂直位置
-  const getTextY = (index, type, height) => {
+  const getTextY = useCallback((index, type, height) => {
     const { text } = currentSeasonConfig.layout;
     const { lineHeight, baseY } = text;
     const basePosition = height - baseY;  
@@ -154,7 +153,7 @@ const CumulativeVotesChart = ({
     totalOffset += type === 'dark-horse' ? text.spacing?.beforeDarkHorse ?? 0 : 0;
 
     return basePosition + totalOffset;
-  };
+  }, [currentSeasonConfig]);
 
   // 处理动画完成
   const handleAnimationComplete = useCallback(() => {
@@ -169,7 +168,7 @@ const CumulativeVotesChart = ({
     setProcessedData(processed);
     // 触发动画重新渲染
     setAnimationKey(prev => prev + 1);
-  }, [data, voteRounds]);
+  }, [data, voteRounds, processChartData]);
 
   // 绘制图表的主函数
   const drawChart = useCallback(() => {
@@ -816,7 +815,6 @@ const CumulativeVotesChart = ({
         labels.merge(labelEnter).call(updateLabels);
 
         // 更新排名记录
-        setPrevRanks(new Map(displayData.map(d => [d.character, d.rank])));
 
         // 先检查是否已经是最后一轮
         if (this.currentRoundIndex >= this.voteRounds.length - 1) {
@@ -882,7 +880,21 @@ const CumulativeVotesChart = ({
 
     // 启动动画
     animationController.start();
-  }, [processedData, animationKey]);
+  }, [
+    animationConfig,
+    charactersInfo,
+    currentRoundIndex,
+    currentSeasonConfig,
+    finalRanks,
+    getCharacterColor,
+    getTextY,
+    handleAnimationComplete,
+    isChartDrawn,
+    participatingCounts,
+    processedData,
+    seasonMilestones,
+    voteRounds
+  ]);
 
   // 使用 useEffect 管理动画生命周期
   useEffect(() => {
