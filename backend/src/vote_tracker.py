@@ -3,9 +3,7 @@ import sys
 import re
 import math
 import pandas as pd
-import logging
-from datetime import datetime
-from typing import List, Dict, Optional, Any
+from typing import Optional
 from config.seasons_rounds import (
     NON_VOTE_COLUMNS,
     get_season_rounds,
@@ -24,7 +22,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 if current_dir not in sys.path:
     sys.path.append(current_dir)
 
-_skipped_votes = set()  # 用集合来存储被跳过的轮次和角色
+_skipped_votes: set[tuple[str, str]] = set()  # 用集合来存储被跳过的轮次和角色
 
 def safe_float_convert(value) -> Optional[float]:
     """
@@ -70,7 +68,7 @@ def safe_float_convert(value) -> Optional[float]:
         return None
 
 class VoteTracker:
-    def __init__(self, csv_path: str, original_filename: str = None):
+    def __init__(self, csv_path: str, original_filename: Optional[str] = None):
         """
         初始化VoteTracker
         
@@ -78,10 +76,10 @@ class VoteTracker:
         :param original_filename: 原始文件名（用于从文件名中获取赛季）
         :raises: ValueError 如果没有提供文件路径
         """
-        self.data = None
-        self.vote_columns = None
-        self.wildcard_rounds = None
-        self.season = None
+        self.data: Optional[pd.DataFrame] = None
+        self.vote_columns: list[str] = []
+        self.wildcard_rounds: list[str] = []
+        self.season: Optional[str] = None
         self.csv_path = csv_path
         
         if csv_path:
@@ -89,7 +87,7 @@ class VoteTracker:
         else:
             raise ValueError("必须提供CSV文件路径")
 
-    def load_csv(self, csv_path: str, original_filename: str = None) -> pd.DataFrame:
+    def load_csv(self, csv_path: str, original_filename: Optional[str] = None) -> pd.DataFrame:
         """
         加载CSV文件
         
@@ -105,9 +103,10 @@ class VoteTracker:
             
             # 读取CSV文件
             self.data = pd.read_csv(csv_path)
+            data = self.data
             
             # 清理列名中的所有空格
-            self.data.columns = [col.replace(' ', '') for col in self.data.columns]
+            data.columns = [col.replace(' ', '') for col in data.columns]
             
             # 获取赛季信息
             filename = original_filename or os.path.basename(csv_path)
@@ -119,7 +118,7 @@ class VoteTracker:
             self.wildcard_rounds = get_wildcard_rounds(self.season)
             
             # 获取CSV文件中的投票列
-            csv_vote_columns = [col for col in self.data.columns if col not in NON_VOTE_COLUMNS]
+            csv_vote_columns = [col for col in data.columns if col not in NON_VOTE_COLUMNS]
             
             # 检查CSV文件中的列名是否完全匹配配置
             missing_columns = [col for col in expected_vote_columns if col not in csv_vote_columns]
@@ -134,7 +133,7 @@ class VoteTracker:
             # 使用配置中的投票列，保持原有顺序
             self.vote_columns = expected_vote_columns
             
-            return self.data
+            return data
             
         except Exception as e:
             logger.error(f"加载CSV文件失败: {str(e)}")
@@ -148,13 +147,14 @@ class VoteTracker:
             raise ValueError(f"无法从文件名识别赛季: {filename}")
         return season_match.group(1)
 
-    def get_vote_rounds(self) -> List[str]:
+    def get_vote_rounds(self) -> list[str]:
         """
         获取所有投票轮次列表
         
         :return: 投票轮次列表
         """
-        # 直接使用配置中的投票轮次
+        if self.season is None:
+            raise ValueError("赛季未初始化")
         return get_season_rounds(self.season)
     
     def get_filtered_vote_rounds(self, excluded_columns=None, exclude_wildcard=False):
@@ -171,8 +171,12 @@ class VoteTracker:
         if excluded_columns is None:
             excluded_columns = []
             
+        data = self.data
+        if data is None:
+            raise ValueError("投票数据未加载")
+
         # 获取所有列（轮次）
-        all_columns = [col.replace(' ', '') for col in self.data.columns.tolist()]
+        all_columns = [col.replace(' ', '') for col in data.columns.tolist()]
         
         # 过滤出投票列
         vote_columns = [col for col in all_columns if col not in NON_VOTE_COLUMNS]
@@ -203,9 +207,13 @@ class VoteTracker:
             return []
             
         votes_data = []
-        eliminated_info = {}  # 用于收集淘汰信息
+        data = self.data
+        if data is None:
+            raise ValueError("投票数据未加载")
+        if self.season is None:
+            raise ValueError("赛季未初始化")
         
-        for idx, row in self.data.iterrows():
+        for _, row in data.iterrows():
             character_name = row['角色']
             series_name = row['作品']
             
@@ -213,7 +221,7 @@ class VoteTracker:
             votes = []
             for col in vote_rounds:
                 # 使用原始列名从数据中获取值
-                original_col = next(c for c in self.data.columns if c.replace(' ', '') == col)
+                original_col = next(c for c in data.columns if c.replace(' ', '') == col)
                 vote = safe_float_convert(row[original_col])
                 votes.append(vote)
             
@@ -226,8 +234,6 @@ class VoteTracker:
                         for char in eliminated_chars:
                             if char['character'] == character_name and char['series'] == series_name:
                                 eliminated_round = round_name
-                                eliminated_info[round_name] = eliminated_info.get(round_name, [])
-                                eliminated_info[round_name].append(f"{character_name}（{series_name}）")
                                 break
                     if eliminated_round:
                         break
@@ -358,20 +364,24 @@ class VoteTracker:
             logger.error(f'【get_votes_by_rounds】处理投票数据时发生错误：{str(e)}')
             raise
 
-    def get_characters_info(self) -> List[Dict[str, str]]:
+    def get_characters_info(self) -> list[dict[str, str]]:
         """
         获取角色的作品信息
         
         :return: 包含角色作品信息的列表，格式为 [{"character": "角色名", "ip": "作品名", "avatar": "头像URL"}, ...]
         """
+        data = self.data
+        if data is None:
+            raise ValueError("投票数据未加载")
+
         # 确保 '角色' 和 '作品' 列存在
-        if '角色' not in self.data.columns or '作品' not in self.data.columns:
+        if '角色' not in data.columns or '作品' not in data.columns:
             logger.error("数据文件缺少必要的列：'角色' 或 '作品'")
             raise ValueError("数据文件缺少必要的列：'角色' 或 '作品'")
         
         # 获取角色和作品的对应关系
         characters_info = []
-        for _, row in self.data.iterrows():
+        for _, row in data.iterrows():
             character_info = {
                 'character': row['角色'],
                 'ip': row['作品']

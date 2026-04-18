@@ -1,8 +1,6 @@
-"""
-存储每个赛季的投票轮次配置
-"""
+from typing import Any
 
-SEASONS_CONFIG = {
+SEASONS_CONFIG: dict[str, dict[str, Any]] = {
     "2023": {
         "vote_columns": [
             "预选赛第一轮", "预选赛第二轮", 
@@ -118,7 +116,7 @@ NON_VOTE_COLUMNS = {
     "累计得票数"
 }
 
-def get_season_rounds(season: str) -> list:
+def get_season_rounds(season: str) -> list[str]:
     """
     获取指定赛季的投票轮次
     
@@ -130,7 +128,7 @@ def get_season_rounds(season: str) -> list:
         raise KeyError(f"赛季配置不存在: {season}")
     return SEASONS_CONFIG[season]["vote_columns"]
 
-def get_eliminated_characters(season: str, round_name: str) -> list:
+def get_eliminated_characters(season: str, round_name: str) -> list[dict[str, str]]:
     """
     获取指定轮次淘汰的角色列表
     
@@ -142,7 +140,7 @@ def get_eliminated_characters(season: str, round_name: str) -> list:
         raise KeyError(f"赛季配置不存在: {season}")
     return SEASONS_CONFIG[season].get("eliminated_characters", {}).get(round_name, [])
 
-def get_wildcard_rounds(season: str) -> list:
+def get_wildcard_rounds(season: str) -> list[str]:
     """
     获取指定赛季的外卡赛轮次
     

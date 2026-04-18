@@ -1,21 +1,17 @@
 import os
 import sys
-import re
 import shutil
 import tempfile
-import logging
 import hashlib
 import json
-from typing import Dict, Any, List, Optional
-from fastapi import FastAPI, File, Form, HTTPException, Query, UploadFile, Response, Body, Request
+from typing import Any, Optional
+from fastapi import FastAPI, File, Form, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from config import settings
-from config.seasons_rounds import get_wildcard_rounds, get_eliminated_characters
-from .vote_tracker import VoteTracker, NON_VOTE_COLUMNS
+from .vote_tracker import VoteTracker
 from .logger import logger
-import pandas as pd
 
 # 添加项目根目录到 Python 路径
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -35,10 +31,10 @@ app.add_middleware(
 )
 
 # 全局变量
-_characters_by_id = None
-_ips_by_id = None
-_character_lookup = None
-_vote_tracker = None  # 缓存VoteTracker实例
+_characters_by_id: dict[str, dict[str, Any]] = {}
+_ips_by_id: dict[str, dict[str, Any]] = {}
+_character_lookup: dict[str, str] = {}
+_vote_tracker: Optional[VoteTracker] = None  # 缓存VoteTracker实例
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 BACKEND_DIR = os.path.dirname(BASE_DIR)
 PROJECT_ROOT = os.path.dirname(BACKEND_DIR)
@@ -123,7 +119,7 @@ def calculate_file_hash(file_path: str) -> str:
 async def upload_data(
     file: UploadFile = File(...), 
     original_path: str = Form(...)
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     处理文件上传
     
@@ -136,19 +132,20 @@ async def upload_data(
         os.makedirs(DATA_DIR, exist_ok=True)
         
         # 使用原始文件名
-        filename = file.filename
+        filename = file.filename or os.path.basename(original_path)
         target_path = os.path.join(DATA_DIR, filename)
         
         # 如果上传的就是目标文件，直接使用它
         if os.path.abspath(original_path) == os.path.abspath(target_path):
             logger.info(f"直接使用文件: {filename}")
             vote_tracker = VoteTracker(target_path)
+            total_characters = len(vote_tracker.data.index) if vote_tracker.data is not None else 0
             save_latest_file_path(target_path)
             return {
                 "message": "直接使用上传的文件",
                 "filename": filename,
                 "project_path": target_path,
-                "total_characters": len(vote_tracker.data),
+                "total_characters": total_characters,
                 "vote_rounds": vote_tracker.vote_columns
             }
         
@@ -171,11 +168,12 @@ async def upload_data(
                     os.unlink(temp_path)
                     logger.info(f"文件内容未变化: {filename}")
                     save_latest_file_path(target_path)
+                    total_characters = len(vote_tracker_temp.data.index) if vote_tracker_temp.data is not None else 0
                     return {
                         "message": "文件内容未变化，继续使用已有文件",
                         "filename": filename,
                         "project_path": target_path,
-                        "total_characters": len(vote_tracker_temp.data),
+                        "total_characters": total_characters,
                         "vote_rounds": vote_tracker_temp.vote_columns
                     }
                 else:
@@ -192,12 +190,13 @@ async def upload_data(
             
             # 使用新文件创建 VoteTracker
             vote_tracker = VoteTracker(target_path)
+            total_characters = len(vote_tracker.data.index) if vote_tracker.data is not None else 0
             
             return {
                 "message": "文件上传成功",
                 "filename": filename,
                 "project_path": target_path,
-                "total_characters": len(vote_tracker.data),
+                "total_characters": total_characters,
                 "vote_rounds": vote_tracker.vote_columns,
                 "file_hash": calculate_file_hash(target_path)
             }
@@ -213,7 +212,7 @@ async def upload_data(
         raise HTTPException(status_code=400, detail=str(e))
 
 @app.post(f"{settings.API_V1_STR}/upload")
-async def upload_data(
+async def upload_legacy_data(
     file: UploadFile = File(...), 
     original_path: str = Form(...)
 ):
@@ -270,7 +269,7 @@ async def upload_data(
         if 'temp_path' in locals():
             try:
                 os.unlink(temp_path)
-            except:
+            except OSError:
                 pass
         
         logger.error(f"文件上传失败: {str(e)}")
@@ -280,15 +279,15 @@ async def upload_data(
         file.file.close()
 
 class VoteRoundsRequest(BaseModel):
-    excluded_columns: Optional[List[str]] = []
+    excluded_columns: list[str] = Field(default_factory=list)
     exclude_wildcard: bool = False
     exclude_ranking: bool = False
 
 @app.get(f"{settings.API_V1_STR}/votes-by-rounds")
 @app.post(f"{settings.API_V1_STR}/votes-by-rounds")
 def get_votes_by_rounds(
-    request: VoteRoundsRequest = None,
-    excluded_columns: List[str] = Query([]),  
+    request: Optional[VoteRoundsRequest] = None,
+    excluded_columns: list[str] = Query([]),  
     exclude_wildcard: bool = Query(False),
     exclude_ranking: bool = Query(False)
 ):
