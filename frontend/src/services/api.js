@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://127.0.0.1:8000/api/v1';
+const API_HOST = window.location.hostname || '127.0.0.1';
+const BASE_URL = `http://${API_HOST}:8000/api/v1`;
 
 // 创建 axios 实例，配置数组参数的序列化方式
 const api = axios.create({
