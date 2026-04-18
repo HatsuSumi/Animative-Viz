@@ -1,0 +1,12 @@
+from .season_2023 import SEASON_CONFIG as SEASON_2023_CONFIG, SEASON_ID as SEASON_2023_ID
+from .shared import NON_VOTE_COLUMNS
+
+SEASONS_CONFIG = {
+    SEASON_2023_ID: SEASON_2023_CONFIG,
+}
+
+__all__ = [
+    'NON_VOTE_COLUMNS',
+    'SEASONS_CONFIG',
+]
+
