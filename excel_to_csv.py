@@ -39,15 +39,14 @@ def excel_to_csv(excel_path, csv_path=None):
 
 # 使用示例
 if __name__ == "__main__":
-    # 支持命令行参数
-    if len(sys.argv) > 1:
-        excel_path = sys.argv[1]
-        csv_path = sys.argv[2] if len(sys.argv) > 2 else None
-    else:
-        # 默认使用当前目录下的 Female-datas.xlsx
-        excel_path = os.path.join(os.path.dirname(__file__), 'Female-datas.xlsx')
-    
     print("=" * 60)
     print("Excel 转 CSV 工具")
     print("=" * 60)
-    excel_to_csv(excel_path, csv_path if 'csv_path' in locals() else None)
+
+    if len(sys.argv) < 2:
+        print("用法: python excel_to_csv.py <excel_path> [csv_path]")
+        sys.exit(1)
+
+    excel_path = sys.argv[1]
+    csv_path = sys.argv[2] if len(sys.argv) > 2 else None
+    excel_to_csv(excel_path, csv_path)

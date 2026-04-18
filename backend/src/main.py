@@ -37,13 +37,17 @@ app.add_middleware(
 # 全局变量
 _characters_data = None
 _vote_tracker = None  # 缓存VoteTracker实例
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BACKEND_DIR = os.path.dirname(BASE_DIR)
+PROJECT_ROOT = os.path.dirname(BACKEND_DIR)
+CHARACTERS_DATA_PATH = os.path.join(PROJECT_ROOT, 'frontend', 'src', 'config', 'characters-data.json')
+RANKINGS_DATA_PATH = os.path.join(BASE_DIR, 'data', 'rankings.json')
 
 def load_characters_data():
     """加载角色数据到内存"""
     global _characters_data
     try:
-        characters_data_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'frontend', 'src', 'config', 'characters-data.json')
-        with open(characters_data_path, 'r', encoding='utf-8') as f:
+        with open(CHARACTERS_DATA_PATH, 'r', encoding='utf-8') as f:
             _characters_data = json.loads(f.read())
     except Exception as e:
         logger.error(f"加载角色数据失败: {str(e)}")
@@ -381,7 +385,7 @@ def get_characters_info():
 
         # 读取排名数据
         try:
-            with open('src/data/rankings.json', 'r', encoding='utf-8') as f:
+            with open(RANKINGS_DATA_PATH, 'r', encoding='utf-8') as f:
                 rankings_data = json.load(f)
                 rankings = rankings_data['rankings']
         except Exception as e:
