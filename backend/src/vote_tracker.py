@@ -1,7 +1,6 @@
 import os
 import sys
 import re
-import math
 import pandas as pd
 from typing import Optional
 from config.seasons_rounds import (
@@ -11,6 +10,7 @@ from config.seasons_rounds import (
     get_eliminated_characters
 )
 from .logger import logger
+from .utils import safe_float_convert
 
 # 将项目根目录添加到 Python 路径
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,49 +23,6 @@ if current_dir not in sys.path:
     sys.path.append(current_dir)
 
 _skipped_votes: set[tuple[str, str]] = set()  # 用集合来存储被跳过的轮次和角色
-
-def safe_float_convert(value) -> Optional[float]:
-    """
-    安全地转换浮点数，处理空值、无穷大和非数字值
-    
-    :param value: 输入值
-    :return: 浮点数或None（如果是空值或无效值）
-    """
-    try:
-        # 处理 None 和空字符串
-        if value is None or pd.isna(value) or (isinstance(value, str) and value.strip() == ''):
-            return None
-        
-        # 如果包含 '/'，计算斜线前后数值的总和
-        if isinstance(value, str) and '/' in value:
-            try:
-                parts = value.split('/')
-                # 递归调用自身来处理每个部分
-                results = [safe_float_convert(part) for part in parts]
-                # 过滤掉 None 值并求和
-                valid_results = [r for r in results if r is not None]
-                return sum(valid_results) if valid_results else None
-            except Exception as e:
-                logger.warning(f"处理带斜线的值 '{value}' 失败: {str(e)}")
-                return None
-            
-        # 检查特殊字符串
-        if isinstance(value, str):
-            value = value.lower().strip()
-            if value in ('inf', '-inf', 'infinity', '-infinity', 'nan'):
-                return None
-        
-        # 转换为浮点数并限制精度
-        float_value = float(value)
-        
-        # 处理无穷大和非数字值（以防万一）
-        if math.isinf(float_value) or math.isnan(float_value):
-            return None
-            
-        return round(float_value, 2)
-    except (ValueError, TypeError) as e:
-        logger.warning(f"转换值 '{value}' 失败: {str(e)}")
-        return None
 
 class VoteTracker:
     def __init__(self, csv_path: str, original_filename: Optional[str] = None):
@@ -192,6 +149,37 @@ class VoteTracker:
 
         return vote_columns
 
+    def _build_vote_column_mapping(self, vote_rounds: list[str]) -> dict[str, str]:
+        data = self.data
+        if data is None:
+            raise ValueError("投票数据未加载")
+
+        return {
+            round_name: next(column for column in data.columns if column.replace(' ', '') == round_name)
+            for round_name in vote_rounds
+        }
+
+    def _find_eliminated_round(self, vote_rounds: list[str], character_name: str, series_name: str) -> Optional[str]:
+        if self.season is None:
+            raise ValueError("赛季未初始化")
+
+        for round_name in vote_rounds:
+            eliminated_chars = get_eliminated_characters(self.season, round_name)
+            for char in eliminated_chars:
+                if char['character'] == character_name and char['series'] == series_name:
+                    return round_name
+
+        return None
+
+    def _exclude_votes_after_elimination(self, votes: list[Optional[float]], vote_rounds: list[str], eliminated_round: str) -> None:
+        eliminated_round_index = vote_rounds.index(eliminated_round)
+
+        for index, round_name in enumerate(vote_rounds):
+            is_elimination_round = '淘汰赛' in round_name
+            if (not is_elimination_round and index >= eliminated_round_index) or \
+               (is_elimination_round and index > eliminated_round_index):
+                votes[index] = None
+
     def get_vote_data(self, vote_rounds, exclude_ranking=False):
         """
         获取投票数据
@@ -205,47 +193,32 @@ class VoteTracker:
         """
         if not vote_rounds:
             return []
-            
+
         votes_data = []
         data = self.data
         if data is None:
             raise ValueError("投票数据未加载")
         if self.season is None:
             raise ValueError("赛季未初始化")
-        
+
+        vote_column_mapping = self._build_vote_column_mapping(vote_rounds)
+
         for _, row in data.iterrows():
             character_name = row['角色']
             series_name = row['作品']
-            
-            # 收集每个轮次的投票数据
+
             votes = []
             for col in vote_rounds:
-                # 使用原始列名从数据中获取值
-                original_col = next(c for c in data.columns if c.replace(' ', '') == col)
+                original_col = vote_column_mapping[col]
                 vote = safe_float_convert(row[original_col])
                 votes.append(vote)
             
-            # 如果需要排除排位赛，才查找角色被淘汰的轮次
             eliminated_round = None
             if exclude_ranking:
-                for round_name in vote_rounds:
-                    if get_eliminated_characters(self.season, round_name):
-                        eliminated_chars = get_eliminated_characters(self.season, round_name)
-                        for char in eliminated_chars:
-                            if char['character'] == character_name and char['series'] == series_name:
-                                eliminated_round = round_name
-                                break
-                    if eliminated_round:
-                        break
-            
-                # 如果角色已被淘汰，排除当前轮次和后续轮次的数据
+                eliminated_round = self._find_eliminated_round(vote_rounds, character_name, series_name)
+
                 if eliminated_round:
-                    for i, col in enumerate(vote_rounds):
-                        # 如果是淘汰赛，则包含当前轮次；否则不包含
-                        is_elimination_round = '淘汰赛' in col
-                        if (not is_elimination_round and i >= vote_rounds.index(eliminated_round)) or \
-                           (is_elimination_round and i > vote_rounds.index(eliminated_round)):
-                            votes[i] = None
+                    self._exclude_votes_after_elimination(votes, vote_rounds, eliminated_round)
             
             votes_data.append({
                 'character': character_name,
@@ -254,6 +227,16 @@ class VoteTracker:
             })
                 
         return votes_data
+
+    def _get_eliminated_character_pairs(self, round_name: str) -> set[tuple[str, str]]:
+        if self.season is None:
+            raise ValueError("赛季未初始化")
+
+        eliminated_chars = get_eliminated_characters(self.season, round_name)
+        return {
+            (char['character'], char['series'])
+            for char in eliminated_chars
+        }
 
     def get_participating_counts(self, vote_rounds, votes_data):
         """
@@ -271,36 +254,23 @@ class VoteTracker:
             dict: 每轮参与角色数的字典
         """
         participating_counts = {}
-        
-        # 首先获取所有角色（使用集合推导式）
+
         total_chars = {(char_data['character'], char_data['series']) for char_data in votes_data}
-        eliminated_cache = {}  # 缓存每轮的淘汰角色
-        
-        # 遍历每轮，获取被淘汰的角色
-        for i, round_name in enumerate(vote_rounds):
+        eliminated_cache: dict[str, set[tuple[str, str]]] = {}
+
+        for index, round_name in enumerate(vote_rounds):
             cumulative_eliminated_chars = set()
-            
-            # 获取到上一轮为止的所有淘汰角色
-            for prev_round in vote_rounds[:i]:
-                if prev_round not in eliminated_cache:
-                    eliminated_cache[prev_round] = get_eliminated_characters(self.season, prev_round)
-                if eliminated_cache[prev_round]:
-                    cumulative_eliminated_chars.update(
-                        (char['character'], char['series']) for char in eliminated_cache[prev_round]
-                    )
-            
-            # 计算参赛人数（只使用之前轮次的淘汰角色）
-            participating_count = len(total_chars.difference(cumulative_eliminated_chars))
-            participating_counts[round_name] = participating_count
-            
-            # 更新当前轮次的淘汰角色（在计算完参赛人数后，为下一轮做准备）
+
+            for previous_round in vote_rounds[:index]:
+                if previous_round not in eliminated_cache:
+                    eliminated_cache[previous_round] = self._get_eliminated_character_pairs(previous_round)
+                cumulative_eliminated_chars.update(eliminated_cache[previous_round])
+
+            participating_counts[round_name] = len(total_chars.difference(cumulative_eliminated_chars))
+
             if round_name not in eliminated_cache:
-                eliminated_cache[round_name] = get_eliminated_characters(self.season, round_name)
-            if eliminated_cache[round_name]:
-                cumulative_eliminated_chars.update(
-                    (char['character'], char['series']) for char in eliminated_cache[round_name]
-                )
-        
+                eliminated_cache[round_name] = self._get_eliminated_character_pairs(round_name)
+
         return participating_counts
 
     def get_votes_by_rounds(self, excluded_columns=None, exclude_wildcard=False, exclude_ranking=False):
@@ -333,6 +303,7 @@ class VoteTracker:
             # 获取所有轮次（包括被排除的轮次）
             all_vote_rounds = self.get_vote_rounds()
             all_votes_data = self.get_vote_data(all_vote_rounds, exclude_ranking)
+            round_index_map = {round_name: index for index, round_name in enumerate(all_vote_rounds)}
             
             # 使用所有轮次来计算参与人数
             all_participating_counts = self.get_participating_counts(all_vote_rounds, all_votes_data)
@@ -342,7 +313,7 @@ class VoteTracker:
             for vote_data in all_votes_data:
                 filtered_votes = []
                 for round_name in vote_rounds:
-                    round_index = all_vote_rounds.index(round_name)
+                    round_index = round_index_map[round_name]
                     filtered_votes.append(vote_data['votes'][round_index])
                 filtered_votes_data.append({
                     'character': vote_data['character'],
