@@ -1,8 +1,9 @@
 import json
 import os
-from typing import Any
+from typing import Any, cast
 
 from ..logger import logger
+from ..vote_tracker import CharacterInfo, VotesByRoundsResult
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SRC_DIR = os.path.dirname(BASE_DIR)
@@ -36,7 +37,7 @@ def load_characters_data() -> None:
         _character_lookup = {}
 
 
-def build_votes_response(result: dict[str, Any]) -> dict[str, Any]:
+def build_votes_response(result: VotesByRoundsResult) -> dict[str, Any]:
     """组装投票轮次接口响应"""
     processed_data = []
 
@@ -71,7 +72,7 @@ def build_votes_response(result: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def build_characters_info_response(characters_info: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def build_characters_info_response(characters_info: list[CharacterInfo]) -> list[dict[str, Any]]:
     """组装角色信息接口响应"""
     try:
         with open(RANKINGS_DATA_PATH, 'r', encoding='utf-8') as file_obj:
@@ -103,5 +104,5 @@ def build_characters_info_response(characters_info: list[dict[str, Any]]) -> lis
             char_info['ip_year'] = ip_meta.get('year')
             char_info['ip_season'] = ip_meta.get('season')
 
-    return characters_info
+    return cast(list[dict[str, Any]], characters_info)
 
