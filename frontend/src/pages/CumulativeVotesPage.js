@@ -123,9 +123,10 @@ const CumulativeVotesPage = () => {
 
         // 从角色信息中提取排名
         const finalRanks = {};
-        charactersResponse.forEach(({ character, rank }) => {
-          if (rank) {
-            finalRanks[character] = rank;
+        charactersResponse.forEach(({ id, character, rank }) => {
+          const rankKey = id || character;
+          if (rank && rankKey) {
+            finalRanks[rankKey] = rank;
           }
         });
 

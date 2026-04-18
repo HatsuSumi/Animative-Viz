@@ -35,23 +35,33 @@ app.add_middleware(
 )
 
 # 全局变量
-_characters_data = None
+_characters_by_id = None
+_ips_by_id = None
+_character_lookup = None
 _vote_tracker = None  # 缓存VoteTracker实例
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 BACKEND_DIR = os.path.dirname(BASE_DIR)
 PROJECT_ROOT = os.path.dirname(BACKEND_DIR)
 CHARACTERS_DATA_PATH = os.path.join(PROJECT_ROOT, 'frontend', 'src', 'config', 'characters-data.json')
+IPS_DATA_PATH = os.path.join(PROJECT_ROOT, 'frontend', 'src', 'config', 'ip-data.json')
+CHARACTER_LOOKUP_PATH = os.path.join(PROJECT_ROOT, 'frontend', 'src', 'config', 'character-lookup.json')
 RANKINGS_DATA_PATH = os.path.join(BASE_DIR, 'data', 'rankings.json')
 
 def load_characters_data():
     """加载角色数据到内存"""
-    global _characters_data
+    global _characters_by_id, _ips_by_id, _character_lookup
     try:
         with open(CHARACTERS_DATA_PATH, 'r', encoding='utf-8') as f:
-            _characters_data = json.loads(f.read())
+            _characters_by_id = json.load(f)
+        with open(IPS_DATA_PATH, 'r', encoding='utf-8') as f:
+            _ips_by_id = json.load(f)
+        with open(CHARACTER_LOOKUP_PATH, 'r', encoding='utf-8') as f:
+            _character_lookup = json.load(f)
     except Exception as e:
         logger.error(f"加载角色数据失败: {str(e)}")
-        _characters_data = {}
+        _characters_by_id = {}
+        _ips_by_id = {}
+        _character_lookup = {}
 
 # 启动时加载数据
 load_characters_data()
@@ -300,13 +310,18 @@ def get_votes_by_rounds(
             exclude_ranking=exclude_ranking
         )
 
-        # 处理数据：去掉作品名
+        # 处理数据：去掉作品名并补充角色 ID
         processed_data = []
         for char_data in result['votes_data']:
-            # 从角色名中提取纯角色名（如果包含作品名）
             character = char_data["character"]
+            series = char_data["series"]
+            lookup_key = f"{character}@{series}"
+            character_id = _character_lookup.get(lookup_key)
+
             if " (" in character:
                 character = character.split(" (")[0]
+                lookup_key = f"{character}@{series}"
+                character_id = _character_lookup.get(lookup_key, character_id)
                 
             # 将votes列表转换为rounds字典
             rounds_data = {}
@@ -316,7 +331,9 @@ def get_votes_by_rounds(
                     rounds_data[round_name] = vote
 
             processed_data.append({
+                "id": character_id,
                 "character": character,
+                "ip": series,
                 "rounds": rounds_data
             })
 
@@ -396,14 +413,24 @@ def get_characters_info():
         for char_info in characters_info:
             char_name = char_info['character']
             char_ip = char_info['ip']
-            char_key = f"{char_name}@{char_ip}"
-            
-            # 从排名数据中获取排名
-            char_info['rank'] = rankings.get(char_key)
-            
-            # 从全局角色数据中获取头像
-            if _characters_data and char_key in _characters_data:
-                char_info['avatar'] = _characters_data[char_key].get('avatar')
+            lookup_key = f"{char_name}@{char_ip}"
+            character_id = _character_lookup.get(lookup_key)
+
+            char_info['id'] = character_id
+            char_info['rank'] = rankings.get(character_id) if character_id else None
+
+            character_meta = _characters_by_id.get(character_id) if character_id else None
+            ip_meta = _ips_by_id.get(character_meta['ip_id']) if character_meta else None
+
+            if character_meta:
+                char_info['avatar'] = character_meta.get('avatar') or char_info.get('avatar', '')
+                char_info['name_en'] = character_meta.get('name_en', '')
+                char_info['cv'] = character_meta.get('cv', '')
+
+            if ip_meta:
+                char_info['ip_id'] = ip_meta.get('id')
+                char_info['ip_year'] = ip_meta.get('year')
+                char_info['ip_season'] = ip_meta.get('season')
 
         return characters_info
 

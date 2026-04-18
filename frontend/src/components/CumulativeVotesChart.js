@@ -40,8 +40,9 @@ const CumulativeVotesChart = ({
 
     // 初始化累积票数，使用全部角色
     const processedData = data.map(characterData => ({
+      id: characterData.id,
       character: characterData.character,  
-      ip: characterData.series,  
+      ip: characterData.ip,
       roundVotes: [],
       cumulativeVotes: []
     }));
@@ -51,7 +52,7 @@ const CumulativeVotesChart = ({
       data.forEach(characterData => {
         // 找到对应角色的数据项
         const processedItem = processedData.find(
-          item => item.character === characterData.character
+          item => item.id === characterData.id
         );
         
 
@@ -218,6 +219,7 @@ const CumulativeVotesChart = ({
           const eliminated = currentRoundActualVote === null && cumulativeVotes !== null;
 
           return {
+            id: item.id,
             character: item.character,
             ip: item.ip, 
             currentRoundVote: cumulativeVotes,  // 累计票数
@@ -373,7 +375,7 @@ const CumulativeVotesChart = ({
               return [
                 { ...stat, text: topNTitle, round: this.currentRoundIndex },
                 ...topVotedChars.map((item, idx) => {
-                  const characterInfo = charactersInfo.find(info => info.character === item.character);
+                  const characterInfo = charactersInfo.find(info => info.id === item.id);
                   const avatar = characterInfo?.avatar || '';
                   return {
                     id: `top5-${idx}`,
@@ -704,7 +706,7 @@ const CumulativeVotesChart = ({
                 .attr('class', 'vote-tspan');
             }
             
-            const finalRank = finalRanks?.[d.character];
+            const finalRank = finalRanks?.[d.id] ?? finalRanks?.[d.character];
             const currentVote = d.currentRoundVote;
             const startVote = d.prevRoundVote || 0;
             
