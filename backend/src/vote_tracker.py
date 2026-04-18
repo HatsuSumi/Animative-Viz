@@ -174,7 +174,7 @@ class VoteTracker:
         data = self.data
         if data is None:
             raise ValueError("投票数据未加载")
-
+            
         # 获取所有列（轮次）
         all_columns = [col.replace(' ', '') for col in data.columns.tolist()]
         

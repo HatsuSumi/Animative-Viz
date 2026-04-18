@@ -28,7 +28,7 @@ const HomePage = () => {
       throw new Error('获取的数据不完整');
     }
 
-    navigate('/cumulative-votes', {
+    navigate('/cumulative-votes', { 
       state: {
         votesData: data.votes_data,
         voteRounds: data.vote_rounds,
@@ -91,7 +91,7 @@ const HomePage = () => {
         excludeWildcard,
         excludeRanking
       };
-
+      
       await navigateWithVotesData(filterOptions, true);
     } catch (error) {
       console.error('Error navigating to chart:', error);
@@ -107,7 +107,7 @@ const HomePage = () => {
         excludeWildcard,
         excludeRanking
       };
-
+      
       await navigateWithVotesData(filterOptions, false);
     } catch (error) {
       console.error('Error navigating to chart:', error);
@@ -116,7 +116,7 @@ const HomePage = () => {
 
   return (
     <div className="home-page">
-      <>
+        <>
           <motion.h1 
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}

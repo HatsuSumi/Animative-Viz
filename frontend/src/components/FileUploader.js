@@ -85,7 +85,7 @@ const FileUploader = ({ onUploadSuccess }) => {
 
   const triggerFileInput = () => {
     if (!uploading) {
-      fileInputRef.current.click();
+    fileInputRef.current.click();
     }
   };
 

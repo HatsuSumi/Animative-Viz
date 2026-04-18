@@ -35,4 +35,4 @@ if not logger.handlers:
 
 # 关闭一些不必要的日志
 logging.getLogger('uvicorn.access').setLevel(logging.WARNING)
-logging.getLogger('uvicorn.error').setLevel(logging.WARNING)
+logging.getLogger('uvicorn.error').setLevel(logging.INFO)

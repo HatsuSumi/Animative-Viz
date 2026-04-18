@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:8000/api/v1';
+const BASE_URL = 'http://127.0.0.1:8000/api/v1';
 
 // 创建 axios 实例，配置数组参数的序列化方式
 const api = axios.create({
@@ -21,11 +21,7 @@ export async function uploadFile(file) {
     formData.append('file', file);
     formData.append('original_path', file.name);
 
-    const response = await api.post('/upload-data', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    const response = await api.post('/upload-data', formData);
 
     return response.data;
   } catch (error) {

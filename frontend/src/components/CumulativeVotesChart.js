@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';  
 import '../styles/cumulative-votes-chart.css';
 import MilestonesOverlay from './MilestonesOverlay';
 import { processChartData } from './CumulativeVotesChart/chartData';
