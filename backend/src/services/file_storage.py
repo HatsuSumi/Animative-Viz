@@ -5,7 +5,6 @@ import tempfile
 from typing import Any
 
 from fastapi import UploadFile
-from fastapi.responses import JSONResponse
 
 from .vote_tracker_store import save_latest_file_path
 from ..logger import logger
@@ -93,46 +92,4 @@ def handle_upload_data(file: UploadFile, original_path: str) -> dict[str, Any]:
         if os.path.exists(temp_path):
             os.unlink(temp_path)
         raise
-
-
-def handle_legacy_upload(file: UploadFile) -> JSONResponse:
-    """处理旧版上传接口"""
-    with tempfile.NamedTemporaryFile(delete=False) as temp_file:
-        shutil.copyfileobj(file.file, temp_file)
-        temp_path = temp_file.name
-
-    try:
-        new_hash = calculate_file_hash(temp_path)
-        latest_file = os.path.join(DATA_DIR, 'latest.csv')
-
-        if os.path.exists(latest_file):
-            old_hash = calculate_file_hash(latest_file)
-            if new_hash == old_hash:
-                os.unlink(temp_path)
-                return JSONResponse(
-                    status_code=200,
-                    content={
-                        'message': '文件内容未变化，无需重新上传',
-                        'status': 'unchanged'
-                    }
-                )
-
-        os.makedirs(DATA_DIR, exist_ok=True)
-        shutil.move(temp_path, latest_file)
-        save_latest_file_path(latest_file)
-
-        return JSONResponse(
-            status_code=200,
-            content={
-                'message': '文件上传成功',
-                'status': 'success',
-                'file_path': latest_file
-            }
-        )
-    except Exception:
-        if os.path.exists(temp_path):
-            os.unlink(temp_path)
-        raise
-    finally:
-        file.file.close()
 

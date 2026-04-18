@@ -10,7 +10,6 @@ from ..services import (
     build_characters_info_response,
     build_votes_response,
     get_vote_tracker,
-    handle_legacy_upload,
     handle_upload_data,
 )
 
@@ -40,25 +39,6 @@ async def upload_data(
     except Exception as error:
         logger.error(f"文件上传失败: {str(error)}")
         raise HTTPException(status_code=400, detail=str(error))
-
-
-@router.post(f"{settings.API_V1_STR}/upload")
-async def upload_legacy_data(
-    file: UploadFile = File(...),
-    original_path: str = Form(...)
-):
-    """
-    处理文件上传
-
-    :param file: 上传的文件
-    :param original_path: 原始文件路径
-    :return: 上传结果信息
-    """
-    try:
-        return handle_legacy_upload(file)
-    except Exception as error:
-        logger.error(f"文件上传失败: {str(error)}")
-        raise HTTPException(status_code=500, detail=str(error))
 
 
 @router.get(f"{settings.API_V1_STR}/votes-by-rounds")

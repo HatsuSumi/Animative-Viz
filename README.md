@@ -100,79 +100,108 @@
 ### 前端 (`/frontend`)
 ```
 frontend/
-├── src/
-│   ├── components/          # React组件
-│   │   ├── CumulativeVotesChart.js    # 核心图表组件
-│   │   ├── MilestonesOverlay.js       # 里程碑显示组件
-│   │   ├── ColumnExclusionModal.js    # 列排除设置
-│   │   ├── ExcludeSpecialRoundsModal.js # 特殊轮次排除设置
-│   │   ├── FileUploader.js           # 文件上传组件
-│   │   ├── ConfirmationModal.js      # 轮次排除确认对话框
-│   │   ├── RecordVideoModal.js       # 视频录制对话框（UI预留）
-│   │   └── ErrorBoundary.js         # 错误边界处理组件
-│   ├── pages/              # 页面组件
-│   │   ├── HomePage.js     # 主页（文件上传和设置）
-│   │   └── CumulativeVotesPage.js # 投票展示页面
-│   ├── config/             # 配置文件
-│   │   ├── animationConfig.js      # 动画配置
-│   │   ├── globalChartConfig.json  # 图表配置
-│   │   ├── seasonsConfig.json      # 赛季配置
-│   │   └── characters-data.json    # 角色基础数据
-│   ├── services/           # API服务
-│   │   └── api.js         # 后端接口调用
-│   ├── styles/            # 样式文件
-│   │   ├── cumulative-votes-chart.css # 图表样式
-│   │   ├── milestones-overlay.css     # 里程碑样式
-│   │   ├── columnexclusionmodal.css   # 列排除模态框样式
-│   │   ├── specialroundsmodal.css     # 特殊轮次模态框样式
-│   │   ├── confirmationmodal.css      # 确认对话框样式
-│   │   ├── recordvideomodal.css       # 视频录制对话框样式
-│   │   ├── fileuploader.css           # 文件上传组件样式
-│   │   └── global.css                 # 全局样式
-│   └── utils/             # 工具函数
-│       └── fileUtils.js   # 文件处理工具
 ├── public/
-│   └── index.html         # 应用 HTML 模板
-├── node_modules/          # NPM 依赖包
-├── package.json           # 项目依赖配置
-├── package-lock.json      # 依赖版本锁定文件
-└── App.js                 # React 应用入口
-└── index.js               # 应用程序入口点
+│   └── index.html                     # 应用 HTML 模板
+├── src/
+│   ├── components/
+│   │   ├── CumulativeVotesChart.js    # 图表容器组件
+│   │   ├── CumulativeVotesChart/      # 图表渲染与动画拆分模块
+│   │   │   ├── chartData.js
+│   │   │   ├── chartRenderer.js
+│   │   │   ├── chartUtils.js
+│   │   │   ├── createRoundAnimationController.js
+│   │   │   └── useCumulativeVotesConfig.js
+│   │   ├── ColumnExclusionModal.js    # 列排除设置
+│   │   ├── ConfirmationModal.js       # 确认对话框
+│   │   ├── ErrorBoundary.js           # 错误边界
+│   │   ├── ExcludeSpecialRoundsModal.js # 特殊轮次过滤设置
+│   │   ├── FileUploader.js            # 文件上传组件
+│   │   ├── MilestonesOverlay.js       # 里程碑展示层
+│   │   └── RecordVideoModal.js        # 录制流程占位 UI
+│   ├── config/
+│   │   ├── animationConfig.js         # 动画配置
+│   │   ├── character-lookup.json      # 角色名到角色 ID 的映射
+│   │   ├── characters-data.json       # 角色元数据
+│   │   ├── globalChartConfig.json     # 图表全局配置
+│   │   ├── ip-data.json               # 作品元数据
+│   │   └── seasonsConfig.json         # 前端赛季展示配置
+│   ├── pages/
+│   │   ├── hooks/
+│   │   │   ├── useCumulativeVotesPageData.js # 页面数据获取与整理
+│   │   │   └── useRoundProgress.js    # 播放进度状态
+│   │   ├── CumulativeVotesPage.js     # 投票展示页面
+│   │   └── HomePage.js                # 首页与上传入口
+│   ├── services/
+│   │   └── api.js                     # 后端接口封装
+│   ├── styles/
+│   │   ├── columnexclusionmodal.css
+│   │   ├── confirmationmodal.css
+│   │   ├── cumulative-votes-chart.css
+│   │   ├── fileuploader.css
+│   │   ├── global.css
+│   │   ├── milestones-overlay.css
+│   │   ├── recordvideomodal.css
+│   │   └── specialroundsmodal.css
+│   ├── utils/
+│   │   └── fileUtils.js               # 文件校验与处理工具
+│   ├── App.css
+│   ├── App.js                         # 路由入口
+│   ├── index.css
+│   └── index.js                       # 应用入口
+├── package-lock.json
+└── package.json
 ```
 
 ### 后端 (`/backend`)
 ```
 backend/
+├── config/
+│   ├── seasons/
+│   │   ├── __init__.py                # 聚合各赛季配置
+│   │   ├── season_2023.py             # 2023 赛季独立配置
+│   │   └── shared.py                  # 非投票列等共享常量
+│   ├── __init__.py                    # 配置导出入口
+│   ├── seasons_rounds.py              # 赛季配置访问层与类型定义
+│   └── settings.py                    # 全局配置
+├── data/
+│   ├── .latest                        # 最近一次数据文件路径
+│   ├── 2023_season.csv
+│   ├── 2023_season.xlsx
+│   └── 2024_season.csv
+├── logs/
+│   ├── animative_viz.log
+│   └── app.log
+├── scripts/
+│   ├── analyze_character_matches.py
+│   ├── analyze_matches.py
+│   ├── calculate_losses.py
+│   └── update_eliminated_chars.py
 ├── src/
-│   ├── main.py           # FastAPI 服务入口
-│   ├── vote_tracker.py   # 投票数据处理核心
-│   ├── logger.py         # 日志系统
-│   ├── __init__.py       # 包初始化文件
-│   └── data/
-│       └── rankings.json # 赛季排名数据
-├── config/               # 配置文件目录
-│   ├── settings.py       # 全局配置
-│   └── seasons_rounds.py # 赛季轮次配置
-├── scripts/              # 辅助脚本目录
-│   ├── analyze_character_matches.py  # 角色对战分析
-│   ├── analyze_matches.py            # 比赛数据分析
-│   ├── calculate_losses.py           # 败场计算
-│   └── update_eliminated_chars.py    # 更新淘汰角色
-├── data/                 # 数据存储目录
-│   ├── .latest          # 最新数据记录
-│   ├── global_state.json # 全局状态文件
-│   └── 2023_season.csv  # 2023赛季数据
-├── logs/                 # 日志目录
-│   ├── animative_viz.log # 应用日志
-│   └── app.log          # 详细日志
-├── animative_viz.log    # 根目录日志
-├── backend_debug.log    # 调试日志
-├── vote_tracker.log     # 投票追踪日志
-├── vote_tracker_debug.log # 投票追踪调试日志
-├── vote_tracker_info.log  # 投票追踪信息日志
-├── requirements.txt     # Python 依赖
-├── start.py            # 服务启动脚本
-└── venv/               # Python 虚拟环境
+│   ├── data/
+│   │   └── rankings.json              # 排名数据
+│   ├── routes/
+│   │   ├── __init__.py
+│   │   └── data_routes.py             # API 路由定义
+│   ├── services/
+│   │   ├── __init__.py
+│   │   ├── character_metadata.py      # 角色信息与响应组装
+│   │   ├── file_storage.py            # 上传存储与文件落盘
+│   │   └── vote_tracker_store.py      # VoteTracker 生命周期管理
+│   ├── utils/
+│   │   ├── __init__.py
+│   │   └── vote_parsing.py            # 投票值解析与安全转换
+│   ├── __init__.py
+│   ├── logger.py                      # 日志系统
+│   ├── main.py                        # FastAPI 应用入口
+│   └── vote_tracker.py                # 投票数据处理核心
+├── venv/
+├── animative_viz.log
+├── backend_debug.log
+├── requirements.txt
+├── start.py                           # 本地启动脚本
+├── vote_tracker_debug.log
+├── vote_tracker_info.log
+└── vote_tracker.log
 ```
 
 ## 技术栈
@@ -239,21 +268,11 @@ backend/
   - 功能：上传投票数据文件
   - 参数：
     - `file`: 上传的 CSV 文件
-    - `original_path`: 原始文件路径
+    - `original_path`: 原始文件名或来源路径标识
   - 返回：
     - 文件信息
     - 总角色数
     - 投票轮次列表
-
-- `POST /api/v1/upload`
-  - 功能：上传并保存为最新数据文件
-  - 参数：
-    - `file`: 上传的 CSV 文件
-    - `original_path`: 原始文件路径
-  - 返回：
-    - 上传状态
-    - 文件路径（如果上传成功）
-    - 提示信息
 
 ### 数据获取
 - `GET|POST /api/v1/votes-by-rounds`
@@ -263,7 +282,7 @@ backend/
     - `exclude_wildcard`: 是否排除外卡赛
     - `exclude_ranking`: 是否排除排位赛
   - 返回：
-    - 处理后的投票数据（已去除作品名）
+    - 处理后的投票数据
     - 投票轮次列表
     - 每轮参与人数
 
@@ -286,346 +305,179 @@ backend/
 
 ### 前端文件
 
-#### 组件 (`/frontend/src/components/`)
+#### 组件与页面
 
-**CumulativeVotesChart.js**
-- 核心图表组件
-- 使用 D3.js 绘制动态条形图
-- 实现票数和排名的实时更新
-- 管理图表动画状态
-- 处理数据的累计计算
+**`frontend/src/components/CumulativeVotesChart.js`**
+- 图表容器组件
+- 负责组织图表渲染、动画控制和外部配置注入
+- 具体绘制逻辑已拆到 `frontend/src/components/CumulativeVotesChart/`
 
-**MilestonesOverlay.js**
-- 里程碑显示组件
-- 在特定时刻显示重要事件
-- 处理里程碑的动画过渡
-- 支持多里程碑同时显示
+**`frontend/src/components/CumulativeVotesChart/`**
+- `chartData.js`：整理轮次数据、排名数据和绘图输入
+- `chartRenderer.js`：负责 D3 绘制与更新
+- `chartUtils.js`：图表辅助计算
+- `createRoundAnimationController.js`：轮次播放控制器
+- `useCumulativeVotesConfig.js`：图表配置读取与整理
 
-**ColumnExclusionModal.js**
-- 列排除设置模态框
-- 允许用户选择要排除的数据列
-- 提供列选择的可视化界面
-- 管理列排除状态
+**`frontend/src/components/MilestonesOverlay.js`**
+- 里程碑展示层
+- 在动画过程中显示赛季记录、项链赛记录等信息
 
-**ExcludeSpecialRoundsModal.js**
-- 特殊轮次排除设置模态框
-- 控制外卡赛和排位赛的过滤
-- 提供过滤选项的开关界面
+**`frontend/src/components/ColumnExclusionModal.js`**
+- 列排除设置弹窗
+- 允许用户手动排除指定轮次
 
-**FileUploader.js**
+**`frontend/src/components/ExcludeSpecialRoundsModal.js`**
+- 特殊轮次过滤弹窗
+- 控制外卡赛过滤与排位赛淘汰角色过滤
+
+**`frontend/src/components/FileUploader.js`**
 - 文件上传组件
-- 支持拖拽上传
-- 文件类型验证
-- 上传状态管理
-- 错误处理和提示
-- 上传进度显示
+- 负责选择文件、发起上传与展示上传状态
 
-**ConfirmationModal.js**
-- 轮次排除确认对话框
-- 提示用户是否要排除某些投票轮次
-- 使用 Framer Motion 实现动画效果
-- 支持点击背景关闭
-- 提供确认和取消按钮
-- 按钮支持悬停和点击动画
+**`frontend/src/components/ConfirmationModal.js`**
+- 确认操作弹窗
+- 用于进入展示前的流程确认
 
-**RecordVideoModal.js**
-- 视频录制询问对话框（UI预留接口）
-- 询问用户是否需要录制动画过程
-- 使用 Framer Motion 实现流畅动画
-- 目前仅作为流程控制，实际录制功能待实现
+**`frontend/src/components/RecordVideoModal.js`**
+- 录制流程占位 UI
+- 当前仍是预留入口，不包含真正的视频录制实现
 
-**ErrorBoundary.js**
-- 错误边界处理组件
-- 捕获和处理组件树中的错误
-- 提供错误信息和重载按钮
-- 支持自定义错误界面
+**`frontend/src/components/ErrorBoundary.js`**
+- React 错误边界
+- 捕获页面渲染异常并给出兜底界面
 
-#### 页面 (`/frontend/src/pages/`)
+**`frontend/src/pages/HomePage.js`**
+- 首页与上传入口
+- 管理上传、过滤设置和进入展示页前的交互流程
 
-**HomePage.js**
-- 应用程序主页
-- 处理文件上传功能
-- 管理过滤设置状态
-- 协调各个模态框的显示
+**`frontend/src/pages/CumulativeVotesPage.js`**
+- 投票展示页
+- 组合图表、里程碑与进度逻辑
 
-**CumulativeVotesPage.js**
-- 投票数据展示页面
-- 整合图表和里程碑组件
-- 管理动画进度
-- 处理数据的加载和更新
+**`frontend/src/pages/hooks/useCumulativeVotesPageData.js`**
+- 展示页数据获取与整理
+- 负责调用接口并转换为页面可用状态
 
-#### 配置 (`/frontend/src/config/`)
+**`frontend/src/pages/hooks/useRoundProgress.js`**
+- 动画播放进度管理
+- 负责轮次推进相关状态
 
-**animationConfig.js**
-- 定义动画相关配置
-- 设置动画时长
-- 配置缓动函数
-- 设置动画延迟
+#### 配置与服务
 
-**globalChartConfig.json**
-- 图表全局配置
-- 设置图表尺寸和边距
-- 定义颜色方案
-- 配置字体样式
+**`frontend/src/config/seasonsConfig.json`**
+- 前端赛季展示配置
+- 定义赛季名称、轮次时间、里程碑、统计模板、布局与配色
 
-**seasonsConfig.json**
-- 赛季相关配置
-- 定义轮次信息和开赛时间
-- 配置里程碑事件和角色记录
-- 设置外卡赛信息
-- 定义颜色方案和布局配置
-- 配置统计信息展示模板
+**`frontend/src/config/characters-data.json`**
+- 角色元数据
+- 提供角色头像、英文名、CV 等前端展示信息
 
-**characters-data.json**
-- 角色基础数据库
-- 存储角色名称、作品、CV等信息
-- 包含角色头像链接
-- 记录作品首播年份和季度
-- 为前端提供角色详细信息
+**`frontend/src/config/ip-data.json`**
+- 作品元数据
+- 提供作品年份、季度等信息
 
-#### 服务 (`/frontend/src/services/`)
+**`frontend/src/config/character-lookup.json`**
+- 角色名与作品名到角色 ID 的映射
+- 供前后端拼接角色详情时使用
 
-**api.js**
-- 封装后端 API 调用
-- 处理文件上传请求
-- 获取投票数据
-- 错误处理
+**`frontend/src/config/globalChartConfig.json`**
+- 图表全局展示配置
 
-#### 样式 (`/frontend/src/styles/`)
+**`frontend/src/config/animationConfig.js`**
+- 动画参数配置
 
-**cumulative-votes-chart.css**
-- 图表组件样式
-- 定义条形图样式
-- 设置动画效果
+**`frontend/src/services/api.js`**
+- 后端接口封装
+- 负责上传文件、获取轮次数据、获取角色信息等请求
 
-**milestones-overlay.css**
-- 里程碑组件样式
-- 定义过渡动画
-- 设置显示效果
-
-**columnexclusionmodal.css**
-- 列排除模态框样式
-- 定义选择器样式
-
-**specialroundsmodal.css**
-- 特殊轮次模态框样式
-- 定义开关按钮样式
-
-**confirmationmodal.css**
-- 确认对话框样式
-- 按钮动画效果
-
-**recordvideomodal.css**
-- 视频录制对话框样式
-- 动画过渡效果
-
-**fileuploader.css**
-- 文件上传组件样式
-- 拖拽区域样式
-
-**global.css**
-- 全局样式定义
-- 页面整体布局
-
-#### 工具 (`/frontend/src/utils/`)
-
-**fileUtils.js**
-- 文件处理工具
-- 文件类型验证
-- 文件大小检查
-- 文件名处理
-
-#### 公共资源 (`/frontend/public/`)
-
-**index.html**
-- 应用 HTML 模板
-- 配置页面元数据
-- 加载外部资源
-- 定义根元素
-
-#### 根目录文件 (`/frontend/`)
-
-**package.json**
-- 项目依赖配置
-- 定义项目脚本
-- 指定项目版本
-- 管理项目依赖项
-
-**package-lock.json**
-- 依赖版本锁定文件
-- 确保团队使用相同版本依赖
-- 记录完整的依赖树
-- 加速依赖安装过程
-- 提供依赖安全审计信息
-
-**App.js**
-- React 应用入口
-- 配置路由系统
-- 管理全局状态
-- 处理页面导航
-
-**index.js**
-- 应用程序入口点
-- 渲染 React 根组件
-- 配置全局样式
-- 初始化应用
+**`frontend/src/utils/fileUtils.js`**
+- 文件校验与处理工具
 
 ### 后端文件
 
-#### 核心文件 (`/backend/src/`)
+#### 核心处理链路
 
-**main.py**
-- FastAPI 服务入口
-- 定义 API 路由
-- 处理文件上传和哈希校验
-- 返回处理后的数据
-- 管理全局数据缓存
+**`backend/start.py`**
+- 本地启动脚本
+- 统一启动 `src.main:app`
 
-**vote_tracker.py**
+**`backend/src/main.py`**
+- FastAPI 应用入口
+- 负责创建应用、挂载中间件并注册路由
+
+**`backend/src/routes/data_routes.py`**
+- 数据相关 API 路由
+- 包含上传、获取轮次、获取角色信息、获取当前赛季等接口
+
+**`backend/src/vote_tracker.py`**
 - 投票数据处理核心
-- 实现数据过滤逻辑（外卡赛、排位赛）
-- 计算累计票数和排名
-- 处理特殊轮次和淘汰角色
-- 安全的数值转换和处理
+- 负责读取 CSV、校验列、过滤轮次、处理淘汰角色、输出投票数据结构
 
-**logger.py**
+**`backend/src/services/file_storage.py`**
+- 上传文件存储服务
+- 负责文件落盘、重复文件判断、记录最新文件路径
+
+**`backend/src/services/vote_tracker_store.py`**
+- VoteTracker 实例管理
+- 根据 `backend/data/.latest` 懒加载当前数据文件
+
+**`backend/src/services/character_metadata.py`**
+- 角色元数据补充与响应组装
+- 将后端票数结果和前端角色库、作品库、排名数据拼接成接口返回值
+
+**`backend/src/utils/vote_parsing.py`**
+- 投票值解析工具
+- 负责安全数值转换与特殊值处理
+
+**`backend/src/logger.py`**
 - 日志系统
-- 记录数据处理过程
-- 记录错误和警告
-- 跟踪过滤操作
+- 输出后端运行日志与数据处理日志
 
-**src/data/rankings.json**
-- 赛季最终排名数据
-- 存储角色的最终名次
-- 用于角色信息API返回
-- 当前包含2023赛季排名
+#### 配置与数据
 
-#### 配置文件 (`/backend/config/`)
+**`backend/config/seasons/__init__.py`**
+- 聚合所有赛季模块
+- 统一构建 `SEASONS_CONFIG`
 
-**settings.py**
-- 全局配置管理
-- 环境变量配置
-- 数据库连接设置
-- 日志级别控制
+**`backend/config/seasons/season_2023.py`**
+- 单个赛季配置模块
+- 当前 2023 赛季的轮次、外卡赛、淘汰角色都定义在这里
 
-**seasons_rounds.py**
-- 赛季轮次定义
-- 外卡赛配置
-- 排位赛规则和淘汰角色列表
-- 轮次顺序管理
-- 非投票列定义
-- 提供赛季配置查询接口
+**`backend/config/seasons/shared.py`**
+- 共享配置
+- 当前主要保存 `NON_VOTE_COLUMNS`
 
-#### 数据目录 (`/backend/data/`)
+**`backend/config/seasons_rounds.py`**
+- 赛季配置访问层
+- 对外提供 `get_season_rounds`、`get_wildcard_rounds`、`get_eliminated_characters`
+- 同时承载赛季配置相关类型定义
 
-**.latest**
-- 记录最新上传的数据文件路径
-- 用于应用启动时自动加载最新数据
+**`backend/config/settings.py`**
+- 全局配置
+- 管理 API 前缀、CORS 等后端基础设置
 
-**global_state.json**
-- 存储应用全局状态
-- 保存运行时配置
+**`backend/data/.latest`**
+- 当前最新数据文件路径
+- 服务重启后会据此恢复当前赛季数据
 
-**2023_season.csv**
-- 2023赛季的完整投票数据
-- 包含所有轮次的票数记录
+**`backend/src/data/rankings.json`**
+- 排名数据
+- 用于角色详情接口中的名次补充
 
-#### 日志目录 (`/backend/logs/`)
+#### 脚本与依赖
 
-**animative_viz.log**
-- 应用主日志
-- 记录关键操作
+**`backend/scripts/update_eliminated_chars.py`**
+- 维护淘汰角色配置的辅助脚本
 
-**app.log**
-- 详细应用日志
-- 完整操作记录
+**`backend/scripts/analyze_character_matches.py`**
+**`backend/scripts/analyze_matches.py`**
+**`backend/scripts/calculate_losses.py`**
+- 数据分析类脚本
+- 用于离线统计与辅助维护
 
-#### 根目录日志文件
-
-**animative_viz.log**
-- 根目录应用日志
-
-**backend_debug.log**
-- 后端调试日志
-
-**vote_tracker.log**
-- 投票数据追踪日志
-- 记录投票处理过程
-
-**vote_tracker_debug.log**
-- 投票追踪调试信息
-- 详细处理步骤记录
-
-**vote_tracker_info.log**
-- 投票追踪信息日志
-- 一般信息记录
-
-#### 根目录文件 (`/backend/`)
-
-**requirements.txt**
+**`backend/requirements.txt`**
 - Python 依赖列表
-- 指定依赖版本
-- 环境依赖管理
-- 快速环境搭建
-
-#### 脚本目录 (`/backend/scripts/`)
-
-**analyze_character_matches.py**
-- 分析角色对战数据
-- 统计对战记录和胜率
-
-**analyze_matches.py**
-- 比赛数据综合分析
-- 生成统计报告
-
-**calculate_losses.py**
-- 计算角色败场数据
-- 分析失利情况
-
-**update_eliminated_chars.py**
-- 更新淘汰角色列表
-- 维护赛季配置数据
-
-**start.py**
-- 服务启动入口
-- 配置加载
-- 服务初始化
-- 错误处理
-
-**__init__.py**
-- 包初始化文件
-- 导出接口
-- 版本信息
-- 包级设置
-
-#### 日志文件 (`/backend/`)
-
-**vote_tracker.log**
-- 主日志文件
-- 记录关键操作
-- 追踪错误信息
-- 保存处理结果
-
-**vote_tracker_debug.log**
-- 调试日志文件
-- 记录详细信息
-- 帮助问题诊断
-- 跟踪数据流
-
-**vote_tracker_info.log**
-- 信息日志文件
-- 记录一般操作
-- 保存状态变化
-- 追踪用户行为
-
-### 工具文件（根目录）
-
-**excel_to_csv.py**
-- Excel 转 CSV 独立工具脚本
-- 使用 pandas 和 openpyxl 处理文件格式转换
-- 清理数据格式
-- 支持命令行使用
-- 注意：需要单独安装 openpyxl 依赖
 
 ## 安装与运行
 
@@ -638,26 +490,23 @@ npm start
 前端将运行在 `http://localhost:3000`
 
 ### 后端安装
-```bash
+```powershell
 cd backend
 python -m venv venv
-# Windows
-venv\Scripts\activate
-# Linux/Mac
-source venv/bin/activate
-
-pip install -r requirements.txt
-python start.py
+.\venv\Scripts\pip.exe install -r requirements.txt
+.\venv\Scripts\python.exe start.py
 ```
 后端将运行在 `http://localhost:8000`
 
-### Excel 转换工具使用
-```bash
-# 使用命令行参数
-python excel_to_csv.py <Excel文件路径> [可选:CSV输出路径]
+说明：当前 README 以 Windows PowerShell 环境为准。
 
-# 或使用默认路径（Female-datas.xlsx）
-python excel_to_csv.py
+### Excel 转换工具使用
+```powershell
+# 自动生成同名 CSV
+.\backend\venv\Scripts\python.exe excel_to_csv.py "backend\data\2023_season.xlsx"
+
+# 指定 CSV 输出路径
+.\backend\venv\Scripts\python.exe excel_to_csv.py "backend\data\2023_season.xlsx" "backend\data\2023_season.csv"
 ```
 
 ## 多赛季与赛制灵活性 ⭐
@@ -682,70 +531,79 @@ python excel_to_csv.py
 
 ### 添加新赛季完整指南
 
-假设要添加一个全新的2024赛季，且赛制与2023完全不同：
+当前后端赛季配置已经拆分，不再直接在 `backend/config/seasons_rounds.py` 里手写整份赛季数据。正确做法是新增独立赛季模块，再让聚合入口导出。
 
-#### 步骤1：配置后端赛季信息
+假设要添加一个全新的 2024 赛季：
 
-编辑 `backend/config/seasons_rounds.py`，在 `SEASONS_CONFIG` 中添加：
+#### 步骤1：新增后端赛季模块
+
+在 `backend/config/seasons/` 下新建 `season_2024.py`：
 
 ```python
-SEASONS_CONFIG = {
-    "2023": { ... },  # 已有配置
-    "2024": {
-        # 【必需】定义投票轮次（名称和数量完全自定义）
-        "vote_columns": [
-            "海选赛",
-            "小组赛A组",
-            "小组赛B组",
-            "淘汰赛16强",
-            "淘汰赛8强",
-            "半决赛",
-            "决赛"
-        ],
-        
-        # 【可选】如果有外卡赛/复活赛
-        "wildcard_rounds": [
-            "复活赛"
-        ],
-        
-        # 【可选】如果有排位赛/淘汰规则
-        "eliminated_characters": {
-            "小组赛B组": [
-                {"character": "角色名", "series": "作品名"},
-                # 在这个轮次被淘汰的角色
-            ],
-            "淘汰赛16强": [
-                {"character": "角色名", "series": "作品名"},
-            ]
-        }
+SEASON_ID = '2024'
+
+SEASON_CONFIG = {
+    'vote_columns': [
+        '海选赛',
+        '小组赛A组',
+        '小组赛B组',
+        '淘汰赛16强',
+        '半决赛',
+        '决赛'
+    ],
+    'wildcard_rounds': [
+        '复活赛'
+    ],
+    'eliminated_characters': {
+        '小组赛B组': [
+            {'character': '角色名', 'series': '作品名'}
+        ]
     }
 }
 ```
 
-**最简配置示例**（如果没有任何特殊规则）：
+最简版本只需要：
+
 ```python
-"2024": {
-    "vote_columns": [
-        "第一轮",
-        "第二轮",
-        "决赛"
+SEASON_ID = '2024'
+
+SEASON_CONFIG = {
+    'vote_columns': [
+        '第一轮',
+        '第二轮',
+        '决赛'
     ]
-    # 仅此而已！不需要其他任何配置
 }
 ```
 
-#### 步骤2：配置前端展示信息
+#### 步骤2：把新赛季接入聚合入口
 
-编辑 `frontend/src/config/seasonsConfig.json`，在 `seasons` 对象中添加：
+编辑 `backend/config/seasons/__init__.py`，把新模块导入并加入 `SEASONS_CONFIG`：
+
+```python
+from .season_2023 import SEASON_CONFIG as SEASON_2023_CONFIG, SEASON_ID as SEASON_2023_ID
+from .season_2024 import SEASON_CONFIG as SEASON_2024_CONFIG, SEASON_ID as SEASON_2024_ID
+from .shared import NON_VOTE_COLUMNS
+
+SEASONS_CONFIG = {
+    SEASON_2023_ID: SEASON_2023_CONFIG,
+    SEASON_2024_ID: SEASON_2024_CONFIG,
+}
+```
+
+这里不需要改 `backend/config/seasons_rounds.py` 的查询函数，新增赛季后它会自动通过 `SEASONS_CONFIG` 生效。
+
+#### 步骤3：配置前端赛季展示信息
+
+编辑 `frontend/src/config/seasonsConfig.json`，在 `seasons` 对象中添加新赛季，例如：
 
 ```json
 {
   "seasons": {
-    "2023": { ... },
+    "2023": { "...": "..." },
     "2024": {
       "id": "2024",
       "name": "2024赛季",
-      
       "rounds": [
         {
           "name": "海选赛",
@@ -758,14 +616,12 @@ SEASONS_CONFIG = {
           "totalVoters": 8000
         }
       ],
-      
       "colors": {
         "safe": [
           {"light": "#FF6B6B", "dark": "#C23616"}
         ],
         "default": "#333"
       },
-      
       "milestones": {
         "决赛": [
           {
@@ -774,41 +630,39 @@ SEASONS_CONFIG = {
           }
         ]
       },
-      
       "stats": [
         {
           "id": "total",
           "type": "total",
           "template": "该轮次总选票数：{totalVotes}"
         }
-      ],
-      
-      "layout": {
-        "text": {
-          "baseY": 500,
-          "baseX": {"text": 520, "icon": 570},
-          "lineHeight": 30
-        }
-      }
+      ]
     }
   }
 }
 ```
 
-**最简配置示例**（使用默认样式）：
+最简版本至少要保证：
+
 ```json
 "2024": {
   "id": "2024",
   "name": "2024赛季",
   "rounds": [
-    {"name": "第一轮", "startTime": "2024-01-01T20:00:00"}
+    { "name": "第一轮", "startTime": "2024-01-01T20:00:00" },
+    { "name": "第二轮", "startTime": "2024-01-08T20:00:00" },
+    { "name": "决赛", "startTime": "2024-01-15T20:00:00" }
   ]
 }
 ```
 
-#### 步骤3：准备数据文件
+这里的 `rounds[].name` 必须和后端 `vote_columns` 一一对应，否则前端展示会对不上轮次。
 
-创建 `2024_season.csv` 文件，列名必须包含：
+#### 步骤4：准备数据文件
+
+将数据文件放到后端可读取位置，文件名必须满足 `YYYY_season.csv`，例如 `2024_season.csv`。
+
+CSV 至少要包含这些基础列：
 
 ```csv
 序号,角色,作品,CV,海选赛,小组赛A组,小组赛B组,淘汰赛16强,半决赛,决赛
@@ -816,17 +670,43 @@ SEASONS_CONFIG = {
 2,角色B,作品B,声优B,150,250,350,450,550,650
 ```
 
-**关键要求**：
-- ✅ 文件名必须是 `YYYY_season.csv` 格式
-- ✅ 列名必须与后端配置的 `vote_columns` 完全一致
-- ✅ 必须包含基础列：`序号`、`角色`、`作品`、`CV`
+关键约束：
 
-#### 步骤4：上传使用
+1. 文件名必须是 `YYYY_season.csv`
+2. 基础列必须包含 `序号`、`角色`、`作品`、`CV`
+3. CSV 中的投票列必须和后端 `vote_columns` 完全一致
+4. 前端 `seasonsConfig.json` 中的 `rounds[].name` 也必须与后端轮次一致
+
+#### 步骤5：上传并验证
 
 1. 启动后端服务
 2. 在前端上传 `2024_season.csv`
-3. 系统会自动识别赛季并应用对应配置
-4. 享受你的全新赛制！
+3. 后端会根据文件名自动识别赛季
+4. 前端会根据赛季号读取对应展示配置
+5. 检查轮次、里程碑、角色信息是否都能正常显示
+
+#### 步骤6：静态检查与回归验证
+
+新增赛季配置后，建议至少做两类检查：
+
+1. 运行 Python 静态分析，确认配置改动没有破坏类型约束
+2. 实际上传新赛季 CSV，确认轮次匹配、接口返回和页面展示都正常
+
+建议命令如下：
+
+```powershell
+cd backend
+.\venv\Scripts\mypy.exe src config --pretty
+```
+
+本地启动后端：
+
+```powershell
+cd backend
+.\venv\Scripts\python.exe start.py
+```
+
+前端启动后，在页面上传 `2024_season.csv` 做实际回归验证。
 
 ### 配置灵活性示例
 
@@ -861,29 +741,10 @@ SEASONS_CONFIG = {
 
 ### 技术实现原理
 
-系统通过以下机制实现灵活性：
+项目采用“文件名识别赛季 + 配置驱动渲染”的方式工作：
 
-1. **动态赛季识别**：从文件名 `YYYY_season.csv` 中提取赛季年份
-2. **配置驱动**：所有赛制规则由配置文件定义，无需修改代码
-3. **安全回退**：可选配置项使用 `.get()` 方法，缺失时返回默认值
-4. **独立处理**：每个赛季的数据和规则完全独立，互不干扰
+1. 后端从 `YYYY_season.csv` 文件名识别赛季
+2. 后端从 `backend/config/seasons/` 读取对应赛季规则
+3. 前端从 `frontend/src/config/seasonsConfig.json` 读取对应展示配置
+4. CSV 列名、后端轮次配置、前端轮次配置三者对齐后，整套展示流程即可工作
 
-## 配置说明
-
-### 赛季配置
-在 `frontend/src/config/seasonsConfig.json` 中配置：
-- 赛季轮次信息
-- 外卡赛轮次
-- 里程碑事件
-
-### 图表配置
-在 `frontend/src/config/globalChartConfig.json` 中配置：
-- 图表尺寸
-- 边距设置
-- 颜色方案
-
-### 动画配置
-在 `frontend/src/config/animationConfig.js` 中配置：
-- 动画时长
-- 缓动函数
-- 延迟设置
