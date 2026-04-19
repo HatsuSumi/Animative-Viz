@@ -111,6 +111,32 @@ export async function getVoteRounds(contextId) {
 }
 
 /**
+ * 获取累计票数页面初始化数据
+ * @param {Object} options - 选项对象
+ * @param {string} options.contextId - 数据上下文 ID
+ * @param {string[]} options.excludedColumns - 要排除的列
+ * @param {boolean} options.excludeWildcard - 是否排除外卡赛
+ * @param {boolean} options.excludeRanking - 是否排除排位赛
+ * @returns {Promise<Object>} 页面初始化数据
+ */
+export async function getCumulativeVotesPageData({ contextId, excludedColumns = [], excludeWildcard = false, excludeRanking = false } = {}) {
+  try {
+    const requiredContextId = requireContextId(contextId);
+    const response = await api.post('/pages/cumulative-votes', {
+      context_id: requiredContextId,
+      excluded_columns: excludedColumns,
+      exclude_wildcard: excludeWildcard,
+      exclude_ranking: excludeRanking
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('获取累计票数页面初始化数据失败:', error);
+    throw new Error(getErrorMessage(error, '获取累计票数页面初始化数据失败'));
+  }
+}
+
+/**
  * 获取完整的投票数据
  * @param {Object} options - 选项对象
  * @param {string} options.contextId - 数据上下文 ID

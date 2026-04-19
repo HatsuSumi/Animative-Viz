@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { getCharactersInfo, getCurrentSeason, getSeasonConfig, getVotesByRounds } from '../../services/api';
+import { getCumulativeVotesPageData } from '../../services/api';
 
 export function useCumulativeVotesPageData({
   location,
@@ -43,42 +43,16 @@ export function useCumulativeVotesPageData({
           throw new Error('缺少数据上下文，请返回首页重新上传文件');
         }
 
-        let currentVotesData = location.state?.votesData;
-        let currentVoteRounds = location.state?.voteRounds;
-        let currentParticipatingCounts = location.state?.participatingCounts;
+        const pageData = await getCumulativeVotesPageData(filterOptions);
+        const votesResponse = pageData.votes_by_rounds;
 
-        if (!currentVotesData || !currentVoteRounds) {
-          const votesResponse = await getVotesByRounds(filterOptions);
-          currentVotesData = votesResponse.votes_data;
-          currentVoteRounds = votesResponse.vote_rounds;
-          currentParticipatingCounts = votesResponse.participating_counts;
-        }
-
-        const season = await getCurrentSeason(filterOptions.contextId);
-
-        const [seasonConfigResponse, charactersResponse] = await Promise.all([
-          getSeasonConfig(filterOptions.contextId),
-          getCharactersInfo(filterOptions.contextId)
-        ]);
-
-        if (seasonConfigResponse.season !== season) {
-          throw new Error(`赛季配置与当前赛季不一致: ${seasonConfigResponse.season} !== ${season}`);
-        }
-
-        const resolvedFinalRanks = {};
-        charactersResponse.forEach(({ id, rank }) => {
-          if (id && rank) {
-            resolvedFinalRanks[id] = rank;
-          }
-        });
-
-        setCurrentSeason(season);
-        setSeasonContract(seasonConfigResponse);
-        setFinalRanks(resolvedFinalRanks);
-        setCharactersInfo(charactersResponse);
-        setVotesData(currentVotesData);
-        setVoteRounds(currentVoteRounds);
-        setParticipatingCounts(currentParticipatingCounts || {});
+        setCurrentSeason(pageData.season);
+        setSeasonContract(pageData.season_config);
+        setFinalRanks(pageData.final_ranks);
+        setCharactersInfo(pageData.characters_info);
+        setVotesData(votesResponse.votes_data);
+        setVoteRounds(votesResponse.vote_rounds);
+        setParticipatingCounts(votesResponse.participating_counts || {});
         setNextRoundProgress(100);
         setCurrentRoundIndex(0);
         setLoading(false);
@@ -89,7 +63,7 @@ export function useCumulativeVotesPageData({
     };
 
     fetchAllData();
-  }, [filterOptions, hasContextId, location.state, setCurrentRoundIndex, setNextRoundProgress]);
+  }, [filterOptions, hasContextId, setCurrentRoundIndex, setNextRoundProgress]);
 
   return {
     votesData,

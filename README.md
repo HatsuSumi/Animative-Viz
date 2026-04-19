@@ -267,19 +267,21 @@ backend/
 
 ### 数据上传
 - `POST /api/v1/upload-data`
-  - 功能：上传投票数据文件
+  - 功能：上传投票数据文件并初始化数据上下文
   - 参数：
     - `file`: 上传的 CSV 文件
     - `original_path`: 原始文件名或来源路径标识
   - 返回：
+    - `context_id`: 数据上下文 ID
     - 文件信息
     - 总角色数
     - 投票轮次列表
 
 ### 数据获取
-- `GET|POST /api/v1/votes-by-rounds`
+- `POST /api/v1/votes-by-rounds`
   - 功能：获取每轮投票数据
   - 参数：
+    - `context_id`: 数据上下文 ID
     - `excluded_columns`: 要排除的列
     - `exclude_wildcard`: 是否排除外卡赛
     - `exclude_ranking`: 是否排除排位赛
@@ -290,18 +292,47 @@ backend/
 
 - `GET /api/v1/vote-rounds`
   - 功能：获取投票轮次列表
+  - 参数：
+    - `context_id`: 数据上下文 ID
   - 返回：所有投票轮次的列表
 
 - `GET /api/v1/current-season`
   - 功能：获取当前赛季信息
+  - 参数：
+    - `context_id`: 数据上下文 ID
   - 返回：当前赛季号
+
+- `GET /api/v1/season-config`
+  - 功能：获取当前赛季配置契约
+  - 参数：
+    - `context_id`: 数据上下文 ID
+  - 返回：
+    - `season`: 当前赛季
+    - `vote_rounds`: 投票轮次列表
+    - `wildcard_rounds`: 外卡轮次列表
 
 - `GET /api/v1/characters-info`
   - 功能：获取角色详细信息
+  - 参数：
+    - `context_id`: 数据上下文 ID
   - 返回：
     - 角色基本信息
     - 角色排名
     - 角色头像
+
+- `POST /api/v1/pages/cumulative-votes`
+  - 功能：获取累计票数页面初始化数据
+  - 参数：
+    - `context_id`: 数据上下文 ID
+    - `excluded_columns`: 要排除的列
+    - `exclude_wildcard`: 是否排除外卡赛
+    - `exclude_ranking`: 是否排除排位赛
+  - 返回：
+    - `season`: 当前赛季
+    - `season_config`: 页面使用的赛季配置契约
+    - `characters_info`: 页面所需角色信息
+    - `votes_by_rounds`: 页面所需投票轮次数据
+    - `final_ranks`: 页面所需最终排名映射
 
 ## 文件说明
 
@@ -427,6 +458,10 @@ backend/
 **`backend/src/services/character_metadata.py`**
 - 角色元数据补充与响应组装
 - 将后端票数结果和前端角色库、作品库、排名数据拼接成接口返回值
+
+**`backend/src/services/vote_season_config.py`**
+- 赛季配置解析服务
+- 负责从文件名识别赛季、校验 CSV 投票列并提供外卡轮次与淘汰角色配置
 
 **`backend/src/utils/vote_parsing.py`**
 - 投票值解析工具

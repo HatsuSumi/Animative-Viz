@@ -47,6 +47,10 @@ class VoteRoundsRequest(BaseModel):
     exclude_ranking: bool = False
 
 
+class CumulativeVotesPageRequest(VoteRoundsRequest):
+    pass
+
+
 def _require_context_id(context_id: Optional[str]) -> str:
     if not context_id:
         raise ApiError(400, 'CONTEXT_ID_REQUIRED', '缺少数据上下文，请重新上传文件')
@@ -174,4 +178,51 @@ def get_characters_info(context_id: Optional[str] = None) -> list[dict[str, obje
     except Exception as error:
         logger.error(f"获取角色信息失败: {str(error)}")
         raise ApiError(500, 'GET_CHARACTERS_INFO_FAILED', '获取角色信息失败') from error
+
+
+@router.post(f"{settings.API_V1_STR}/pages/cumulative-votes")
+def get_cumulative_votes_page_data(request: CumulativeVotesPageRequest) -> dict[str, object]:
+    """获取累计票数页面初始化数据"""
+    try:
+        context_id = _require_context_id(request.context_id)
+        vote_tracker = _get_initialized_vote_tracker(context_id)
+
+        votes_result = vote_tracker.get_votes_by_rounds(
+            excluded_columns=request.excluded_columns,
+            exclude_wildcard=request.exclude_wildcard,
+            exclude_ranking=request.exclude_ranking
+        )
+        votes_response = build_votes_response(votes_result)
+
+        if not vote_tracker.season:
+            raise ApiError(400, 'DATA_NOT_INITIALIZED', '请先上传数据文件')
+
+        characters_info = vote_tracker.get_characters_info()
+        if not characters_info:
+            raise ApiError(404, 'CHARACTERS_INFO_NOT_FOUND', '未找到角色信息')
+
+        characters_response = build_characters_info_response(characters_info)
+        final_ranks = {
+            character['id']: character['rank']
+            for character in characters_response
+            if character.get('id') and character.get('rank') is not None
+        }
+
+        return {
+            'season': vote_tracker.season,
+            'season_config': {
+                'season': vote_tracker.season,
+                'vote_rounds': vote_tracker.get_vote_rounds(),
+                'wildcard_rounds': vote_tracker.wildcard_rounds,
+            },
+            'characters_info': characters_response,
+            'votes_by_rounds': votes_response,
+            'final_ranks': final_ranks,
+        }
+
+    except HTTPException as error:
+        _rethrow_http_error(error)
+    except Exception as error:
+        logger.error(f"获取累计票数页面初始化数据失败: {str(error)}")
+        raise ApiError(500, 'GET_CUMULATIVE_VOTES_PAGE_FAILED', '获取累计票数页面初始化数据失败') from error
 

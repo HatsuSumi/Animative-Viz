@@ -6,7 +6,6 @@ import ColumnExclusionModal from '../components/ColumnExclusionModal';
 import ConfirmationModal from '../components/ConfirmationModal';
 import ExcludeSpecialRoundsModal from '../components/ExcludeSpecialRoundsModal';
 import RecordVideoModal from '../components/RecordVideoModal';
-import { getVotesByRounds } from '../services/api';
 import '../styles/global.css';
 
 const FLOW_STEP = {
@@ -103,23 +102,15 @@ const HomePage = () => {
     excludeRanking
   } = flowState;
 
-  const navigateWithVotesData = useCallback(async (filterOptions, shouldRecordValue) => {
+  const navigateToCumulativeVotesPage = useCallback((filterOptions, shouldRecordValue) => {
     const requestOptions = {
       contextId,
       ...filterOptions
     };
-    const data = await getVotesByRounds(requestOptions);
-
-    if (!data.votes_data || !data.vote_rounds) {
-      throw new Error('获取的数据不完整');
-    }
 
     navigate('/cumulative-votes', {
       state: {
         contextId,
-        votesData: data.votes_data,
-        voteRounds: data.vote_rounds,
-        participatingCounts: data.participating_counts || {},
         filterOptions: requestOptions,
         shouldRecord: shouldRecordValue
       }
@@ -137,7 +128,7 @@ const HomePage = () => {
       dispatch({ type: 'OPEN_COLUMN_SELECTION' });
     } else {
       try {
-        await navigateWithVotesData({}, false);
+        navigateToCumulativeVotesPage({}, false);
       } catch (error) {
         setError(error.message || '获取数据失败，请重试');
       }
@@ -184,7 +175,7 @@ const HomePage = () => {
         excludeRanking
       };
 
-      await navigateWithVotesData(filterOptions, shouldRecord);
+      navigateToCumulativeVotesPage(filterOptions, shouldRecord);
     } catch (error) {
       console.error('Error navigating to chart:', error);
     }
