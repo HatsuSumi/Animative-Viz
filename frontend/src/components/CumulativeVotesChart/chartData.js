@@ -14,10 +14,11 @@ export function processChartData(data, voteRounds) {
     roundVotes: [],
     cumulativeVotes: []
   }));
+  const processedDataById = new Map(processedData.map(item => [item.id, item]));
 
   voteRounds.forEach(roundName => {
     data.forEach(characterData => {
-      const processedItem = processedData.find(item => item.id === characterData.id);
+      const processedItem = processedDataById.get(characterData.id);
 
       if (processedItem) {
         const currentRoundVotes = characterData.rounds[roundName];
@@ -50,8 +51,12 @@ export function buildRoundData({
   voteRounds,
   currentSeason,
   currentSeasonConfig,
+  roundConfigsByName,
   charactersInfo
 }) {
+  const processedDataById = new Map(processedData.map(item => [item.id, item]));
+  const charactersInfoById = new Map(charactersInfo.map(info => [info.id, info]));
+
   const allRoundData = processedData.map(item => {
     const currentRoundActualVote = item.roundVotes[currentRoundIndex];
     const cumulativeVotes = item.cumulativeVotes[currentRoundIndex];
@@ -98,22 +103,25 @@ export function buildRoundData({
     i++;
   }
 
+  const prevRoundVotes = currentRoundIndex > 0
+    ? processedData.map(d => ({
+      id: d.id,
+      vote: d.cumulativeVotes[currentRoundIndex - 1] || 0
+    })).sort((a, b) => b.vote - a.vote)
+    : [];
+  const prevRoundRanksById = new Map(prevRoundVotes.map((item, index) => [item.id, index]));
+
   const displayData = allRoundData
     .slice(0, globalChartConfig.limits.maxDisplay)
     .map((item, index) => {
       const prevRoundData = currentRoundIndex > 0
-        ? processedData.find(d => d.id === item.id)
+        ? processedDataById.get(item.id)
         : null;
       const prevRoundVote = prevRoundData?.cumulativeVotes[currentRoundIndex - 1] || 0;
 
       let prevRoundDiff = 0;
       if (currentRoundIndex > 0 && index > 0) {
-        const prevRoundVotes = processedData.map(d => ({
-          id: d.id,
-          vote: d.cumulativeVotes[currentRoundIndex - 1] || 0
-        })).sort((a, b) => b.vote - a.vote);
-
-        const prevRoundRank = prevRoundVotes.findIndex(d => d.id === item.id);
+        const prevRoundRank = prevRoundRanksById.get(item.id) ?? -1;
         if (prevRoundRank > 0) {
           const prevRoundLeaderVote = prevRoundVotes[prevRoundRank - 1].vote;
           prevRoundDiff = prevRoundLeaderVote - prevRoundVote;
@@ -150,20 +158,17 @@ export function buildRoundData({
   const total = sortedVotes.reduce((a, b) => a + b, 0);
   const average = hasEffectiveVotes ? (total / sortedVotes.length).toFixed(2) : '0.00';
 
-  const currentRoundConfig = currentSeasonConfig.rounds.find(round => round.name === currentRound);
+  const currentRoundConfig = roundConfigsByName.get(currentRound);
   if (!currentRoundConfig) {
-    console.error('缺少轮次配置:', {
-      season: currentSeason,
-      round: currentRound
-    });
+    throw new Error(`缺少轮次配置: ${currentSeason} / ${currentRound}`);
   }
 
   const effectiveCount = topVotedChars.length;
   const topVotes = sortedByActualVotes
     .slice(0, effectiveCount)
     .reduce((sum, d) => sum + d.currentRoundActualVote, 0);
-  const startTime = currentRoundConfig?.startTime ?? '未知';
-  const totalVoters = currentRoundConfig?.totalVoters ?? '未知';
+  const startTime = currentRoundConfig.startTime;
+  const totalVoters = currentRoundConfig.totalVoters;
   const percentage = totalVotes > 0
     ? ((topVotes / totalVotes) * 100).toFixed(2)
     : '0.00';
@@ -188,7 +193,7 @@ export function buildRoundData({
       return [
         { ...stat, text: topNTitle, round: currentRoundIndex },
         ...topVotedChars.map((item, idx) => {
-          const characterInfo = charactersInfo.find(info => info.id === item.id);
+          const characterInfo = charactersInfoById.get(item.id);
           const avatar = characterInfo?.avatar || '';
           return {
             id: `top5-${idx}`,

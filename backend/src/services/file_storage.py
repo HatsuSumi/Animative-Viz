@@ -6,7 +6,7 @@ from typing import Any
 
 from fastapi import UploadFile
 
-from .vote_tracker_store import save_latest_file_path
+from .vote_tracker_store import save_vote_tracker_context
 from ..logger import logger
 from ..vote_tracker import VoteTracker
 
@@ -36,13 +36,14 @@ def handle_upload_data(file: UploadFile, original_path: str) -> dict[str, Any]:
         logger.info(f'直接使用文件: {filename}')
         vote_tracker = VoteTracker(target_path)
         total_characters = len(vote_tracker.data.index) if vote_tracker.data is not None else 0
-        save_latest_file_path(target_path)
+        context_id = save_vote_tracker_context(target_path)
         return {
             'message': '直接使用上传的文件',
             'filename': filename,
             'project_path': target_path,
             'total_characters': total_characters,
-            'vote_rounds': vote_tracker.vote_columns
+            'vote_rounds': vote_tracker.vote_columns,
+            'context_id': context_id
         }
 
     with tempfile.NamedTemporaryFile(delete=False, suffix='.csv') as temp_file:
@@ -59,14 +60,15 @@ def handle_upload_data(file: UploadFile, original_path: str) -> dict[str, Any]:
             if old_hash == new_hash:
                 os.unlink(temp_path)
                 logger.info(f'文件内容未变化: {filename}')
-                save_latest_file_path(target_path)
+                context_id = save_vote_tracker_context(target_path)
                 total_characters = len(vote_tracker_temp.data.index) if vote_tracker_temp.data is not None else 0
                 return {
                     'message': '文件内容未变化，继续使用已有文件',
                     'filename': filename,
                     'project_path': target_path,
                     'total_characters': total_characters,
-                    'vote_rounds': vote_tracker_temp.vote_columns
+                    'vote_rounds': vote_tracker_temp.vote_columns,
+                    'context_id': context_id
                 }
 
             logger.info(f'更新文件: {filename}')
@@ -75,7 +77,7 @@ def handle_upload_data(file: UploadFile, original_path: str) -> dict[str, Any]:
             logger.info(f'新增文件: {filename}')
             shutil.move(temp_path, target_path)
 
-        save_latest_file_path(target_path)
+        context_id = save_vote_tracker_context(target_path)
 
         vote_tracker = VoteTracker(target_path)
         total_characters = len(vote_tracker.data.index) if vote_tracker.data is not None else 0
@@ -86,7 +88,8 @@ def handle_upload_data(file: UploadFile, original_path: str) -> dict[str, Any]:
             'project_path': target_path,
             'total_characters': total_characters,
             'vote_rounds': vote_tracker.vote_columns,
-            'file_hash': calculate_file_hash(target_path)
+            'file_hash': calculate_file_hash(target_path),
+            'context_id': context_id
         }
     except Exception:
         if os.path.exists(temp_path):

@@ -1,4 +1,4 @@
-from typing import NoReturn
+from typing import NoReturn, Optional
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from pydantic import BaseModel, Field
@@ -33,10 +33,24 @@ def _rethrow_http_error(error: HTTPException) -> NoReturn:
     raise ApiError(error.status_code, 'REQUEST_FAILED', message) from error
 
 
+def _get_initialized_vote_tracker(context_id: Optional[str] = None):
+    vote_tracker = get_vote_tracker(context_id)
+    if vote_tracker is None:
+        raise ApiError(400, 'DATA_NOT_INITIALIZED', '请先上传数据文件')
+    return vote_tracker
+
+
 class VoteRoundsRequest(BaseModel):
+    context_id: str
     excluded_columns: list[str] = Field(default_factory=list)
     exclude_wildcard: bool = False
     exclude_ranking: bool = False
+
+
+def _require_context_id(context_id: Optional[str]) -> str:
+    if not context_id:
+        raise ApiError(400, 'CONTEXT_ID_REQUIRED', '缺少数据上下文，请重新上传文件')
+    return context_id
 
 
 @router.post(f"{settings.API_V1_STR}/upload-data")
@@ -64,9 +78,8 @@ async def upload_data(
 def get_votes_by_rounds(request: VoteRoundsRequest) -> dict[str, object]:
     """获取每轮投票数据"""
     try:
-        vote_tracker = get_vote_tracker()
-        if vote_tracker is None:
-            raise ApiError(400, 'DATA_NOT_INITIALIZED', '请先上传数据文件')
+        context_id = _require_context_id(request.context_id)
+        vote_tracker = _get_initialized_vote_tracker(context_id)
 
         result = vote_tracker.get_votes_by_rounds(
             excluded_columns=request.excluded_columns,
@@ -84,12 +97,11 @@ def get_votes_by_rounds(request: VoteRoundsRequest) -> dict[str, object]:
 
 
 @router.get(f"{settings.API_V1_STR}/vote-rounds")
-def get_vote_rounds() -> dict[str, list[str]]:
+def get_vote_rounds(context_id: Optional[str] = None) -> dict[str, list[str]]:
     """获取投票轮次列表"""
     try:
-        vote_tracker = get_vote_tracker()
-        if vote_tracker is None:
-            raise ApiError(400, 'DATA_NOT_INITIALIZED', '请先上传数据文件')
+        required_context_id = _require_context_id(context_id)
+        vote_tracker = _get_initialized_vote_tracker(required_context_id)
 
         return {
             'vote_rounds': vote_tracker.get_vote_rounds()
@@ -102,12 +114,35 @@ def get_vote_rounds() -> dict[str, list[str]]:
         raise ApiError(500, 'GET_VOTE_ROUNDS_FAILED', '获取投票轮次失败') from error
 
 
+@router.get(f"{settings.API_V1_STR}/season-config")
+def get_season_config(context_id: Optional[str] = None) -> dict[str, object]:
+    """获取当前赛季配置契约"""
+    try:
+        required_context_id = _require_context_id(context_id)
+        vote_tracker = _get_initialized_vote_tracker(required_context_id)
+        if not vote_tracker.season:
+            raise ApiError(400, 'DATA_NOT_INITIALIZED', '请先上传数据文件')
+
+        return {
+            'season': vote_tracker.season,
+            'vote_rounds': vote_tracker.get_vote_rounds(),
+            'wildcard_rounds': vote_tracker.wildcard_rounds,
+        }
+
+    except HTTPException as error:
+        _rethrow_http_error(error)
+    except Exception as error:
+        logger.error(f"获取赛季配置失败: {str(error)}")
+        raise ApiError(500, 'GET_SEASON_CONFIG_FAILED', '获取赛季配置失败') from error
+
+
 @router.get(f"{settings.API_V1_STR}/current-season")
-def get_current_season() -> dict[str, str]:
+def get_current_season(context_id: Optional[str] = None) -> dict[str, str]:
     """获取当前赛季"""
     try:
-        vote_tracker = get_vote_tracker()
-        if not vote_tracker or not vote_tracker.season:
+        required_context_id = _require_context_id(context_id)
+        vote_tracker = _get_initialized_vote_tracker(required_context_id)
+        if not vote_tracker.season:
             raise ApiError(400, 'DATA_NOT_INITIALIZED', '请先上传数据文件')
 
         return {
@@ -122,12 +157,11 @@ def get_current_season() -> dict[str, str]:
 
 
 @router.get(f"{settings.API_V1_STR}/characters-info")
-def get_characters_info() -> list[dict[str, object]]:
+def get_characters_info(context_id: Optional[str] = None) -> list[dict[str, object]]:
     """获取角色信息"""
     try:
-        vote_tracker = get_vote_tracker()
-        if not vote_tracker:
-            raise ApiError(400, 'DATA_NOT_INITIALIZED', '请先上传数据文件')
+        required_context_id = _require_context_id(context_id)
+        vote_tracker = _get_initialized_vote_tracker(required_context_id)
 
         characters_info = vote_tracker.get_characters_info()
         if not characters_info:

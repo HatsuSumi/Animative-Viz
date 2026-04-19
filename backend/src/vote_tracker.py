@@ -1,15 +1,10 @@
 import os
 import sys
-import re
 import pandas as pd
 from typing import Optional, TypedDict
-from config.seasons_rounds import (
-    NON_VOTE_COLUMNS,
-    get_season_rounds,
-    get_wildcard_rounds,
-    get_eliminated_characters
-)
+from config.seasons_rounds import NON_VOTE_COLUMNS
 from .logger import logger
+from .services.vote_season_config import VoteSeasonConfig
 from .utils import safe_float_convert
 
 # 将项目根目录添加到 Python 路径
@@ -63,6 +58,7 @@ class VoteTracker:
         self.vote_columns: list[str] = []
         self.wildcard_rounds: list[str] = []
         self.season: Optional[str] = None
+        self.season_config: Optional[VoteSeasonConfig] = None
         self.csv_path = csv_path
         
         if csv_path:
@@ -92,29 +88,10 @@ class VoteTracker:
             data.columns = [col.replace(' ', '') for col in data.columns]
             
             # 获取赛季信息
-            filename = original_filename or os.path.basename(csv_path)
-            self.season = self.get_season_from_filename(filename)
-            logger.debug(f"加载赛季: {self.season}")
-            
-            # 从配置获取投票轮次列
-            expected_vote_columns = get_season_rounds(self.season)
-            self.wildcard_rounds = get_wildcard_rounds(self.season)
-            
-            # 获取CSV文件中的投票列
-            csv_vote_columns = [col for col in data.columns if col not in NON_VOTE_COLUMNS]
-            
-            # 检查CSV文件中的列名是否完全匹配配置
-            missing_columns = [col for col in expected_vote_columns if col not in csv_vote_columns]
-            extra_columns = [col for col in csv_vote_columns if col not in expected_vote_columns]
-            
-            if missing_columns:
-                raise ValueError(f"CSV文件缺少以下必需的投票列: {missing_columns}")
-            
-            if extra_columns:
-                logger.warning(f"CSV文件包含以下额外的投票列: {extra_columns}")
-            
-            # 使用配置中的投票列，保持原有顺序
-            self.vote_columns = expected_vote_columns
+            self.season_config = VoteSeasonConfig.from_csv(data, csv_path, original_filename)
+            self.season = self.season_config.season
+            self.vote_columns = self.season_config.vote_columns
+            self.wildcard_rounds = self.season_config.wildcard_rounds
             
             return data
             
@@ -124,11 +101,7 @@ class VoteTracker:
 
     def get_season_from_filename(self, filename: str) -> str:
         """从文件名中提取赛季信息"""
-        season_match = re.search(r'(\d{4})_season', filename)
-        if not season_match:
-            logger.error(f"无法从文件名识别赛季: {filename}")
-            raise ValueError(f"无法从文件名识别赛季: {filename}")
-        return season_match.group(1)
+        return VoteSeasonConfig.get_season_from_filename(filename)
 
     def get_vote_rounds(self) -> list[str]:
         """
@@ -136,9 +109,9 @@ class VoteTracker:
         
         :return: 投票轮次列表
         """
-        if self.season is None:
-            raise ValueError("赛季未初始化")
-        return get_season_rounds(self.season)
+        if self.season_config is None:
+            raise ValueError("赛季配置未初始化")
+        return self.season_config.vote_columns
     
     def get_filtered_vote_rounds(self, excluded_columns: Optional[list[str]] = None, exclude_wildcard: bool = False) -> list[str]:
         """
@@ -186,11 +159,11 @@ class VoteTracker:
         }
 
     def _find_eliminated_round(self, vote_rounds: list[str], character_name: str, series_name: str) -> Optional[str]:
-        if self.season is None:
-            raise ValueError("赛季未初始化")
+        if self.season_config is None:
+            raise ValueError("赛季配置未初始化")
 
         for round_name in vote_rounds:
-            eliminated_chars = get_eliminated_characters(self.season, round_name)
+            eliminated_chars = self.season_config.get_eliminated_characters(round_name)
             for char in eliminated_chars:
                 if char['character'] == character_name and char['series'] == series_name:
                     return round_name
@@ -224,8 +197,8 @@ class VoteTracker:
         data = self.data
         if data is None:
             raise ValueError("投票数据未加载")
-        if self.season is None:
-            raise ValueError("赛季未初始化")
+        if self.season_config is None:
+            raise ValueError("赛季配置未初始化")
 
         vote_column_mapping = self._build_vote_column_mapping(vote_rounds)
 
@@ -255,10 +228,10 @@ class VoteTracker:
         return votes_data
 
     def _get_eliminated_character_pairs(self, round_name: str) -> set[tuple[str, str]]:
-        if self.season is None:
-            raise ValueError("赛季未初始化")
+        if self.season_config is None:
+            raise ValueError("赛季配置未初始化")
 
-        eliminated_chars = get_eliminated_characters(self.season, round_name)
+        eliminated_chars = self.season_config.get_eliminated_characters(round_name)
         return {
             (char['character'], char['series'])
             for char in eliminated_chars

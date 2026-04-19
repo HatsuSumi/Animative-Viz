@@ -20,6 +20,7 @@ const CumulativeVotesPage = () => {
     error,
     charactersInfo,
     currentSeason,
+    seasonContract,
     finalRanks
   } = useCumulativeVotesPageData({
     location,
@@ -83,6 +84,7 @@ const CumulativeVotesPage = () => {
         voteRounds={voteRounds}
         participatingCounts={participatingCounts}
         currentSeason={currentSeason}
+        seasonContract={seasonContract}
         charactersInfo={charactersInfo}
         finalRanks={finalRanks}
         currentRoundIndex={currentRoundIndex}

@@ -12,6 +12,7 @@ const CumulativeVotesChart = ({
   voteRounds,
   participatingCounts,
   currentSeason,
+  seasonContract,
   charactersInfo,
   finalRanks,
   currentRoundIndex,
@@ -28,11 +29,13 @@ const CumulativeVotesChart = ({
   const {
     seasonMilestones,
     currentSeasonConfig,
+    roundConfigsByName,
     animationConfig,
     getCharacterColor,
     getChartTextY
   } = useCumulativeVotesConfig({
     currentSeason,
+    seasonContract,
     data
   });
 
@@ -72,6 +75,7 @@ const CumulativeVotesChart = ({
       participatingCounts,
       currentSeason,
       currentSeasonConfig,
+      roundConfigsByName,
       charactersInfo,
       finalRanks,
       animationConfig,
@@ -89,6 +93,7 @@ const CumulativeVotesChart = ({
     charactersInfo,
     currentSeason,
     currentSeasonConfig,
+    roundConfigsByName,
     finalRanks,
     getCharacterColor,
     getChartTextY,
@@ -131,6 +136,11 @@ CumulativeVotesChart.propTypes = {
   voteRounds: PropTypes.arrayOf(PropTypes.string).isRequired,
   participatingCounts: PropTypes.objectOf(PropTypes.number).isRequired,
   currentSeason: PropTypes.string.isRequired,
+  seasonContract: PropTypes.shape({
+    season: PropTypes.string.isRequired,
+    vote_rounds: PropTypes.arrayOf(PropTypes.string).isRequired,
+    wildcard_rounds: PropTypes.arrayOf(PropTypes.string).isRequired
+  }).isRequired,
   charactersInfo: PropTypes.arrayOf(PropTypes.shape({
     character: PropTypes.string.isRequired,
     avatar: PropTypes.string

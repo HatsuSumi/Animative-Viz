@@ -164,7 +164,7 @@ backend/
 │   ├── seasons_rounds.py              # 赛季配置访问层与类型定义
 │   └── settings.py                    # 全局配置
 ├── data/
-│   ├── .latest                        # 最近一次数据文件路径
+│   ├── contexts/                      # context_id 到数据文件路径的持久化映射
 │   ├── 2023_season.csv
 │   ├── 2023_season.xlsx
 │   └── 2024_season.csv
@@ -186,7 +186,8 @@ backend/
 │   │   ├── __init__.py
 │   │   ├── character_metadata.py      # 角色信息与响应组装
 │   │   ├── file_storage.py            # 上传存储与文件落盘
-│   │   └── vote_tracker_store.py      # VoteTracker 生命周期管理
+│   │   ├── vote_season_config.py      # 赛季识别与投票轮次契约装配
+│   │   └── vote_tracker_store.py      # context_id 到 VoteTracker 的上下文存储
 │   ├── utils/
 │   │   ├── __init__.py
 │   │   └── vote_parsing.py            # 投票值解析与安全转换

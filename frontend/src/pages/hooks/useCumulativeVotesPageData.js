@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { getCharactersInfo, getCurrentSeason, getVotesByRounds } from '../../services/api';
+import { getCharactersInfo, getCurrentSeason, getSeasonConfig, getVotesByRounds } from '../../services/api';
 
 export function useCumulativeVotesPageData({
   location,
@@ -16,13 +16,17 @@ export function useCumulativeVotesPageData({
   const [error, setError] = useState(null);
   const [charactersInfo, setCharactersInfo] = useState([]);
   const [currentSeason, setCurrentSeason] = useState(null);
+  const [seasonContract, setSeasonContract] = useState(null);
   const [finalRanks, setFinalRanks] = useState(null);
 
   const filterOptions = useMemo(() => ({
+    contextId: location.state?.filterOptions?.contextId || location.state?.contextId || null,
     excludedColumns: location.state?.filterOptions?.excludedColumns || [],
     excludeWildcard: location.state?.filterOptions?.excludeWildcard || false,
     excludeRanking: location.state?.filterOptions?.excludeRanking || false
-  }), [location.state?.filterOptions]);
+  }), [location.state]);
+
+  const hasContextId = Boolean(filterOptions.contextId);
 
   useEffect(() => {
     if (mountedRef.current) {
@@ -35,6 +39,10 @@ export function useCumulativeVotesPageData({
         setLoading(true);
         setError(null);
 
+        if (!hasContextId) {
+          throw new Error('缺少数据上下文，请返回首页重新上传文件');
+        }
+
         let currentVotesData = location.state?.votesData;
         let currentVoteRounds = location.state?.voteRounds;
         let currentParticipatingCounts = location.state?.participatingCounts;
@@ -46,10 +54,16 @@ export function useCumulativeVotesPageData({
           currentParticipatingCounts = votesResponse.participating_counts;
         }
 
-        const [season, charactersResponse] = await Promise.all([
-          getCurrentSeason(),
-          getCharactersInfo()
+        const season = await getCurrentSeason(filterOptions.contextId);
+
+        const [seasonConfigResponse, charactersResponse] = await Promise.all([
+          getSeasonConfig(filterOptions.contextId),
+          getCharactersInfo(filterOptions.contextId)
         ]);
+
+        if (seasonConfigResponse.season !== season) {
+          throw new Error(`赛季配置与当前赛季不一致: ${seasonConfigResponse.season} !== ${season}`);
+        }
 
         const resolvedFinalRanks = {};
         charactersResponse.forEach(({ id, rank }) => {
@@ -59,6 +73,7 @@ export function useCumulativeVotesPageData({
         });
 
         setCurrentSeason(season);
+        setSeasonContract(seasonConfigResponse);
         setFinalRanks(resolvedFinalRanks);
         setCharactersInfo(charactersResponse);
         setVotesData(currentVotesData);
@@ -74,7 +89,7 @@ export function useCumulativeVotesPageData({
     };
 
     fetchAllData();
-  }, [filterOptions, location.state, setCurrentRoundIndex, setNextRoundProgress]);
+  }, [filterOptions, hasContextId, location.state, setCurrentRoundIndex, setNextRoundProgress]);
 
   return {
     votesData,
@@ -84,6 +99,7 @@ export function useCumulativeVotesPageData({
     error,
     charactersInfo,
     currentSeason,
+    seasonContract,
     finalRanks
   };
 }

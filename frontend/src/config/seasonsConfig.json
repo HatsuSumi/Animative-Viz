@@ -427,98 +427,80 @@
           "template": "剩余角色数：{actualParticipatingCount}"
         }
       ],
-      "rounds": [
-        {
-          "name": "预选赛第一轮",
+      "roundDetailsByName": {
+        "预选赛第一轮": {
           "startTime": "2024/09/28 20:00",
           "totalVoters": 2864
         },
-        {
-          "name": "预选赛第二轮",
+        "预选赛第二轮": {
           "startTime": "2024/10/01 20:00",
           "totalVoters": 5181
         },
-        {
-          "name": "第一阶段第一轮",
+        "第一阶段第一轮": {
           "startTime": "2024/10/05 20:00",
           "totalVoters": 8715
         },
-        {
-          "name": "第一阶段第二轮",
+        "第一阶段第二轮": {
           "startTime": "2024/10/08 20:00",
           "totalVoters": 9417
         },
-        {
-          "name": "第一阶段第三轮",
+        "第一阶段第三轮": {
           "startTime": "2024/10/11 20:00",
           "totalVoters": 9289
         },
-        {
-          "name": "第一阶段第四轮",
+        "第一阶段第四轮": {
           "startTime": "2024/10/15 20:00",
           "totalVoters": 11111
         },
-        {
-          "name": "第二阶段第一轮",
+        "第二阶段第一轮": {
           "startTime": "2024/10/19 20:00",
           "totalVoters": 6352
         },
-        {
-          "name": "第二阶段第二轮",
+        "第二阶段第二轮": {
           "startTime": "2024/10/22 20:00",
           "totalVoters": 8156
         },
-        {
-          "name": "第二阶段第三轮",
+        "第二阶段第三轮": {
           "startTime": "2024/10/25 20:00",
           "totalVoters": 7860
         },
-        {
-          "name": "第二阶段第四轮",
+        "第二阶段第四轮": {
           "startTime": "2024/10/29 22:00",
           "totalVoters": 8293
         },
-        {
-          "name": "第三阶段第一轮",
+        "第三阶段第一轮": {
           "startTime": "2024/11/02 20:00",
           "totalVoters": 8254
         },
-        {
-          "name": "第三阶段第二轮",
+        "第三阶段第二轮": {
           "startTime": "2024/11/05 20:00",
           "totalVoters": 7013
         },
-        {
-          "name": "第三阶段第三轮",
+        "第三阶段第三轮": {
           "startTime": "2024/11/08 20:00",
           "totalVoters": 7754
         },
-        {
-          "name": "第三阶段第四轮",
+        "第三阶段第四轮": {
           "startTime": "2024/11/12 20:00",
           "totalVoters": 6027
         },
-        {
-          "name": "淘汰赛第一轮",
+        "淘汰赛第一轮": {
           "startTime": "2024/11/17 20:00",
           "totalVoters": 7774
         },
-        {
-          "name": "淘汰赛第二轮",
+        "淘汰赛第二轮": {
           "startTime": "2024/11/21 20:00",
           "totalVoters": 5662
         },
-        {
-          "name": "淘汰赛第三轮",
+        "淘汰赛第三轮": {
           "startTime": "2024/11/25 20:00",
           "totalVoters": 7934
         },
-        {
-          "name": "淘汰赛第四轮",
+        "淘汰赛第四轮": {
           "startTime": "2024/11/30 20:00",
           "totalVoters": 8681
         }
-      ],
+      },
       "layout": {
         "text": {
           "baseY": 500,
@@ -630,18 +612,16 @@
           "margin": 20
         }
       },
-      "rounds": [
-        {
-          "name": "预选赛第一轮",
+      "roundDetailsByName": {
+        "预选赛第一轮": {
           "startTime": "2024-02-14T00:00:00",
           "totalVoters": 3500
         },
-        {
-          "name": "预选赛第二轮",
+        "预选赛第二轮": {
           "startTime": "2024-02-21T00:00:00",
           "totalVoters": 3200
         }
-      ]
+      }
     }
   }
 }

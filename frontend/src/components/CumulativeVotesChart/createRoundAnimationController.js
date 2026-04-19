@@ -13,6 +13,7 @@ export function createRoundAnimationController({
   participatingCounts,
   currentSeason,
   currentSeasonConfig,
+  roundConfigsByName,
   charactersInfo,
   finalRanks,
   animationConfig,
@@ -59,6 +60,7 @@ export function createRoundAnimationController({
         voteRounds: this.voteRounds,
         currentSeason,
         currentSeasonConfig,
+        roundConfigsByName,
         charactersInfo
       });
 

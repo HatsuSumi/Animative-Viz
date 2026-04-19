@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useReducer, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import FileUploader from '../components/FileUploader';
@@ -9,47 +9,135 @@ import RecordVideoModal from '../components/RecordVideoModal';
 import { getVotesByRounds } from '../services/api';
 import '../styles/global.css';
 
+const FLOW_STEP = {
+  IDLE: 'idle',
+  CONFIRM_EXCLUSION: 'confirm-exclusion',
+  SELECT_COLUMNS: 'select-columns',
+  SELECT_SPECIAL_ROUNDS: 'select-special-rounds',
+  SELECT_RECORDING: 'select-recording'
+};
+
+const initialState = {
+  step: FLOW_STEP.IDLE,
+  contextId: null,
+  selectedColumns: [],
+  excludeWildcard: false,
+  excludeRanking: false
+};
+
+function homeFlowReducer(state, action) {
+  switch (action.type) {
+    case 'UPLOAD_SUCCESS':
+      return {
+        ...state,
+        contextId: action.contextId,
+        step: FLOW_STEP.CONFIRM_EXCLUSION
+      };
+
+    case 'OPEN_COLUMN_SELECTION':
+      return {
+        ...state,
+        step: FLOW_STEP.SELECT_COLUMNS
+      };
+
+    case 'CLOSE_COLUMN_SELECTION':
+      return {
+        ...state,
+        step: FLOW_STEP.IDLE
+      };
+
+    case 'SELECT_COLUMNS':
+      return {
+        ...state,
+        selectedColumns: action.selectedColumns,
+        step: FLOW_STEP.SELECT_SPECIAL_ROUNDS
+      };
+
+    case 'BACK_TO_COLUMN_SELECTION':
+      return {
+        ...state,
+        step: FLOW_STEP.SELECT_COLUMNS
+      };
+
+    case 'CLOSE_SPECIAL_ROUNDS':
+      return {
+        ...state,
+        step: FLOW_STEP.IDLE
+      };
+
+    case 'SELECT_SPECIAL_ROUNDS':
+      return {
+        ...state,
+        excludeWildcard: action.excludeWildcard,
+        excludeRanking: action.excludeRanking,
+        step: FLOW_STEP.SELECT_RECORDING
+      };
+
+    case 'SELECT_RECORDING_MODE':
+      return {
+        ...state,
+        step: FLOW_STEP.IDLE
+      };
+
+    case 'RESET_FLOW':
+      return {
+        ...state,
+        step: FLOW_STEP.IDLE
+      };
+
+    default:
+      return state;
+  }
+}
+
 const HomePage = () => {
   const navigate = useNavigate();
-  const [error, setError] = useState(null);
-  const [showColumnExclusionModal, setShowColumnExclusionModal] = useState(false);
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const [showSpecialRoundsModal, setShowSpecialRoundsModal] = useState(false);
-  const [showRecordModal, setShowRecordModal] = useState(false);
-  const [selectedColumns, setSelectedColumns] = useState([]);
-  const [excludeWildcard, setExcludeWildcard] = useState(false);
-  const [excludeRanking, setExcludeRanking] = useState(false);
-  const [shouldRecord, setShouldRecord] = useState(false);
+  const [error, setError] = React.useState(null);
+  const [flowState, dispatch] = useReducer(homeFlowReducer, initialState);
+
+  const {
+    step,
+    contextId,
+    selectedColumns,
+    excludeWildcard,
+    excludeRanking
+  } = flowState;
 
   const navigateWithVotesData = useCallback(async (filterOptions, shouldRecordValue) => {
-    const data = await getVotesByRounds(filterOptions);
+    const requestOptions = {
+      contextId,
+      ...filterOptions
+    };
+    const data = await getVotesByRounds(requestOptions);
 
     if (!data.votes_data || !data.vote_rounds) {
       throw new Error('获取的数据不完整');
     }
 
-    navigate('/cumulative-votes', { 
+    navigate('/cumulative-votes', {
       state: {
+        contextId,
         votesData: data.votes_data,
         voteRounds: data.vote_rounds,
         participatingCounts: data.participating_counts || {},
-        filterOptions,
+        filterOptions: requestOptions,
         shouldRecord: shouldRecordValue
       }
     });
-  }, [navigate]);
+  }, [contextId, navigate]);
 
-  const handleUploadSuccess = async () => {
-    setShowConfirmationModal(true);
+  const handleUploadSuccess = async (uploadResult) => {
+    dispatch({ type: 'UPLOAD_SUCCESS', contextId: uploadResult.context_id });
   };
 
   const handleColumnExclusionDecision = async (shouldExclude) => {
-    setShowConfirmationModal(false);
+    dispatch({ type: 'RESET_FLOW' });
+
     if (shouldExclude) {
-      setShowColumnExclusionModal(true);
+      dispatch({ type: 'OPEN_COLUMN_SELECTION' });
     } else {
       try {
-        await navigateWithVotesData({}, shouldRecord);
+        await navigateWithVotesData({}, false);
       } catch (error) {
         setError(error.message || '获取数据失败，请重试');
       }
@@ -57,108 +145,104 @@ const HomePage = () => {
   };
 
   const handleColumnSelection = ({ selectedColumns }) => {
-    setSelectedColumns(selectedColumns);
-    setShowColumnExclusionModal(false);  
-    setShowSpecialRoundsModal(true);  
+    dispatch({
+      type: 'SELECT_COLUMNS',
+      selectedColumns
+    });
   };
 
   const handleColumnExclusionCancel = () => {
-    setShowColumnExclusionModal(false);
+    dispatch({ type: 'CLOSE_COLUMN_SELECTION' });
   };
 
   const handleSpecialRoundsCancel = () => {
-    setShowSpecialRoundsModal(false);  
-    setShowColumnExclusionModal(true);  
+    dispatch({ type: 'BACK_TO_COLUMN_SELECTION' });
   };
 
   const handleSpecialRoundsHide = () => {
-    setShowSpecialRoundsModal(false);
+    dispatch({ type: 'CLOSE_SPECIAL_ROUNDS' });
   };
 
   const handleSpecialRoundsConfirm = ({ excludeWildcard, excludeRanking }) => {
-    setExcludeWildcard(excludeWildcard);
-    setExcludeRanking(excludeRanking);
-    setShowSpecialRoundsModal(false);
-    setShowRecordModal(true);
+    dispatch({
+      type: 'SELECT_SPECIAL_ROUNDS',
+      excludeWildcard,
+      excludeRanking
+    });
+  };
+
+  const handleRecordingSelection = async (shouldRecord) => {
+    dispatch({
+      type: 'SELECT_RECORDING_MODE',
+      shouldRecord
+    });
+
+    try {
+      const filterOptions = {
+        excludedColumns: selectedColumns,
+        excludeWildcard,
+        excludeRanking
+      };
+
+      await navigateWithVotesData(filterOptions, shouldRecord);
+    } catch (error) {
+      console.error('Error navigating to chart:', error);
+    }
   };
 
   const handleRecordConfirm = async () => {
-    setShouldRecord(true);
-    setShowRecordModal(false);
-    try {
-      const filterOptions = {
-        excludedColumns: selectedColumns,
-        excludeWildcard,
-        excludeRanking
-      };
-      
-      await navigateWithVotesData(filterOptions, true);
-    } catch (error) {
-      console.error('Error navigating to chart:', error);
-    }
+    await handleRecordingSelection(true);
   };
 
   const handleRecordCancel = async () => {
-    setShouldRecord(false);
-    setShowRecordModal(false);
-    try {
-      const filterOptions = {
-        excludedColumns: selectedColumns,
-        excludeWildcard,
-        excludeRanking
-      };
-      
-      await navigateWithVotesData(filterOptions, false);
-    } catch (error) {
-      console.error('Error navigating to chart:', error);
-    }
+    await handleRecordingSelection(false);
   };
 
   return (
     <div className="home-page">
-        <>
-          <motion.h1 
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
-          >
-            动态数据可视化工具
-          </motion.h1>
+      <>
+        <motion.h1
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
+        >
+          动态数据可视化工具
+        </motion.h1>
 
-          {error && (
-            <div className="error-message">
-              {error}
-            </div>
-          )}
+        {error && (
+          <div className="error-message">
+            {error}
+          </div>
+        )}
 
-          <FileUploader onUploadSuccess={handleUploadSuccess} />
+        <FileUploader onUploadSuccess={handleUploadSuccess} />
 
-          <ConfirmationModal
-            isOpen={showConfirmationModal}
-            onConfirmAction={() => handleColumnExclusionDecision(true)}
-            onCancelAction={() => handleColumnExclusionDecision(false)}
-          />
+        <ConfirmationModal
+          isOpen={step === FLOW_STEP.CONFIRM_EXCLUSION}
+          onConfirmAction={() => handleColumnExclusionDecision(true)}
+          onCancelAction={() => handleColumnExclusionDecision(false)}
+        />
 
-          <ColumnExclusionModal
-            show={showColumnExclusionModal}
-            initialSelectedColumns={selectedColumns}
-            onClose={handleColumnExclusionCancel}
-            onConfirm={handleColumnSelection}
-          />
+        <ColumnExclusionModal
+          show={step === FLOW_STEP.SELECT_COLUMNS}
+          initialSelectedColumns={selectedColumns}
+          onClose={handleColumnExclusionCancel}
+          onConfirm={handleColumnSelection}
+        />
 
-          <ExcludeSpecialRoundsModal 
-            show={showSpecialRoundsModal}
-            onHide={handleSpecialRoundsHide}  
-            onCancel={handleSpecialRoundsCancel}  
-            onConfirm={handleSpecialRoundsConfirm}
-          />
+        <ExcludeSpecialRoundsModal
+          show={step === FLOW_STEP.SELECT_SPECIAL_ROUNDS}
+          onHide={handleSpecialRoundsHide}
+          onCancel={handleSpecialRoundsCancel}
+          onConfirm={handleSpecialRoundsConfirm}
+        />
 
-          <RecordVideoModal
-            show={showRecordModal}
-            onCancel={handleRecordCancel}
-            onConfirm={handleRecordConfirm}
-          />
-        </>
+        <RecordVideoModal
+          show={step === FLOW_STEP.SELECT_RECORDING}
+          onCancel={handleRecordCancel}
+          onConfirm={handleRecordConfirm}
+        />
+      </>
     </div>
   );
 };
