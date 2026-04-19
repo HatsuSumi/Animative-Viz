@@ -102,18 +102,18 @@ export function buildRoundData({
     .slice(0, globalChartConfig.limits.maxDisplay)
     .map((item, index) => {
       const prevRoundData = currentRoundIndex > 0
-        ? processedData.find(d => d.character === item.character)
+        ? processedData.find(d => d.id === item.id)
         : null;
       const prevRoundVote = prevRoundData?.cumulativeVotes[currentRoundIndex - 1] || 0;
 
       let prevRoundDiff = 0;
       if (currentRoundIndex > 0 && index > 0) {
         const prevRoundVotes = processedData.map(d => ({
-          character: d.character,
+          id: d.id,
           vote: d.cumulativeVotes[currentRoundIndex - 1] || 0
         })).sort((a, b) => b.vote - a.vote);
 
-        const prevRoundRank = prevRoundVotes.findIndex(d => d.character === item.character);
+        const prevRoundRank = prevRoundVotes.findIndex(d => d.id === item.id);
         if (prevRoundRank > 0) {
           const prevRoundLeaderVote = prevRoundVotes[prevRoundRank - 1].vote;
           prevRoundDiff = prevRoundLeaderVote - prevRoundVote;

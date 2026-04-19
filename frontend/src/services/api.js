@@ -3,13 +3,16 @@ import axios from 'axios';
 const API_HOST = window.location.hostname || '127.0.0.1';
 const BASE_URL = `http://${API_HOST}:8000/api/v1`;
 
-// 创建 axios 实例，配置数组参数的序列化方式
 const api = axios.create({
   baseURL: BASE_URL,
   paramsSerializer: {
-    indexes: null 
+    indexes: null
   }
 });
+
+function getErrorMessage(error, fallbackMessage) {
+  return error?.response?.data?.message || error?.message || fallbackMessage;
+}
 
 /**
  * 上传文件
@@ -27,7 +30,7 @@ export async function uploadFile(file) {
     return response.data;
   } catch (error) {
     console.error('上传文件失败:', error);
-    throw error;
+    throw new Error(getErrorMessage(error, '文件上传失败'));
   }
 }
 
@@ -41,7 +44,7 @@ export async function getCharactersInfo() {
     return response.data;
   } catch (error) {
     console.error('获取角色信息失败:', error);
-    throw error;
+    throw new Error(getErrorMessage(error, '获取角色信息失败'));
   }
 }
 
@@ -52,10 +55,10 @@ export async function getCharactersInfo() {
 export async function getCurrentSeason() {
   try {
     const response = await api.get('/current-season');
-    return response.data;
+    return response.data.season;
   } catch (error) {
     console.error('获取当前赛季失败:', error);
-    throw error;
+    throw new Error(getErrorMessage(error, '获取当前赛季失败'));
   }
 }
 
@@ -66,10 +69,10 @@ export async function getCurrentSeason() {
 export async function getVoteRounds() {
   try {
     const response = await api.get('/vote-rounds');
-    return response.data;
+    return response.data.vote_rounds || [];
   } catch (error) {
     console.error('获取投票轮次失败:', error);
-    throw error;
+    throw new Error(getErrorMessage(error, '获取投票轮次失败'));
   }
 }
 
@@ -89,20 +92,17 @@ export async function getVotesByRounds({ excludedColumns = [], excludeWildcard =
       exclude_ranking: excludeRanking
     });
 
-
-    // 如果没有数据，返回默认结构
     if (!response.data || !response.data.votes_data || response.data.votes_data.length === 0) {
-      return { 
+      return {
         votes_data: [],
         vote_rounds: [],
         participating_counts: {}
       };
     }
 
-    // 数据已经是正确的格式，直接返回
     return response.data;
   } catch (error) {
     console.error('获取投票数据失败:', error);
-    throw error;
+    throw new Error(getErrorMessage(error, '获取投票数据失败'));
   }
 }

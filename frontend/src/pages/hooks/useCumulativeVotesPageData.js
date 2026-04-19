@@ -52,10 +52,9 @@ export function useCumulativeVotesPageData({
         ]);
 
         const resolvedFinalRanks = {};
-        charactersResponse.forEach(({ id, character, rank }) => {
-          const rankKey = id || character;
-          if (rank && rankKey) {
-            resolvedFinalRanks[rankKey] = rank;
+        charactersResponse.forEach(({ id, rank }) => {
+          if (id && rank) {
+            resolvedFinalRanks[id] = rank;
           }
         });
 

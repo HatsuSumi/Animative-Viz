@@ -98,7 +98,7 @@ export function renderBars({
   getCharacterColor
 }) {
   const bars = svg.selectAll('.bar')
-    .data(displayData, d => d.character);
+    .data(displayData, d => d.id);
 
   const updateBars = selection => {
     selection
@@ -148,7 +148,7 @@ export function renderLabels({
   trendConfig
 }) {
   const labels = svg.selectAll('.bar-label')
-    .data(displayData, d => d.character);
+    .data(displayData, d => d.id);
 
   const updateLabels = selection => {
     const duration = animationConfig.duration;
@@ -175,7 +175,7 @@ export function renderLabels({
           .attr('class', 'vote-tspan');
       }
 
-      const finalRank = finalRanks?.[d.id] ?? finalRanks?.[d.character];
+      const finalRank = finalRanks?.[d.id];
       const currentVote = d.currentRoundVote;
       const startVote = d.prevRoundVote || 0;
 
