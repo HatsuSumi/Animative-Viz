@@ -200,49 +200,49 @@ const HomePage = () => {
 
   return (
     <div className="home-page">
-      <>
-        <motion.h1
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
-        >
-          动态数据可视化工具
-        </motion.h1>
+        <>
+          <motion.h1 
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
+          >
+            动态数据可视化工具
+          </motion.h1>
 
-        {error && (
-          <div className="error-message">
-            {error}
-          </div>
-        )}
+          {error && (
+            <div className="error-message">
+              {error}
+            </div>
+          )}
 
-        <FileUploader onUploadSuccess={handleUploadSuccess} />
+          <FileUploader onUploadSuccess={handleUploadSuccess} />
 
-        <ConfirmationModal
+          <ConfirmationModal
           isOpen={step === FLOW_STEP.CONFIRM_EXCLUSION}
-          onConfirmAction={() => handleColumnExclusionDecision(true)}
-          onCancelAction={() => handleColumnExclusionDecision(false)}
-        />
+            onConfirmAction={() => handleColumnExclusionDecision(true)}
+            onCancelAction={() => handleColumnExclusionDecision(false)}
+          />
 
-        <ColumnExclusionModal
+          <ColumnExclusionModal
           show={step === FLOW_STEP.SELECT_COLUMNS}
-          initialSelectedColumns={selectedColumns}
-          onClose={handleColumnExclusionCancel}
-          onConfirm={handleColumnSelection}
-        />
+            initialSelectedColumns={selectedColumns}
+            onClose={handleColumnExclusionCancel}
+            onConfirm={handleColumnSelection}
+          />
 
-        <ExcludeSpecialRoundsModal
+          <ExcludeSpecialRoundsModal 
           show={step === FLOW_STEP.SELECT_SPECIAL_ROUNDS}
-          onHide={handleSpecialRoundsHide}
-          onCancel={handleSpecialRoundsCancel}
-          onConfirm={handleSpecialRoundsConfirm}
-        />
+            onHide={handleSpecialRoundsHide}  
+            onCancel={handleSpecialRoundsCancel}  
+            onConfirm={handleSpecialRoundsConfirm}
+          />
 
-        <RecordVideoModal
+          <RecordVideoModal
           show={step === FLOW_STEP.SELECT_RECORDING}
-          onCancel={handleRecordCancel}
-          onConfirm={handleRecordConfirm}
-        />
-      </>
+            onCancel={handleRecordCancel}
+            onConfirm={handleRecordConfirm}
+          />
+        </>
     </div>
   );
 };
