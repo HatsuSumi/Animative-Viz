@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { createPortal } from 'react-dom';
 import CumulativeVotesChart from '../components/CumulativeVotesChart';
+import AppStatusCard from '../components/AppStatusCard';
 import '../styles/cumulative-votes-chart.css';
 import { useCumulativeVotesPageData } from './hooks/useCumulativeVotesPageData';
 import { useRoundProgress } from './hooks/useRoundProgress';
@@ -51,15 +52,43 @@ const CumulativeVotesPage = () => {
   }, []);
 
   if (loading) {
-    return <div className="loading">加载中...</div>;
+    return (
+      <div className="app-status-shell chart-status-shell">
+        <AppStatusCard
+          tone="loading"
+          eyebrow="页面初始化中"
+          title="正在加载累计票数数据"
+          description="正在同步赛季配置、角色信息与票数数据，请稍候。"
+          homeHref={null}
+        />
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="error">错误: {error}</div>;
+    return (
+      <div className="app-status-shell chart-status-shell">
+        <AppStatusCard
+          tone="error"
+          eyebrow="加载失败"
+          title="累计票数页面暂时无法打开"
+          description={error}
+        />
+      </div>
+    );
   }
 
   if (!votesData || !voteRounds) {
-    return <div className="error">数据无效，请返回首页重新加载</div>;
+    return (
+      <div className="app-status-shell chart-status-shell">
+        <AppStatusCard
+          tone="error"
+          eyebrow="数据不可用"
+          title="缺少图表所需数据"
+          description="当前上下文里的累计票数数据不完整，请返回首页重新导入文件。"
+        />
+      </div>
+    );
   }
 
   return createPortal(

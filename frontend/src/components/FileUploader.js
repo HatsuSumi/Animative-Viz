@@ -14,12 +14,13 @@ const FileUploader = ({ onUploadSuccess }) => {
 
   const handleUpload = useCallback(async (selectedFile) => {
     setUploading(true);
+    setError(null);
     try {
       const result = await importVoteData(selectedFile);
       onUploadSuccess(result);
-      setUploading(false);
     } catch (err) {
-      setError('导入数据文件失败');
+      setError(err.message || '导入数据文件失败');
+    } finally {
       setUploading(false);
     }
   }, [onUploadSuccess]);

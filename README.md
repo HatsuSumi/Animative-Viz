@@ -113,6 +113,7 @@ frontend/
 │   │   │   └── useCumulativeVotesConfig.js
 │   │   ├── ColumnExclusionModal.js    # 列排除设置
 │   │   ├── ConfirmationModal.js       # 确认对话框
+│   │   ├── AppStatusCard.js           # 统一状态卡组件
 │   │   ├── ErrorBoundary.js           # 错误边界
 │   │   ├── ExcludeSpecialRoundsModal.js # 特殊轮次过滤设置
 │   │   ├── FileUploader.js            # 文件上传组件
@@ -351,6 +352,10 @@ backend/
 - `chartUtils.js`：图表辅助计算
 - `createRoundAnimationController.js`：轮次播放控制器
 - `useCumulativeVotesConfig.js`：图表配置读取与整理
+
+**`frontend/src/components/AppStatusCard.js`**
+- 统一状态卡组件
+- 用于加载失败、数据缺失、渲染异常等页面状态展示
 
 **`frontend/src/components/MilestonesOverlay.js`**
 - 里程碑展示层

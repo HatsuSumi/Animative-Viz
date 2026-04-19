@@ -6,12 +6,26 @@ const BASE_URL = `http://${API_HOST}:8000/api/v1`;
 const api = axios.create({
   baseURL: BASE_URL,
   paramsSerializer: {
-    indexes: null
+    indexes: null 
   }
 });
 
 function getErrorMessage(error, fallbackMessage) {
-  return error?.response?.data?.message || error?.message || fallbackMessage;
+  const responseData = error?.response?.data;
+
+  if (typeof responseData?.message === 'string' && responseData.message) {
+    return responseData.message;
+  }
+
+  if (typeof responseData?.detail?.message === 'string' && responseData.detail.message) {
+    return responseData.detail.message;
+  }
+
+  if (typeof responseData?.detail === 'string' && responseData.detail) {
+    return responseData.detail;
+  }
+
+  return error?.message || fallbackMessage;
 }
 
 function requireContextId(contextId) {
@@ -156,7 +170,7 @@ export async function getVotesByRounds({ contextId, excludedColumns = [], exclud
     });
 
     if (!response.data || !response.data.votes_data || response.data.votes_data.length === 0) {
-      return {
+      return { 
         votes_data: [],
         vote_rounds: [],
         participating_counts: {}

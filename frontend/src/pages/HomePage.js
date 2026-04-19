@@ -108,7 +108,7 @@ const HomePage = () => {
       ...filterOptions
     };
 
-    navigate('/cumulative-votes', {
+    navigate('/cumulative-votes', { 
       state: {
         contextId,
         filterOptions: requestOptions,
@@ -174,7 +174,7 @@ const HomePage = () => {
         excludeWildcard,
         excludeRanking
       };
-
+      
       navigateToCumulativeVotesPage(filterOptions, shouldRecord);
     } catch (error) {
       console.error('Error navigating to chart:', error);

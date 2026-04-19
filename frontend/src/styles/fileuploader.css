@@ -44,3 +44,15 @@
   color: var(--secondary-color);
   font-weight: bold;
 }
+
+.file-uploader .error-message {
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(192, 57, 43, 0.08);
+  border: 1px solid rgba(192, 57, 43, 0.18);
+  color: #a33224;
+  text-align: left;
+  line-height: 1.6;
+}
