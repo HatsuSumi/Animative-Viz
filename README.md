@@ -194,6 +194,7 @@ backend/
 │   ├── __init__.py
 │   ├── logger.py                      # 日志系统
 │   ├── main.py                        # FastAPI 应用入口
+│   ├── types.py                       # 后端共享类型契约
 │   └── vote_tracker.py                # 投票数据处理核心
 ├── venv/
 ├── animative_viz.log

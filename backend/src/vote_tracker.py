@@ -1,10 +1,11 @@
 import os
 import sys
 import pandas as pd
-from typing import Optional, TypedDict
+from typing import Optional
 from config.seasons_rounds import NON_VOTE_COLUMNS
 from .logger import logger
 from .services.vote_season_config import VoteSeasonConfig
+from .types import CharacterInfo, VoteData, VotesByRoundsResult
 from .utils import safe_float_convert
 
 # 将项目根目录添加到 Python 路径
@@ -18,31 +19,6 @@ if current_dir not in sys.path:
     sys.path.append(current_dir)
 
 _skipped_votes: set[tuple[str, str]] = set()  # 用集合来存储被跳过的轮次和角色
-
-
-class VoteData(TypedDict):
-    character: str
-    series: str
-    votes: list[Optional[float]]
-
-
-class VotesByRoundsResult(TypedDict):
-    votes_data: list[VoteData]
-    vote_rounds: list[str]
-    participating_counts: dict[str, int]
-
-
-class CharacterInfo(TypedDict, total=False):
-    character: str
-    ip: str
-    avatar: str
-    id: Optional[str]
-    rank: Optional[int]
-    name_en: str
-    cv: str
-    ip_id: Optional[str]
-    ip_year: Optional[int]
-    ip_season: Optional[str]
 
 
 class VoteTracker:

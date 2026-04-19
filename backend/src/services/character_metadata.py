@@ -3,7 +3,7 @@ import os
 from typing import Any, cast
 
 from ..logger import logger
-from ..vote_tracker import CharacterInfo, VotesByRoundsResult
+from ..types import CharacterInfo, VotesByRoundsResult
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SRC_DIR = os.path.dirname(BASE_DIR)
