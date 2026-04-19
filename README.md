@@ -183,7 +183,7 @@ backend/
 │   │   ├── __init__.py
 │   │   └── data_routes.py             # API 路由定义
 │   ├── services/
-│   │   ├── __init__.py
+│   │   ├── __init__.py                # 服务包边界定义
 │   │   ├── character_metadata.py      # 角色信息与响应组装
 │   │   ├── file_storage.py            # 上传存储与文件落盘
 │   │   ├── vote_season_config.py      # 赛季识别与投票轮次契约装配

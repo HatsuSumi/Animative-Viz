@@ -6,12 +6,12 @@ from pydantic import BaseModel, Field
 from config import settings
 
 from ..logger import logger
-from ..services import (
+from ..services.character_metadata import (
     build_characters_info_response,
     build_votes_response,
-    get_vote_tracker,
-    handle_upload_data,
 )
+from ..services.file_storage import handle_upload_data
+from ..services.vote_tracker_store import get_vote_tracker
 
 router = APIRouter()
 
