@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { uploadFile } from '../services/api';
+import { importVoteData } from '../services/api';
 import { validateCSVFile } from '../utils/fileUtils';
 import '../styles/fileuploader.css';
 
@@ -15,11 +15,11 @@ const FileUploader = ({ onUploadSuccess }) => {
   const handleUpload = useCallback(async (selectedFile) => {
     setUploading(true);
     try {
-      const result = await uploadFile(selectedFile);
+      const result = await importVoteData(selectedFile);
       onUploadSuccess(result);
       setUploading(false);
     } catch (err) {
-      setError('文件上传失败');
+      setError('导入数据文件失败');
       setUploading(false);
     }
   }, [onUploadSuccess]);
@@ -110,11 +110,11 @@ const FileUploader = ({ onUploadSuccess }) => {
       >
         {file ? (
           <div className="file-selected">
-            <span>{uploading ? `上传中: ${file.name}` : `已选择: ${file.name}`}</span>
+            <span>{uploading ? `导入中: ${file.name}` : `已选择: ${file.name}`}</span>
           </div>
         ) : (
           <div className="file-placeholder">
-            {isDragging ? '松开以上传 CSV 文件' : '点击或拖拽上传 CSV 文件'}
+            {isDragging ? '松开以导入 CSV 文件' : '点击或拖拽导入 CSV 文件'}
           </div>
         )}
       </motion.div>
@@ -127,7 +127,7 @@ const FileUploader = ({ onUploadSuccess }) => {
           whileTap={{ scale: 0.95 }}
           className="upload-button"
         >
-          {uploading ? '上传中...' : '重新上传'}
+          {uploading ? '导入中...' : '重新导入'}
         </motion.button>
       )}
       

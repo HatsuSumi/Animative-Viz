@@ -25,8 +25,8 @@ def calculate_file_hash(file_path: str) -> str:
     return hash_md5.hexdigest()
 
 
-def handle_upload_data(file: UploadFile, original_path: str) -> dict[str, Any]:
-    """处理新版上传接口"""
+def handle_import_vote_data(file: UploadFile, original_path: str) -> dict[str, Any]:
+    """导入投票数据并初始化上下文"""
     os.makedirs(DATA_DIR, exist_ok=True)
 
     filename = file.filename or os.path.basename(original_path)
@@ -38,7 +38,7 @@ def handle_upload_data(file: UploadFile, original_path: str) -> dict[str, Any]:
         total_characters = len(vote_tracker.data.index) if vote_tracker.data is not None else 0
         context_id = save_vote_tracker_context(target_path)
         return {
-            'message': '直接使用上传的文件',
+            'message': '直接使用已导入的文件',
             'filename': filename,
             'project_path': target_path,
             'total_characters': total_characters,
@@ -63,7 +63,7 @@ def handle_upload_data(file: UploadFile, original_path: str) -> dict[str, Any]:
                 context_id = save_vote_tracker_context(target_path)
                 total_characters = len(vote_tracker_temp.data.index) if vote_tracker_temp.data is not None else 0
                 return {
-                    'message': '文件内容未变化，继续使用已有文件',
+                    'message': '文件内容未变化，继续使用已有数据文件',
                     'filename': filename,
                     'project_path': target_path,
                     'total_characters': total_characters,
@@ -83,7 +83,7 @@ def handle_upload_data(file: UploadFile, original_path: str) -> dict[str, Any]:
         total_characters = len(vote_tracker.data.index) if vote_tracker.data is not None else 0
 
         return {
-            'message': '文件上传成功',
+            'message': '数据文件导入成功',
             'filename': filename,
             'project_path': target_path,
             'total_characters': total_characters,

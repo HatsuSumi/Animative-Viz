@@ -16,29 +16,29 @@ function getErrorMessage(error, fallbackMessage) {
 
 function requireContextId(contextId) {
   if (!contextId) {
-    throw new Error('缺少数据上下文，请重新上传文件');
+    throw new Error('缺少数据上下文，请重新导入文件');
   }
 
   return contextId;
 }
 
 /**
- * 上传文件
- * @param {File} file - 要上传的文件
- * @returns {Promise} 上传结果
+ * 导入投票数据文件并初始化上下文
+ * @param {File} file - 要导入的文件
+ * @returns {Promise} 导入结果
  */
-export async function uploadFile(file) {
+export async function importVoteData(file) {
   try {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('original_path', file.name);
 
-    const response = await api.post('/upload-data', formData);
+    const response = await api.post('/import-vote-data', formData);
 
     return response.data;
   } catch (error) {
-    console.error('上传文件失败:', error);
-    throw new Error(getErrorMessage(error, '文件上传失败'));
+    console.error('导入投票数据文件失败:', error);
+    throw new Error(getErrorMessage(error, '导入投票数据文件失败'));
   }
 }
 

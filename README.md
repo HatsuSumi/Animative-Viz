@@ -265,9 +265,9 @@ backend/
 
 ## API 路由
 
-### 数据上传
-- `POST /api/v1/upload-data`
-  - 功能：上传投票数据文件并初始化数据上下文
+### 数据导入
+- `POST /api/v1/import-vote-data`
+  - 功能：导入投票数据文件并初始化数据上下文
   - 参数：
     - `file`: 上传的 CSV 文件
     - `original_path`: 原始文件名或来源路径标识
@@ -365,8 +365,8 @@ backend/
 - 控制外卡赛过滤与排位赛淘汰角色过滤
 
 **`frontend/src/components/FileUploader.js`**
-- 文件上传组件
-- 负责选择文件、发起上传与展示上传状态
+- 文件导入组件
+- 负责选择文件、发起导入与展示导入状态
 
 **`frontend/src/components/ConfirmationModal.js`**
 - 确认操作弹窗

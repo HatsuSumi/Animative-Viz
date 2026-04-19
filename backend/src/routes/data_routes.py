@@ -10,7 +10,7 @@ from ..services.character_metadata import (
     build_characters_info_response,
     build_votes_response,
 )
-from ..services.file_storage import handle_upload_data
+from ..services.file_storage import handle_import_vote_data
 from ..services.vote_tracker_store import get_vote_tracker
 
 router = APIRouter()
@@ -36,7 +36,7 @@ def _rethrow_http_error(error: HTTPException) -> NoReturn:
 def _get_initialized_vote_tracker(context_id: Optional[str] = None):
     vote_tracker = get_vote_tracker(context_id)
     if vote_tracker is None:
-        raise ApiError(400, 'DATA_NOT_INITIALIZED', '请先上传数据文件')
+        raise ApiError(400, 'DATA_NOT_INITIALIZED', '请先导入数据文件')
     return vote_tracker
 
 
@@ -53,29 +53,29 @@ class CumulativeVotesPageRequest(VoteRoundsRequest):
 
 def _require_context_id(context_id: Optional[str]) -> str:
     if not context_id:
-        raise ApiError(400, 'CONTEXT_ID_REQUIRED', '缺少数据上下文，请重新上传文件')
+        raise ApiError(400, 'CONTEXT_ID_REQUIRED', '缺少数据上下文，请重新导入文件')
     return context_id
 
 
-@router.post(f"{settings.API_V1_STR}/upload-data")
-async def upload_data(
+@router.post(f"{settings.API_V1_STR}/import-vote-data")
+def import_vote_data(
     file: UploadFile = File(...),
     original_path: str = Form(...)
 ) -> dict[str, object]:
     """
-    处理文件上传
+    导入投票数据并初始化上下文
 
-    :param file: 上传的文件
+    :param file: 导入的文件
     :param original_path: 原始文件路径
-    :return: 上传结果信息
+    :return: 导入结果信息
     """
     try:
-        return handle_upload_data(file, original_path)
+        return handle_import_vote_data(file, original_path)
     except HTTPException as error:
         _rethrow_http_error(error)
     except Exception as error:
-        logger.error(f"文件上传失败: {str(error)}")
-        raise ApiError(400, 'UPLOAD_FAILED', str(error)) from error
+        logger.error(f"导入数据文件失败: {str(error)}")
+        raise ApiError(400, 'IMPORT_VOTE_DATA_FAILED', str(error)) from error
 
 
 @router.post(f"{settings.API_V1_STR}/votes-by-rounds")
@@ -125,7 +125,7 @@ def get_season_config(context_id: Optional[str] = None) -> dict[str, object]:
         required_context_id = _require_context_id(context_id)
         vote_tracker = _get_initialized_vote_tracker(required_context_id)
         if not vote_tracker.season:
-            raise ApiError(400, 'DATA_NOT_INITIALIZED', '请先上传数据文件')
+            raise ApiError(400, 'DATA_NOT_INITIALIZED', '请先导入数据文件')
 
         return {
             'season': vote_tracker.season,
@@ -147,7 +147,7 @@ def get_current_season(context_id: Optional[str] = None) -> dict[str, str]:
         required_context_id = _require_context_id(context_id)
         vote_tracker = _get_initialized_vote_tracker(required_context_id)
         if not vote_tracker.season:
-            raise ApiError(400, 'DATA_NOT_INITIALIZED', '请先上传数据文件')
+            raise ApiError(400, 'DATA_NOT_INITIALIZED', '请先导入数据文件')
 
         return {
             'season': vote_tracker.season
@@ -195,7 +195,7 @@ def get_cumulative_votes_page_data(request: CumulativeVotesPageRequest) -> dict[
         votes_response = build_votes_response(votes_result)
 
         if not vote_tracker.season:
-            raise ApiError(400, 'DATA_NOT_INITIALIZED', '请先上传数据文件')
+            raise ApiError(400, 'DATA_NOT_INITIALIZED', '请先导入数据文件')
 
         characters_info = vote_tracker.get_characters_info()
         if not characters_info:
