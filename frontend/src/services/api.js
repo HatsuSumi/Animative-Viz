@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+const FILE_UPLOAD_CHANGED_MESSAGE = '文件上传失败，源文件可能在上传过程中发生变化，请重新选择文件后再试';
+
 const API_HOST = window.location.hostname || '127.0.0.1';
 const BASE_URL = `http://${API_HOST}:8000/api/v1`;
 
@@ -28,6 +30,21 @@ function getErrorMessage(error, fallbackMessage) {
   return error?.message || fallbackMessage;
 }
 
+function isUploadFileChangedError(error) {
+  return error?.code === 'ERR_NETWORK'
+    && error?.message === 'Network Error'
+    && !error?.response
+    && error?.request instanceof XMLHttpRequest;
+}
+
+function getImportVoteDataErrorMessage(error) {
+  if (isUploadFileChangedError(error)) {
+    return FILE_UPLOAD_CHANGED_MESSAGE;
+  }
+
+  return getErrorMessage(error, '导入投票数据文件失败');
+}
+
 function requireContextId(contextId) {
   if (!contextId) {
     throw new Error('缺少数据上下文，请重新导入文件');
@@ -52,7 +69,7 @@ export async function importVoteData(file) {
     return response.data;
   } catch (error) {
     console.error('导入投票数据文件失败:', error);
-    throw new Error(getErrorMessage(error, '导入投票数据文件失败'));
+    throw new Error(getImportVoteDataErrorMessage(error));
   }
 }
 

@@ -4,6 +4,8 @@ import { importVoteData } from '../services/api';
 import { validateCSVFile } from '../utils/fileUtils';
 import '../styles/fileuploader.css';
 
+const FILE_UPLOAD_CHANGED_MESSAGE = '文件上传失败，源文件可能在上传过程中发生变化，请重新选择文件后再试';
+
 const FileUploader = ({ onUploadSuccess }) => {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -19,6 +21,9 @@ const FileUploader = ({ onUploadSuccess }) => {
       const result = await importVoteData(selectedFile);
       onUploadSuccess(result);
     } catch (err) {
+      if (err.message === FILE_UPLOAD_CHANGED_MESSAGE) {
+        setFile(null);
+      }
       setError(err.message || '导入数据文件失败');
     } finally {
       setUploading(false);
