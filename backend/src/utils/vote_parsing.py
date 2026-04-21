@@ -17,11 +17,12 @@ def safe_float_convert(value) -> Optional[float]:
     if isinstance(value, str) and '/' in value:
         parts = value.split('/')
         results = [safe_float_convert(part) for part in parts]
+        valid_results = [result for result in results if result is not None]
 
-        if any(result is None for result in results):
+        if len(valid_results) != len(results):
             raise ValueError(f"票数字段包含无效分段值: {value}")
 
-        return round(sum(results), 2)
+        return round(sum(valid_results), 2)
 
     if isinstance(value, str):
         value = value.lower().strip()

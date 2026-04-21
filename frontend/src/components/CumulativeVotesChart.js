@@ -1,9 +1,9 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';  
 import '../styles/cumulative-votes-chart.css';
 import MilestonesOverlay from './MilestonesOverlay';
-import { processChartData } from './CumulativeVotesChart/chartData';
+import { processChartData, buildRoundSnapshots } from './CumulativeVotesChart/chartData';
 import { useCumulativeVotesConfig } from './CumulativeVotesChart/useCumulativeVotesConfig';
 import { createRoundAnimationController } from './CumulativeVotesChart/createRoundAnimationController';
 
@@ -22,7 +22,6 @@ const CumulativeVotesChart = ({
   const svgRef = useRef(null);
   const animationTimeoutsRef = useRef([]);
   const animationStartRoundIndexRef = useRef(currentRoundIndex);
-  const [processedData, setProcessedData] = useState([]);
   const [animationKey, setAnimationKey] = useState(0);
   const [currentMilestone, setCurrentMilestone] = useState(null);
 
@@ -39,18 +38,32 @@ const CumulativeVotesChart = ({
     data
   });
 
-  // 处理动画完成
+  const processedData = useMemo(() => processChartData(data, voteRounds), [data, voteRounds]);
+  const precomputedRounds = useMemo(() => buildRoundSnapshots({
+    processedData,
+    participatingCounts,
+    voteRounds,
+    currentSeason,
+    currentSeasonConfig,
+    roundConfigsByName,
+    charactersInfo
+  }), [
+    charactersInfo,
+    currentSeason,
+    currentSeasonConfig,
+    participatingCounts,
+    processedData,
+    roundConfigsByName,
+    voteRounds
+  ]);
+
   const handleAnimationComplete = useCallback((nextRoundIndex) => {
     onRoundChange(nextRoundIndex);
   }, [onRoundChange]);
 
-  // 在数据变化时处理数据
   useEffect(() => {
-    const processed = processChartData(data, voteRounds);
-    setProcessedData(processed);
-    // 触发动画重新渲染
     setAnimationKey(prev => prev + 1);
-  }, [data, voteRounds]);
+  }, [processedData]);
 
   useEffect(() => {
     animationStartRoundIndexRef.current = currentRoundIndex;
@@ -84,7 +97,8 @@ const CumulativeVotesChart = ({
       getChartTextY,
       handleAnimationComplete,
       setCurrentMilestone,
-      animationTimeoutsRef
+      animationTimeoutsRef,
+      precomputedRounds
     });
 
     animationController.start();
@@ -99,6 +113,7 @@ const CumulativeVotesChart = ({
     getChartTextY,
     handleAnimationComplete,
     participatingCounts,
+    precomputedRounds,
     processedData,
     seasonMilestones,
     voteRounds

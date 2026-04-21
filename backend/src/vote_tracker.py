@@ -36,6 +36,11 @@ class VoteTracker:
         self.season: Optional[str] = None
         self.season_config: Optional[VoteSeasonConfig] = None
         self.csv_path = csv_path
+        self._eliminated_round_lookup: dict[tuple[str, str], str] = {}
+        self._vote_data_cache: dict[tuple[tuple[str, ...], bool], list[VoteData]] = {}
+        self._participating_counts_cache: dict[tuple[str, ...], dict[str, int]] = {}
+        self._votes_by_rounds_cache: dict[tuple[tuple[str, ...], bool, bool], VotesByRoundsResult] = {}
+        self._characters_info_cache: Optional[list[CharacterInfo]] = None
         
         if csv_path:
             self.load_csv(csv_path, original_filename)
@@ -68,6 +73,11 @@ class VoteTracker:
             self.season = self.season_config.season
             self.vote_columns = self.season_config.vote_columns
             self.wildcard_rounds = self.season_config.wildcard_rounds
+            self._eliminated_round_lookup = self._build_eliminated_round_lookup(self.vote_columns)
+            self._vote_data_cache.clear()
+            self._participating_counts_cache.clear()
+            self._votes_by_rounds_cache.clear()
+            self._characters_info_cache = None
             
             return data
             
@@ -134,15 +144,23 @@ class VoteTracker:
             for round_name in vote_rounds
         }
 
-    def _find_eliminated_round(self, vote_rounds: list[str], character_name: str, series_name: str) -> Optional[str]:
+    def _build_eliminated_round_lookup(self, vote_rounds: list[str]) -> dict[tuple[str, str], str]:
         if self.season_config is None:
             raise ValueError("赛季配置未初始化")
+
+        eliminated_round_lookup: dict[tuple[str, str], str] = {}
 
         for round_name in vote_rounds:
             eliminated_chars = self.season_config.get_eliminated_characters(round_name)
             for char in eliminated_chars:
-                if char['character'] == character_name and char['series'] == series_name:
-                    return round_name
+                eliminated_round_lookup[(char['character'], char['series'])] = round_name
+
+        return eliminated_round_lookup
+
+    def _find_eliminated_round(self, vote_rounds: list[str], character_name: str, series_name: str) -> Optional[str]:
+        eliminated_round = self._eliminated_round_lookup.get((character_name, series_name))
+        if eliminated_round in vote_rounds:
+            return eliminated_round
 
         return None
 
@@ -169,7 +187,11 @@ class VoteTracker:
         if not vote_rounds:
             return []
 
-        votes_data: list[VoteData] = []
+        cache_key = (tuple(vote_rounds), exclude_ranking)
+        cached_votes_data = self._vote_data_cache.get(cache_key)
+        if cached_votes_data is not None:
+            return cached_votes_data
+
         data = self.data
         if data is None:
             raise ValueError("投票数据未加载")
@@ -177,30 +199,32 @@ class VoteTracker:
             raise ValueError("赛季配置未初始化")
 
         vote_column_mapping = self._build_vote_column_mapping(vote_rounds)
+        original_columns = [vote_column_mapping[round_name] for round_name in vote_rounds]
+        base_columns = ['角色', '作品']
+        if '头像' in data.columns:
+            base_columns.append('头像')
 
-        for _, row in data.iterrows():
+        selected_columns = base_columns + original_columns
+        rows = data[selected_columns].to_dict('records')
+        votes_data: list[VoteData] = []
+
+        for row in rows:
             character_name = row['角色']
             series_name = row['作品']
+            votes = [safe_float_convert(row[column_name]) for column_name in original_columns]
 
-            votes: list[Optional[float]] = []
-            for col in vote_rounds:
-                original_col = vote_column_mapping[col]
-                vote = safe_float_convert(row[original_col])
-                votes.append(vote)
-            
-            eliminated_round = None
             if exclude_ranking:
                 eliminated_round = self._find_eliminated_round(vote_rounds, character_name, series_name)
-
                 if eliminated_round:
                     self._exclude_votes_after_elimination(votes, vote_rounds, eliminated_round)
-            
+
             votes_data.append({
                 'character': character_name,
-                'series': series_name,  
+                'series': series_name,
                 'votes': votes
             })
-                
+
+        self._vote_data_cache[cache_key] = votes_data
         return votes_data
 
     def _get_eliminated_character_pairs(self, round_name: str) -> set[tuple[str, str]]:
@@ -228,24 +252,21 @@ class VoteTracker:
         Returns:
             dict: 每轮参与角色数的字典
         """
+        cache_key = tuple(vote_rounds)
+        cached_participating_counts = self._participating_counts_cache.get(cache_key)
+        if cached_participating_counts is not None:
+            return cached_participating_counts
+
         participating_counts: dict[str, int] = {}
 
         total_chars = {(char_data['character'], char_data['series']) for char_data in votes_data}
-        eliminated_cache: dict[str, set[tuple[str, str]]] = {}
+        cumulative_eliminated_chars: set[tuple[str, str]] = set()
 
-        for index, round_name in enumerate(vote_rounds):
-            cumulative_eliminated_chars: set[tuple[str, str]] = set()
-
-            for previous_round in vote_rounds[:index]:
-                if previous_round not in eliminated_cache:
-                    eliminated_cache[previous_round] = self._get_eliminated_character_pairs(previous_round)
-                cumulative_eliminated_chars.update(eliminated_cache[previous_round])
-
+        for round_name in vote_rounds:
             participating_counts[round_name] = len(total_chars.difference(cumulative_eliminated_chars))
+            cumulative_eliminated_chars.update(self._get_eliminated_character_pairs(round_name))
 
-            if round_name not in eliminated_cache:
-                eliminated_cache[round_name] = self._get_eliminated_character_pairs(round_name)
-
+        self._participating_counts_cache[cache_key] = participating_counts
         return participating_counts
 
     def get_votes_by_rounds(
@@ -267,49 +288,50 @@ class VoteTracker:
         """
         try:
             logger.info(f'【get_votes_by_rounds】开始处理投票数据，参数：excluded_columns={excluded_columns}, exclude_wildcard={exclude_wildcard}, exclude_ranking={exclude_ranking}')
+            normalized_excluded_columns = tuple(excluded_columns or [])
+            cache_key = (normalized_excluded_columns, exclude_wildcard, exclude_ranking)
+            cached_result = self._votes_by_rounds_cache.get(cache_key)
+            if cached_result is not None:
+                return cached_result
             
-            # 获取过滤后的轮次列表
-            vote_rounds = self.get_filtered_vote_rounds(excluded_columns, exclude_wildcard)
+            vote_rounds = self.get_filtered_vote_rounds(list(normalized_excluded_columns), exclude_wildcard)
             
-            # 如果没有投票列，返回空数据
             if not vote_rounds:
                 logger.warning('【get_votes_by_rounds】没有找到任何投票列')
-                return {
+                empty_result: VotesByRoundsResult = {
                     'votes_data': [],
                     'vote_rounds': [],
                     'participating_counts': {}
                 }
+                self._votes_by_rounds_cache[cache_key] = empty_result
+                return empty_result
             
-            # 获取所有轮次（包括被排除的轮次）
             all_vote_rounds = self.get_vote_rounds()
             all_votes_data = self.get_vote_data(all_vote_rounds, exclude_ranking)
+            all_participating_counts = self.get_participating_counts(all_vote_rounds, all_votes_data)
             round_index_map = {round_name: index for index, round_name in enumerate(all_vote_rounds)}
             
-            # 使用所有轮次来计算参与人数
-            all_participating_counts = self.get_participating_counts(all_vote_rounds, all_votes_data)
-            
-            # 只返回过滤后的轮次的数据
             filtered_votes_data: list[VoteData] = []
             for vote_data in all_votes_data:
-                filtered_votes: list[Optional[float]] = []
-                for round_name in vote_rounds:
-                    round_index = round_index_map[round_name]
-                    filtered_votes.append(vote_data['votes'][round_index])
+                filtered_votes = [vote_data['votes'][round_index_map[round_name]] for round_name in vote_rounds]
                 filtered_votes_data.append({
                     'character': vote_data['character'],
                     'series': vote_data['series'],
                     'votes': filtered_votes
                 })
             
-            # 只返回过滤后的轮次的参与人数
-            participating_counts = {round_name: all_participating_counts[round_name] 
-                                 for round_name in vote_rounds}
+            participating_counts = {
+                round_name: all_participating_counts[round_name]
+                for round_name in vote_rounds
+            }
             
-            return {
+            result: VotesByRoundsResult = {
                 'votes_data': filtered_votes_data,
                 'vote_rounds': vote_rounds,
                 'participating_counts': participating_counts
             }
+            self._votes_by_rounds_cache[cache_key] = result
+            return result
             
         except Exception as e:
             logger.error(f'【get_votes_by_rounds】处理投票数据时发生错误：{str(e)}')
@@ -321,6 +343,9 @@ class VoteTracker:
         
         :return: 包含角色作品信息的列表，格式为 [{"character": "角色名", "ip": "作品名", "avatar": "头像URL"}, ...]
         """
+        if self._characters_info_cache is not None:
+            return self._characters_info_cache
+
         data = self.data
         if data is None:
             raise ValueError("投票数据未加载")
@@ -332,7 +357,7 @@ class VoteTracker:
         
         # 获取角色和作品的对应关系
         characters_info: list[CharacterInfo] = []
-        for _, row in data.iterrows():
+        for row in data.to_dict('records'):
             character_info: CharacterInfo = {
                 'character': row['角色'],
                 'ip': row['作品']
@@ -344,4 +369,5 @@ class VoteTracker:
             
             characters_info.append(character_info)
         
+        self._characters_info_cache = characters_info
         return characters_info

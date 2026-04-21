@@ -27,45 +27,58 @@ export function processChartData(data, voteRounds) {
     return [];
   }
 
-  const processedData = data.map(characterData => ({
-    id: characterData.id,
-    character: characterData.character,
-    ip: characterData.ip,
-    roundVotes: [],
-    cumulativeVotes: []
-  }));
-  const processedDataById = new Map(processedData.map(item => [item.id, item]));
+  return data.map(characterData => {
+    const roundVotes = [];
+    const cumulativeVotes = [];
+    let cumulativeVote = 0;
 
-  voteRounds.forEach(roundName => {
-    data.forEach(characterData => {
-      const processedItem = processedDataById.get(characterData.id);
-
-      if (processedItem) {
-        if (!Object.prototype.hasOwnProperty.call(characterData.rounds, roundName)) {
-          throw new Error(`角色 ${characterData.character} 缺少轮次数据: ${roundName}`);
-        }
-
-        const currentRoundVotes = characterData.rounds[roundName];
-        const prevCumulativeVote = processedItem.cumulativeVotes.length > 0
-          ? processedItem.cumulativeVotes[processedItem.cumulativeVotes.length - 1]
-          : 0;
-
-        const roundVote = requireRoundVoteValue(currentRoundVotes, characterData.character, roundName);
-        const newCumulativeVote = roundVote === null
-          ? prevCumulativeVote
-          : prevCumulativeVote + roundVote;
-
-        processedItem.roundVotes.push(roundVote);
-        processedItem.cumulativeVotes.push(newCumulativeVote);
+    voteRounds.forEach(roundName => {
+      if (!Object.prototype.hasOwnProperty.call(characterData.rounds, roundName)) {
+        throw new Error(`角色 ${characterData.character} 缺少轮次数据: ${roundName}`);
       }
-    });
-  });
 
-  return [...processedData].sort((a, b) => {
+      const roundVote = requireRoundVoteValue(characterData.rounds[roundName], characterData.character, roundName);
+      if (roundVote !== null) {
+        cumulativeVote += roundVote;
+      }
+
+      roundVotes.push(roundVote);
+      cumulativeVotes.push(cumulativeVote);
+    });
+
+    return {
+      id: characterData.id,
+      character: characterData.character,
+      ip: characterData.ip,
+      roundVotes,
+      cumulativeVotes
+    };
+  }).sort((a, b) => {
     const voteDiff = b.cumulativeVotes[b.cumulativeVotes.length - 1] - a.cumulativeVotes[a.cumulativeVotes.length - 1];
     if (voteDiff !== 0) return voteDiff;
     return a.character.localeCompare(b.character);
   });
+}
+
+export function buildRoundSnapshots({
+  processedData,
+  participatingCounts,
+  voteRounds,
+  currentSeason,
+  currentSeasonConfig,
+  roundConfigsByName,
+  charactersInfo
+}) {
+  return voteRounds.map((_, currentRoundIndex) => buildRoundData({
+    processedData,
+    currentRoundIndex,
+    participatingCounts,
+    voteRounds,
+    currentSeason,
+    currentSeasonConfig,
+    roundConfigsByName,
+    charactersInfo
+  }));
 }
 
 export function buildRoundData({

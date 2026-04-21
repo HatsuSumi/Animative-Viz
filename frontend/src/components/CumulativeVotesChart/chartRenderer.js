@@ -8,7 +8,8 @@ export function renderAxes({
   width,
   height,
   margin,
-  currentSeasonConfig
+  currentSeasonConfig,
+  previousMaxVote = 0
 }) {
   svg.selectAll('.y-axis-label').remove();
   svg.append('text')
@@ -46,20 +47,11 @@ export function renderAxes({
     .attr('class', 'y-axis')
     .call(d3.axisLeft(y).tickSize(0));
 
-  svg.selectAll('.x-axis').remove();
-  const xAxis = svg.append('g')
-    .attr('class', 'x-axis')
-    .attr('transform', `translate(0,${height})`);
+  const xAxis = svg.select('.x-axis').empty()
+    ? svg.append('g').attr('class', 'x-axis')
+    : svg.select('.x-axis');
 
-  let prevMaxVote = 0;
-  const prevAxisElement = svg.select('.x-axis');
-  if (!prevAxisElement.empty()) {
-    const prevTicks = prevAxisElement.selectAll('.tick text');
-    if (!prevTicks.empty()) {
-      const lastTickText = prevTicks.nodes()[prevTicks.size() - 1];
-      prevMaxVote = parseFloat(lastTickText.textContent) || 0;
-    }
-  }
+  xAxis.attr('transform', `translate(0,${height})`);
 
   const currentMaxVote = d3.max(displayData, d => d.currentRoundVote) * 1.1;
 
@@ -72,7 +64,7 @@ export function renderAxes({
       .duration(500)
       .ease(d3.easeCubicOut)
       .tween('axis', () => {
-        const interpolateMax = d3.interpolateNumber(prevMaxVote, currentMaxVote);
+        const interpolateMax = d3.interpolateNumber(previousMaxVote, currentMaxVote);
         return t => {
           const currentMax = interpolateMax(t);
           const currentX = d3.scaleLinear()
@@ -417,7 +409,8 @@ export function renderRoundFrame({
   getChartTextY,
   finalRanks,
   finalRankConfig,
-  trendConfig
+  trendConfig,
+  previousMaxVote = 0
 }) {
   renderStatsText({
     svg,
@@ -448,7 +441,8 @@ export function renderRoundFrame({
     width,
     height,
     margin,
-    currentSeasonConfig
+    currentSeasonConfig,
+    previousMaxVote
   });
 
   renderBars({

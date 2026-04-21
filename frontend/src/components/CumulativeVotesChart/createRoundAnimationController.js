@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import globalChartConfig from '../../config/globalChartConfig.json';
 import { chartAnimation } from '../../config/animationConfig';
-import { buildRoundData } from './chartData';
+import { buildRoundSnapshots } from './chartData';
 import { getStageColor } from './chartUtils';
 import { renderRoundFrame } from './chartRenderer';
 
@@ -22,7 +22,8 @@ export function createRoundAnimationController({
   getChartTextY,
   handleAnimationComplete,
   setCurrentMilestone,
-  animationTimeoutsRef
+  animationTimeoutsRef,
+  precomputedRounds
 }) {
   const margin = globalChartConfig.layout.margin;
   const containerWidth = svgRef.current.parentElement.clientWidth;
@@ -30,13 +31,28 @@ export function createRoundAnimationController({
   const width = containerWidth - margin.left - margin.right;
   const height = containerHeight - margin.top - margin.bottom;
 
-  d3.select(svgRef.current).selectAll('*').remove();
-
-  const svg = d3.select(svgRef.current)
+  const svgSelection = d3.select(svgRef.current)
     .attr('width', containerWidth)
-    .attr('height', containerHeight)
-    .append('g')
-    .attr('transform', `translate(${margin.left},${margin.top})`);
+    .attr('height', containerHeight);
+
+  let svg = svgSelection.select('g.chart-root');
+  if (svg.empty()) {
+    svg = svgSelection
+      .append('g')
+      .attr('class', 'chart-root');
+  }
+
+  svg.attr('transform', `translate(${margin.left},${margin.top})`);
+
+  const rounds = precomputedRounds || buildRoundSnapshots({
+    processedData,
+    participatingCounts,
+    voteRounds,
+    currentSeason,
+    currentSeasonConfig,
+    roundConfigsByName,
+    charactersInfo
+  });
 
   return {
     processedData,
@@ -48,24 +64,17 @@ export function createRoundAnimationController({
     voteRounds,
     currentRoundIndex,
     currentRound: voteRounds[currentRoundIndex],
+    previousMaxVote: 0,
 
     nextRound() {
       const {
         displayData,
         statsWithKeys
-      } = buildRoundData({
-        processedData: this.processedData,
-        currentRoundIndex: this.currentRoundIndex,
-        participatingCounts,
-        voteRounds: this.voteRounds,
-        currentSeason,
-        currentSeasonConfig,
-        roundConfigsByName,
-        charactersInfo
-      });
+      } = rounds[this.currentRoundIndex];
 
       const currentRoundName = this.voteRounds[this.currentRoundIndex];
       const currentColor = getStageColor(currentRoundName, currentSeasonConfig);
+      const currentMaxVote = d3.max(displayData, d => d.currentRoundVote) * 1.1;
 
       renderRoundFrame({
         svg: this.svg,
@@ -83,8 +92,11 @@ export function createRoundAnimationController({
         getChartTextY,
         finalRanks,
         finalRankConfig: globalChartConfig.finalRank,
-        trendConfig: globalChartConfig.trend
+        trendConfig: globalChartConfig.trend,
+        previousMaxVote: this.previousMaxVote
       });
+
+      this.previousMaxVote = currentMaxVote;
 
       if (this.currentRoundIndex >= this.voteRounds.length - 1) {
         return false;
@@ -97,40 +109,36 @@ export function createRoundAnimationController({
 
     start() {
       const animate = () => {
-        try {
-          const maxDelay = (this.processedData.length - 1) * this.animationConfig.delayFactor;
-          const totalAnimationTime = this.animationConfig.duration + maxDelay + this.animationConfig.bufferTime + this.animationConfig.roundDelay;
+        const maxDelay = (this.processedData.length - 1) * this.animationConfig.delayFactor;
+        const totalAnimationTime = this.animationConfig.duration + maxDelay + this.animationConfig.bufferTime + this.animationConfig.roundDelay;
 
-          const currentRound = this.voteRounds[this.currentRoundIndex];
-          const milestones = seasonMilestones[currentRound] || [];
+        const currentRound = this.voteRounds[this.currentRoundIndex];
+        const milestones = seasonMilestones[currentRound] || [];
 
-          if (milestones.length > 0) {
-            const newMilestones = milestones.map(milestone => ({
-              ...milestone,
-              id: `${currentRound}-${milestone.character}-${Date.now()}`,
-              totalAnimationTime,
-              isLastRound: chartAnimation.isLastRound(this.currentRoundIndex, this.voteRounds.length)
-            }));
+        if (milestones.length > 0) {
+          const newMilestones = milestones.map(milestone => ({
+            ...milestone,
+            id: `${currentRound}-${milestone.character}-${Date.now()}`,
+            totalAnimationTime,
+            isLastRound: chartAnimation.isLastRound(this.currentRoundIndex, this.voteRounds.length)
+          }));
 
-            setCurrentMilestone(newMilestones);
+          setCurrentMilestone(newMilestones);
 
-            if (!chartAnimation.isLastRound(this.currentRoundIndex, this.voteRounds.length)) {
-              const milestoneTimeoutId = setTimeout(() => {
-                setCurrentMilestone(null);
-              }, totalAnimationTime);
-              animationTimeoutsRef.current.push(milestoneTimeoutId);
-            }
+          if (!chartAnimation.isLastRound(this.currentRoundIndex, this.voteRounds.length)) {
+            const milestoneTimeoutId = setTimeout(() => {
+              setCurrentMilestone(null);
+            }, totalAnimationTime);
+            animationTimeoutsRef.current.push(milestoneTimeoutId);
           }
+        }
 
-          const hasNextRound = this.nextRound();
-          if (hasNextRound) {
-            handleAnimationComplete(this.currentRoundIndex);
+        const hasNextRound = this.nextRound();
+        if (hasNextRound) {
+          handleAnimationComplete(this.currentRoundIndex);
 
-            const animateTimeoutId = setTimeout(animate, totalAnimationTime);
-            animationTimeoutsRef.current.push(animateTimeoutId);
-          }
-        } catch (error) {
-          console.error('动画执行时发生错误:', error);
+          const animateTimeoutId = setTimeout(animate, totalAnimationTime);
+          animationTimeoutsRef.current.push(animateTimeoutId);
         }
       };
 

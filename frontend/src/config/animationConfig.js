@@ -40,7 +40,7 @@ export const isLastRound = (currentRoundIndex, totalRounds) =>
  * 倒计时动画配置
  */
 export const countdownAnimation = {
-  fps: 120
+  fps: 60
 };
 
 /**

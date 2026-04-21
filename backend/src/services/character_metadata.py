@@ -17,6 +17,7 @@ RANKINGS_DATA_PATH = os.path.join(SRC_DIR, 'data', 'rankings.json')
 _characters_by_id: dict[str, dict[str, Any]] = {}
 _ips_by_id: dict[str, dict[str, Any]] = {}
 _character_lookup: dict[str, str] = {}
+_rankings_by_id: dict[str, int] = {}
 
 
 def _load_json_file(path: str, description: str) -> Any:
@@ -35,22 +36,30 @@ def _require_character_lookup() -> dict[str, str]:
 
 
 def _load_rankings() -> dict[str, int]:
+    global _rankings_by_id
+
+    if _rankings_by_id:
+        return _rankings_by_id
+
     rankings_data = _load_json_file(RANKINGS_DATA_PATH, '排名数据')
     rankings = rankings_data.get('rankings')
 
     if not isinstance(rankings, dict):
         raise RuntimeError('排名数据缺少 rankings 字段')
 
-    return rankings
+    _rankings_by_id = rankings
+    return _rankings_by_id
 
 
 def load_characters_data() -> None:
     """加载角色数据到内存"""
-    global _characters_by_id, _ips_by_id, _character_lookup
+    global _characters_by_id, _ips_by_id, _character_lookup, _rankings_by_id
 
     _characters_by_id = _load_json_file(CHARACTERS_DATA_PATH, '角色数据')
     _ips_by_id = _load_json_file(IPS_DATA_PATH, '作品数据')
     _character_lookup = _load_json_file(CHARACTER_LOOKUP_PATH, '角色映射数据')
+    _rankings_by_id = {}
+    _load_rankings()
 
 
 def build_votes_response(result: VotesByRoundsResult) -> dict[str, Any]:
