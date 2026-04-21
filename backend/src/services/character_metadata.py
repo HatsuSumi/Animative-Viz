@@ -19,38 +19,55 @@ _ips_by_id: dict[str, dict[str, Any]] = {}
 _character_lookup: dict[str, str] = {}
 
 
+def _load_json_file(path: str, description: str) -> Any:
+    try:
+        with open(path, 'r', encoding='utf-8') as file_obj:
+            return json.load(file_obj)
+    except Exception as error:
+        logger.error(f'加载{description}失败: {str(error)}')
+        raise RuntimeError(f'加载{description}失败: {path}') from error
+
+
+def _require_character_lookup() -> dict[str, str]:
+    if not _character_lookup:
+        raise RuntimeError('角色映射数据未初始化')
+    return _character_lookup
+
+
+def _load_rankings() -> dict[str, int]:
+    rankings_data = _load_json_file(RANKINGS_DATA_PATH, '排名数据')
+    rankings = rankings_data.get('rankings')
+
+    if not isinstance(rankings, dict):
+        raise RuntimeError('排名数据缺少 rankings 字段')
+
+    return rankings
+
+
 def load_characters_data() -> None:
     """加载角色数据到内存"""
     global _characters_by_id, _ips_by_id, _character_lookup
 
-    try:
-        with open(CHARACTERS_DATA_PATH, 'r', encoding='utf-8') as file_obj:
-            _characters_by_id = json.load(file_obj)
-        with open(IPS_DATA_PATH, 'r', encoding='utf-8') as file_obj:
-            _ips_by_id = json.load(file_obj)
-        with open(CHARACTER_LOOKUP_PATH, 'r', encoding='utf-8') as file_obj:
-            _character_lookup = json.load(file_obj)
-    except Exception as error:
-        logger.error(f'加载角色数据失败: {str(error)}')
-        _characters_by_id = {}
-        _ips_by_id = {}
-        _character_lookup = {}
+    _characters_by_id = _load_json_file(CHARACTERS_DATA_PATH, '角色数据')
+    _ips_by_id = _load_json_file(IPS_DATA_PATH, '作品数据')
+    _character_lookup = _load_json_file(CHARACTER_LOOKUP_PATH, '角色映射数据')
 
 
 def build_votes_response(result: VotesByRoundsResult) -> dict[str, Any]:
     """组装投票轮次接口响应"""
     processed_data = []
+    character_lookup = _require_character_lookup()
 
     for char_data in result['votes_data']:
         character = char_data['character']
         series = char_data['series']
         lookup_key = f'{character}@{series}'
-        character_id = _character_lookup.get(lookup_key)
+        character_id = character_lookup.get(lookup_key)
 
         if ' (' in character:
             character = character.split(' (')[0]
             lookup_key = f'{character}@{series}'
-            character_id = _character_lookup.get(lookup_key, character_id)
+            character_id = character_lookup.get(lookup_key, character_id)
 
         rounds_data = {}
         for index, vote in enumerate(char_data['votes']):
@@ -74,19 +91,14 @@ def build_votes_response(result: VotesByRoundsResult) -> dict[str, Any]:
 
 def build_characters_info_response(characters_info: list[CharacterInfo]) -> list[dict[str, Any]]:
     """组装角色信息接口响应"""
-    try:
-        with open(RANKINGS_DATA_PATH, 'r', encoding='utf-8') as file_obj:
-            rankings_data = json.load(file_obj)
-            rankings = rankings_data['rankings']
-    except Exception as error:
-        logger.error(f'读取排名数据失败: {str(error)}')
-        rankings = {}
+    character_lookup = _require_character_lookup()
+    rankings = _load_rankings()
 
     for char_info in characters_info:
         char_name = char_info['character']
         char_ip = char_info['ip']
         lookup_key = f'{char_name}@{char_ip}'
-        character_id = _character_lookup.get(lookup_key)
+        character_id = character_lookup.get(lookup_key)
 
         char_info['id'] = character_id
         char_info['rank'] = rankings.get(character_id) if character_id else None

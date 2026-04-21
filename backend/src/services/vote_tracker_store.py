@@ -1,6 +1,5 @@
 import hashlib
 import os
-from typing import Optional
 
 from ..logger import logger
 from ..vote_tracker import VoteTracker
@@ -14,6 +13,22 @@ CONTEXTS_DIR = os.path.join(DATA_DIR, 'contexts')
 _vote_trackers: dict[str, VoteTracker] = {}
 
 
+class VoteTrackerContextError(Exception):
+    """VoteTracker 上下文异常基类"""
+
+
+class MissingContextIdError(VoteTrackerContextError):
+    """缺少上下文 ID"""
+
+
+class ContextFileNotFoundError(VoteTrackerContextError):
+    """上下文文件不存在"""
+
+
+class ContextCsvNotFoundError(VoteTrackerContextError):
+    """上下文对应的 CSV 文件不存在"""
+
+
 def build_vote_tracker_context_id(file_path: str) -> str:
     normalized_path = os.path.abspath(file_path)
     return hashlib.md5(normalized_path.encode('utf-8')).hexdigest()
@@ -23,11 +38,12 @@ def _build_context_file_path(context_id: str) -> str:
     return os.path.join(CONTEXTS_DIR, f'{context_id}.txt')
 
 
-def _load_context_csv_path(context_id: str) -> Optional[str]:
+def _load_context_csv_path(context_id: str) -> str:
     context_file_path = _build_context_file_path(context_id)
     if not os.path.exists(context_file_path):
-        logger.error(f'未找到上下文文件: {context_id}')
-        return None
+        message = f'未找到上下文文件: {context_id}'
+        logger.error(message)
+        raise ContextFileNotFoundError(message)
 
     with open(context_file_path, 'r', encoding='utf-8') as file_obj:
         csv_path = file_obj.read().strip()
@@ -36,32 +52,27 @@ def _load_context_csv_path(context_id: str) -> Optional[str]:
         csv_path = os.path.abspath(csv_path)
 
     if not os.path.exists(csv_path):
-        logger.error(f'上下文对应的 CSV 文件不存在: {csv_path}')
-        return None
+        message = f'上下文对应的 CSV 文件不存在: {csv_path}'
+        logger.error(message)
+        raise ContextCsvNotFoundError(message)
 
     return csv_path
 
 
-def get_vote_tracker(context_id: Optional[str] = None) -> Optional[VoteTracker]:
+def get_vote_tracker(context_id: str) -> VoteTracker:
     """获取指定上下文的 VoteTracker 实例"""
-    try:
-        if not context_id:
-            logger.error('缺少上下文 ID')
-            return None
+    if not context_id:
+        message = '缺少上下文 ID'
+        logger.error(message)
+        raise MissingContextIdError(message)
 
-        if context_id in _vote_trackers:
-            return _vote_trackers[context_id]
+    if context_id in _vote_trackers:
+        return _vote_trackers[context_id]
 
-        csv_path = _load_context_csv_path(context_id)
-        if csv_path is None:
-            return None
-
-        vote_tracker = VoteTracker(csv_path)
-        _vote_trackers[context_id] = vote_tracker
-        return vote_tracker
-    except Exception as error:
-        logger.error(f'获取 VoteTracker 失败: {str(error)}')
-        return None
+    csv_path = _load_context_csv_path(context_id)
+    vote_tracker = VoteTracker(csv_path)
+    _vote_trackers[context_id] = vote_tracker
+    return vote_tracker
 
 
 def save_vote_tracker_context(file_path: str) -> str:

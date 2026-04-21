@@ -11,7 +11,12 @@ from ..services.character_metadata import (
     build_votes_response,
 )
 from ..services.file_storage import handle_import_vote_data
-from ..services.vote_tracker_store import get_vote_tracker
+from ..services.vote_tracker_store import (
+    ContextCsvNotFoundError,
+    ContextFileNotFoundError,
+    MissingContextIdError,
+    get_vote_tracker,
+)
 
 router = APIRouter()
 
@@ -34,10 +39,14 @@ def _rethrow_http_error(error: HTTPException) -> NoReturn:
 
 
 def _get_initialized_vote_tracker(context_id: Optional[str] = None):
-    vote_tracker = get_vote_tracker(context_id)
-    if vote_tracker is None:
-        raise ApiError(400, 'DATA_NOT_INITIALIZED', '请先导入数据文件')
-    return vote_tracker
+    try:
+        return get_vote_tracker(_require_context_id(context_id))
+    except MissingContextIdError as error:
+        raise ApiError(400, 'CONTEXT_ID_REQUIRED', str(error)) from error
+    except ContextFileNotFoundError as error:
+        raise ApiError(404, 'CONTEXT_NOT_FOUND', str(error)) from error
+    except ContextCsvNotFoundError as error:
+        raise ApiError(404, 'DATA_FILE_NOT_FOUND', str(error)) from error
 
 
 class VoteRoundsRequest(BaseModel):

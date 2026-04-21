@@ -45,6 +45,40 @@ function getImportVoteDataErrorMessage(error) {
   return getErrorMessage(error, '导入投票数据文件失败');
 }
 
+function requireObjectResponse(data, endpoint) {
+  if (!data || typeof data !== 'object' || Array.isArray(data)) {
+    throw new Error(`${endpoint} 返回的数据结构无效`);
+  }
+
+  return data;
+}
+
+function requireArrayField(data, fieldName, endpoint) {
+  if (!Array.isArray(data[fieldName])) {
+    throw new Error(`${endpoint} 缺少数组字段: ${fieldName}`);
+  }
+
+  return data[fieldName];
+}
+
+function requireObjectField(data, fieldName, endpoint) {
+  const fieldValue = data[fieldName];
+
+  if (!fieldValue || typeof fieldValue !== 'object' || Array.isArray(fieldValue)) {
+    throw new Error(`${endpoint} 缺少对象字段: ${fieldName}`);
+  }
+
+  return fieldValue;
+}
+
+function requireStringField(data, fieldName, endpoint) {
+  if (typeof data[fieldName] !== 'string' || data[fieldName].length === 0) {
+    throw new Error(`${endpoint} 缺少字符串字段: ${fieldName}`);
+  }
+
+  return data[fieldName];
+}
+
 function requireContextId(contextId) {
   if (!contextId) {
     throw new Error('缺少数据上下文，请重新导入文件');
@@ -100,7 +134,8 @@ export async function getCurrentSeason(contextId) {
     const response = await api.get('/current-season', {
       params: { context_id: requiredContextId }
     });
-    return response.data.season;
+    const responseData = requireObjectResponse(response.data, '/current-season');
+    return requireStringField(responseData, 'season', '/current-season');
   } catch (error) {
     console.error('获取当前赛季失败:', error);
     throw new Error(getErrorMessage(error, '获取当前赛季失败'));
@@ -117,7 +152,11 @@ export async function getSeasonConfig(contextId) {
     const response = await api.get('/season-config', {
       params: { context_id: requiredContextId }
     });
-    return response.data;
+    const responseData = requireObjectResponse(response.data, '/season-config');
+    requireStringField(responseData, 'season', '/season-config');
+    requireArrayField(responseData, 'vote_rounds', '/season-config');
+    requireArrayField(responseData, 'wildcard_rounds', '/season-config');
+    return responseData;
   } catch (error) {
     console.error('获取赛季配置失败:', error);
     throw new Error(getErrorMessage(error, '获取赛季配置失败'));
@@ -134,7 +173,8 @@ export async function getVoteRounds(contextId) {
     const response = await api.get('/vote-rounds', {
       params: { context_id: requiredContextId }
     });
-    return response.data.vote_rounds || [];
+    const responseData = requireObjectResponse(response.data, '/vote-rounds');
+    return requireArrayField(responseData, 'vote_rounds', '/vote-rounds');
   } catch (error) {
     console.error('获取投票轮次失败:', error);
     throw new Error(getErrorMessage(error, '获取投票轮次失败'));
@@ -160,7 +200,14 @@ export async function getCumulativeVotesPageData({ contextId, excludedColumns = 
       exclude_ranking: excludeRanking
     });
 
-    return response.data;
+    const responseData = requireObjectResponse(response.data, '/pages/cumulative-votes');
+    requireStringField(responseData, 'season', '/pages/cumulative-votes');
+    requireObjectField(responseData, 'season_config', '/pages/cumulative-votes');
+    requireArrayField(responseData, 'characters_info', '/pages/cumulative-votes');
+    requireObjectField(responseData, 'votes_by_rounds', '/pages/cumulative-votes');
+    requireObjectField(responseData, 'final_ranks', '/pages/cumulative-votes');
+
+    return responseData;
   } catch (error) {
     console.error('获取累计票数页面初始化数据失败:', error);
     throw new Error(getErrorMessage(error, '获取累计票数页面初始化数据失败'));
@@ -186,15 +233,12 @@ export async function getVotesByRounds({ contextId, excludedColumns = [], exclud
       exclude_ranking: excludeRanking
     });
 
-    if (!response.data || !response.data.votes_data || response.data.votes_data.length === 0) {
-      return { 
-        votes_data: [],
-        vote_rounds: [],
-        participating_counts: {}
-      };
-    }
+    const responseData = requireObjectResponse(response.data, '/votes-by-rounds');
+    requireArrayField(responseData, 'votes_data', '/votes-by-rounds');
+    requireArrayField(responseData, 'vote_rounds', '/votes-by-rounds');
+    requireObjectField(responseData, 'participating_counts', '/votes-by-rounds');
 
-    return response.data;
+    return responseData;
   } catch (error) {
     console.error('获取投票数据失败:', error);
     throw new Error(getErrorMessage(error, '获取投票数据失败'));

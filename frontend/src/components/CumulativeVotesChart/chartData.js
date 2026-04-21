@@ -2,6 +2,26 @@ import * as d3 from 'd3';
 import globalChartConfig from '../../config/globalChartConfig.json';
 import { formatNumber } from './chartUtils';
 
+function requireRoundVoteValue(value, character, roundName) {
+  if (value === null) {
+    return null;
+  }
+
+  if (typeof value !== 'number' || Number.isNaN(value)) {
+    throw new Error(`角色 ${character} 在轮次 ${roundName} 的票数无效`);
+  }
+
+  return Math.round(value);
+}
+
+function requireCumulativeVoteValue(value, character, roundIndex) {
+  if (typeof value !== 'number' || Number.isNaN(value)) {
+    throw new Error(`角色 ${character} 在第 ${roundIndex + 1} 轮的累计票数无效`);
+  }
+
+  return value;
+}
+
 export function processChartData(data, voteRounds) {
   if (!data || !data.length || !voteRounds || voteRounds.length === 0) {
     return [];
@@ -21,12 +41,16 @@ export function processChartData(data, voteRounds) {
       const processedItem = processedDataById.get(characterData.id);
 
       if (processedItem) {
+        if (!Object.prototype.hasOwnProperty.call(characterData.rounds, roundName)) {
+          throw new Error(`角色 ${characterData.character} 缺少轮次数据: ${roundName}`);
+        }
+
         const currentRoundVotes = characterData.rounds[roundName];
         const prevCumulativeVote = processedItem.cumulativeVotes.length > 0
           ? processedItem.cumulativeVotes[processedItem.cumulativeVotes.length - 1]
           : 0;
 
-        const roundVote = currentRoundVotes === null ? null : Math.round(currentRoundVotes);
+        const roundVote = requireRoundVoteValue(currentRoundVotes, characterData.character, roundName);
         const newCumulativeVote = roundVote === null
           ? prevCumulativeVote
           : prevCumulativeVote + roundVote;
@@ -59,15 +83,19 @@ export function buildRoundData({
 
   const allRoundData = processedData.map(item => {
     const currentRoundActualVote = item.roundVotes[currentRoundIndex];
-    const cumulativeVotes = item.cumulativeVotes[currentRoundIndex];
-    const eliminated = currentRoundActualVote === null && cumulativeVotes !== null;
+    const cumulativeVotes = requireCumulativeVoteValue(
+      item.cumulativeVotes[currentRoundIndex],
+      item.character,
+      currentRoundIndex
+    );
+    const eliminated = currentRoundActualVote === null;
 
     return {
       id: item.id,
       character: item.character,
       ip: item.ip,
       currentRoundVote: cumulativeVotes,
-      currentRoundActualVote: currentRoundActualVote || 0,
+      currentRoundActualVote: currentRoundActualVote === null ? 0 : currentRoundActualVote,
       cumulativeVotes,
       eliminated
     };
@@ -106,7 +134,7 @@ export function buildRoundData({
   const prevRoundVotes = currentRoundIndex > 0
     ? processedData.map(d => ({
       id: d.id,
-      vote: d.cumulativeVotes[currentRoundIndex - 1] || 0
+      vote: requireCumulativeVoteValue(d.cumulativeVotes[currentRoundIndex - 1], d.character, currentRoundIndex - 1)
     })).sort((a, b) => b.vote - a.vote)
     : [];
   const prevRoundRanksById = new Map(prevRoundVotes.map((item, index) => [item.id, index]));
@@ -117,7 +145,13 @@ export function buildRoundData({
       const prevRoundData = currentRoundIndex > 0
         ? processedDataById.get(item.id)
         : null;
-      const prevRoundVote = prevRoundData?.cumulativeVotes[currentRoundIndex - 1] || 0;
+      const prevRoundVote = currentRoundIndex > 0
+        ? requireCumulativeVoteValue(
+          prevRoundData?.cumulativeVotes[currentRoundIndex - 1],
+          item.character,
+          currentRoundIndex - 1
+        )
+        : 0;
 
       let prevRoundDiff = 0;
       if (currentRoundIndex > 0 && index > 0) {
@@ -206,7 +240,14 @@ export function buildRoundData({
       ];
     }
 
-    let text = stat.template.replace(/\{(\w+)\}/g, (match, key) => templateVars[key] || match);
+    let text = stat.template.replace(/\{(\w+)\}/g, (match, key) => {
+      if (!Object.prototype.hasOwnProperty.call(templateVars, key)) {
+        throw new Error(`统计模板变量缺失: ${key}`);
+      }
+
+      const value = templateVars[key];
+      return value === undefined || value === null ? match : value;
+    });
     if (stat.id === 'top5-percentage') {
       const displayNumber = Math.min(5, sortedByActualVotes.length);
       text = text.replace(/前\d+名/, `前${displayNumber}名`);
