@@ -1,10 +1,14 @@
 """
 从淘汰赛数据中提取淘汰角色信息并更新配置
 """
-import os
-import sys
+import argparse
 import pandas as pd
 import re
+from pathlib import Path
+
+BACKEND_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_CONFIG_PATH = BACKEND_ROOT / 'config' / 'seasons_rounds.py'
+
 
 def process_knockout_round(csv_path):
     """
@@ -56,28 +60,16 @@ def process_knockout_round(csv_path):
     
     return round_name, eliminated_chars
 
-def update_eliminated_chars():
+def update_eliminated_chars(knockout_files: list[Path], config_path: Path = DEFAULT_CONFIG_PATH):
     """
     处理所有淘汰赛轮次并更新配置
     """
-    # 淘汰赛文件按顺序处理
-    knockout_files = [
-        r"F:\ISML\ISML2023\122-11.17-Stella.csv",
-        r"F:\ISML\ISML2023\129-11.21-Stella.csv",
-        r"F:\ISML\ISML2023\137-11.25-all.csv",
-        r"F:\ISML\ISML2023\145-11.30-all.csv"
-    ]
-    
     # 收集所有轮次的数据
     rounds_data = {}
     for csv_file in knockout_files:
         round_name, eliminated = process_knockout_round(csv_file)
         if round_name:  # 只有当找到恒星女子组的数据时才添加
             rounds_data[round_name] = eliminated
-    
-    # 更新配置文件
-    project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    config_path = os.path.join(project_root, "backend", "config", "seasons_rounds.py")
     
     # 读取现有配置
     with open(config_path, 'r', encoding='utf-8') as f:
@@ -165,4 +157,8 @@ def update_eliminated_chars():
     print("\n配置文件已更新！")
 
 if __name__ == "__main__":
-    update_eliminated_chars()
+    parser = argparse.ArgumentParser(description='从淘汰赛 CSV 更新 eliminated_characters 配置')
+    parser.add_argument('--config-path', type=Path, default=DEFAULT_CONFIG_PATH, help='seasons_rounds.py 路径')
+    parser.add_argument('knockout_files', nargs='+', type=Path, help='按轮次顺序传入淘汰赛 CSV 路径')
+    args = parser.parse_args()
+    update_eliminated_chars(args.knockout_files, config_path=args.config_path)
