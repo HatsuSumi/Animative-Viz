@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
+import * as d3 from 'd3';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';  
 import '../styles/cumulative-votes-chart.css';
@@ -22,7 +23,6 @@ const CumulativeVotesChart = ({
   const svgRef = useRef(null);
   const animationTimeoutsRef = useRef([]);
   const animationStartRoundIndexRef = useRef(currentRoundIndex);
-  const [animationKey, setAnimationKey] = useState(0);
   const [currentMilestone, setCurrentMilestone] = useState(null);
 
   const {
@@ -62,10 +62,6 @@ const CumulativeVotesChart = ({
   }, [onRoundChange]);
 
   useEffect(() => {
-    setAnimationKey(prev => prev + 1);
-  }, [processedData]);
-
-  useEffect(() => {
     animationStartRoundIndexRef.current = currentRoundIndex;
   }, [currentRoundIndex]);
 
@@ -74,6 +70,17 @@ const CumulativeVotesChart = ({
       clearTimeout(timeoutId);
     });
     animationTimeoutsRef.current = [];
+  }, []);
+
+  const resetChartSvg = useCallback(() => {
+    if (!svgRef.current) {
+      return;
+    }
+
+    const svgSelection = d3.select(svgRef.current);
+    svgSelection.interrupt();
+    svgSelection.selectAll('*').interrupt();
+    svgSelection.selectAll('*').remove();
   }, []);
 
   // 绘制图表的主函数
@@ -123,14 +130,16 @@ const CumulativeVotesChart = ({
   useEffect(() => {
     if (processedData && processedData.length > 0) {
       clearAnimationTimeouts();
+      resetChartSvg();
       setCurrentMilestone(null);
       drawChart();
     }
 
     return () => {
       clearAnimationTimeouts();
+      resetChartSvg();
     };
-  }, [processedData, animationKey, clearAnimationTimeouts, drawChart]);
+  }, [processedData, clearAnimationTimeouts, drawChart, resetChartSvg]);
 
   return (
     <>

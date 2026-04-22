@@ -137,7 +137,8 @@ export function renderLabels({
   animationConfig,
   finalRanks,
   finalRankConfig,
-  trendConfig
+  trendConfig,
+  currentRoundName
 }) {
   const labels = svg.selectAll('.bar-label')
     .data(displayData, d => d.id);
@@ -174,24 +175,10 @@ export function renderLabels({
       voteTspan
         .text(() => getVoteLabelText({
           character: d.character,
-          vote: startVote,
+          vote: currentVote,
           finalRank
         }))
-        .style('fill', getVoteLabelColor(finalRank, finalRankConfig))
-        .transition()
-        .duration(duration)
-        .ease(easing)
-        .delay((d, i) => (displayData.length - d.rank) * delayFactor)
-        .tween('text', function(d) {
-          const interpolate = d3.interpolateNumber(startVote, currentVote);
-          return function(t) {
-            this.textContent = getVoteLabelText({
-              character: d.character,
-              vote: Math.round(interpolate(t)),
-              finalRank
-            });
-          };
-        });
+        .style('fill', getVoteLabelColor(finalRank, finalRankConfig));
 
       const prevRankVotes = getPrevRankVotes(displayData, d.rank);
       if (prevRankVotes && d.rank > 1) {
@@ -204,19 +191,7 @@ export function renderLabels({
 
         trendTspan
           .style('fill', getTrendColor(diff, trendConfig))
-          .text(d => getTrendText(d.prevRoundDiff || 0))
-          .transition()
-          .duration(duration)
-          .ease(easing)
-          .delay((_, i) => (displayData.length - d.rank) * delayFactor)
-          .tween('text', function(d) {
-            const startDiff = d.prevRoundDiff || 0;
-            const endDiff = diff;
-            const interpolate = d3.interpolateNumber(startDiff, endDiff);
-            return function(t) {
-              this.textContent = getTrendText(interpolate(t));
-            };
-          });
+          .text(getTrendText(diff));
       } else if (!trendTspan.empty()) {
         trendTspan.remove();
       }
@@ -462,7 +437,8 @@ export function renderRoundFrame({
     animationConfig,
     finalRanks,
     finalRankConfig,
-    trendConfig
+    trendConfig,
+    currentRoundName
   });
 }
 
