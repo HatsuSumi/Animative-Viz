@@ -1,0 +1,704 @@
+[
+    {
+        "name": "三日月闲",
+        "name_en": "Mikazuki Shizuka",
+        "series": "僵尸百分百～变成僵尸之前想做的100件事～",
+        "series_en": "Zom 100: Bucket List of the Dead",
+        "ip_id": "ip_000313",
+        "cv": "楠木灯",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000313"
+        ]
+    },
+    {
+        "name": "缠流子",
+        "name_en": "Matoi Ryūko",
+        "series": "斩服少女",
+        "series_en": "KILL la KILL",
+        "ip_id": "ip_000314",
+        "cv": "小清水亚美",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000314"
+        ]
+    },
+    {
+        "name": "木之下茜",
+        "name_en": "Kinoshita Akane",
+        "series": "和山田谈场Lv999的恋爱",
+        "series_en": "My Love Story with Yamada-kun at Lv999",
+        "ip_id": "ip_000315",
+        "cv": "水濑祈",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000315"
+        ]
+    },
+    {
+        "name": "佐天泪子",
+        "name_en": "Saten Ruiko",
+        "series": "魔法禁书目录",
+        "series_en": "Toaru Series",
+        "ip_id": "ip_000185",
+        "cv": "伊藤加奈惠",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000185"
+        ]
+    },
+    {
+        "name": "希露菲叶特·格雷拉特",
+        "name_en": "Sylphiette Greyrat",
+        "series": "无职转生",
+        "series_en": "Mushoku Tensei",
+        "ip_id": "ip_000110",
+        "cv": "茅野爱衣",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000110"
+        ]
+    },
+    {
+        "name": "高海千歌",
+        "name_en": "Takami Chika",
+        "series": "LoveLive!系列",
+        "series_en": "Love Live! Series",
+        "ip_id": "ip_000016",
+        "cv": "伊波杏树",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000016"
+        ]
+    },
+    {
+        "name": "月宫亚由",
+        "name_en": "Tsukimiya Ayu",
+        "series": "Kanon",
+        "series_en": "Kanon",
+        "ip_id": "ip_000316",
+        "cv": "堀江由衣",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000316"
+        ]
+    },
+    {
+        "name": "三角初华",
+        "name_en": "Misumi Uika",
+        "series": "BanG Dream!",
+        "series_en": "BanG Dream!",
+        "ip_id": "ip_000006",
+        "cv": "佐佐木李子",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000006"
+        ]
+    },
+    {
+        "name": "仲村由理",
+        "name_en": "Nakamura Yuri",
+        "series": "Angel Beats!",
+        "series_en": "Angel Beats!",
+        "ip_id": "ip_000003",
+        "cv": "樱井浩美",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000003"
+        ]
+    },
+    {
+        "name": "水濑名雪",
+        "name_en": "Minase Nayuki",
+        "series": "Kanon",
+        "series_en": "Kanon",
+        "ip_id": "ip_000316",
+        "cv": "国府田麻理子",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000316"
+        ]
+    },
+    {
+        "name": "雾切响子",
+        "name_en": "Kirigiri Kyōko",
+        "series": "弹丸论破",
+        "series_en": "Danganronpa",
+        "ip_id": "ip_000091",
+        "cv": "日笠阳子",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000091"
+        ]
+    },
+    {
+        "name": "奈良坂真绫",
+        "name_en": "Narasaka Maaya",
+        "series": "义妹生活",
+        "series_en": "Gimai Seikatsu",
+        "ip_id": "ip_000038",
+        "cv": "铃木爱唯",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000038"
+        ]
+    },
+    {
+        "name": "西森柚咲",
+        "name_en": "Nishimori Yusa",
+        "series": "Charlotte",
+        "series_en": "Charlotte",
+        "ip_id": "ip_000008",
+        "cv": "内田真礼",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000008"
+        ]
+    },
+    {
+        "name": "桔梗",
+        "name_en": "Kikyō",
+        "series": "犬夜叉",
+        "series_en": "InuYasha",
+        "ip_id": "ip_000196",
+        "cv": "日高范子",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000196"
+        ]
+    },
+    {
+        "name": "金色暗影",
+        "name_en": "Konjiki no Yami",
+        "series": "出包王女",
+        "series_en": "To LOVE-Ru",
+        "ip_id": "ip_000049",
+        "cv": "福圆美里",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000049"
+        ]
+    },
+    {
+        "name": "RUPA",
+        "name_en": "Rupa",
+        "series": "少女乐队的呐喊",
+        "series_en": "Girls Band Cry",
+        "ip_id": "ip_000235",
+        "cv": "朱李",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000235"
+        ]
+    },
+    {
+        "name": "柊司",
+        "name_en": "Hiiragi Tsukasa",
+        "series": "幸运☆星",
+        "series_en": "Lucky ☆ Star",
+        "ip_id": "ip_000089",
+        "cv": "福原香织",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000089"
+        ]
+    },
+    {
+        "name": "小野寺小咲",
+        "name_en": "Onodera Kosaki",
+        "series": "伪恋",
+        "series_en": "Nisekoi",
+        "ip_id": "ip_000040",
+        "cv": "花泽香菜",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000040"
+        ]
+    },
+    {
+        "name": "大道寺知世",
+        "name_en": "Daidōji Tomoyo",
+        "series": "魔卡少女樱",
+        "series_en": "Cardcaptor Sakura",
+        "ip_id": "ip_000179",
+        "cv": "岩男润子",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000179"
+        ]
+    },
+    {
+        "name": "瑞吉儿·加德纳",
+        "name_en": "Rachel Gardner",
+        "series": "杀戮的天使",
+        "series_en": "Satsuriku no Tenshi",
+        "ip_id": "ip_000118",
+        "cv": "千菅春香",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000118"
+        ]
+    },
+    {
+        "name": "神乐",
+        "name_en": "Kagura",
+        "series": "银魂",
+        "series_en": "Gintama",
+        "ip_id": "ip_000174",
+        "cv": "钉宫理惠",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000174"
+        ]
+    },
+    {
+        "name": "艾斯德斯",
+        "name_en": "Esdeath",
+        "series": "斩·赤红之瞳！",
+        "series_en": "Akame ga Kill!",
+        "ip_id": "ip_000108",
+        "cv": "明坂聪美",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000108"
+        ]
+    },
+    {
+        "name": "蝴蝶忍",
+        "name_en": "Kochō Shinobu",
+        "series": "鬼灭之刃",
+        "series_en": "Kimetsu no Yaiba",
+        "ip_id": "ip_000178",
+        "cv": "早见沙织",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000178"
+        ]
+    },
+    {
+        "name": "古手川千纱",
+        "name_en": "Kotegawa Chisa",
+        "series": "碧蓝之海",
+        "series_en": "Grand Blue",
+        "ip_id": "ip_000139",
+        "cv": "安济知佳",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000139"
+        ]
+    },
+    {
+        "name": "克鲁鲁·采佩西",
+        "name_en": "Krul Tepes",
+        "series": "终结的炽天使",
+        "series_en": "Owari no Seraph",
+        "ip_id": "ip_000145",
+        "cv": "悠木碧",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000145"
+        ]
+    },
+    {
+        "name": "梦梦·贝莉雅·戴比路克",
+        "name_en": "Momo Belia Deviluke",
+        "series": "出包王女",
+        "series_en": "To LOVE-Ru",
+        "ip_id": "ip_000049",
+        "cv": "丰崎爱生",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000049"
+        ]
+    },
+    {
+        "name": "赛丽艾",
+        "name_en": "Serie",
+        "series": "葬送的芙莉莲",
+        "series_en": "Sōsō no Frieren",
+        "ip_id": "ip_000153",
+        "cv": "伊濑茉莉也",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000153"
+        ]
+    },
+    {
+        "name": "冬马和纱",
+        "name_en": "Tōma Kazusa",
+        "series": "白色相簿2",
+        "series_en": "WHITE ALBUM 2",
+        "ip_id": "ip_000135",
+        "cv": "生天目仁美",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000135"
+        ]
+    },
+    {
+        "name": "露易丝·瓦利埃尔",
+        "name_en": "Louise Vallière",
+        "series": "零之使魔",
+        "series_en": "Zero no Tsukaima",
+        "ip_id": "ip_000200",
+        "cv": "钉宫理惠",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000200"
+        ]
+    },
+    {
+        "name": "玛奇玛",
+        "name_en": "Makima",
+        "series": "电锯人",
+        "series_en": "Chainsaw Man",
+        "ip_id": "ip_000175",
+        "cv": "楠木灯",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000175"
+        ]
+    },
+    {
+        "name": "佐仓杏子",
+        "name_en": "Sakura Kyōko",
+        "series": "魔法少女小圆",
+        "series_en": "Puella Magi Madoka★Magika",
+        "ip_id": "ip_000184",
+        "cv": "野中蓝",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000184"
+        ]
+    },
+    {
+        "name": "伊井野弥子",
+        "name_en": "Iino Miko",
+        "series": "辉夜大小姐想让我告白～天才们的恋爱头脑战～",
+        "series_en": "Kaguya-sama wa Kokurasetai",
+        "ip_id": "ip_000166",
+        "cv": "富田美忧",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000166"
+        ]
+    },
+    {
+        "name": "式守都",
+        "name_en": "Shikimori Miyako",
+        "series": "式守同学不只可爱而已",
+        "series_en": "Kawaii dake ja Nai Shikimori-san",
+        "ip_id": "ip_000317",
+        "cv": "大西沙织",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000317"
+        ]
+    },
+    {
+        "name": "纯田真奈",
+        "name_en": "Sumita Mana",
+        "series": "BanG Dream!",
+        "series_en": "BanG Dream!",
+        "ip_id": "ip_000006",
+        "cv": "反田叶月",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000006"
+        ]
+    },
+    {
+        "name": "我妻由乃",
+        "name_en": "Gasai Yuno",
+        "series": "未来日记",
+        "series_en": "Mirai Nikki",
+        "ip_id": "ip_000318",
+        "cv": "村田知沙",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000318"
+        ]
+    },
+    {
+        "name": "星宫六喰",
+        "name_en": "Hoshimiya Mukuro",
+        "series": "约会大作战",
+        "series_en": "Date A Live",
+        "ip_id": "ip_000144",
+        "cv": "影山灯",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000144"
+        ]
+    },
+    {
+        "name": "保登心爱",
+        "name_en": "Hoto Kokoa",
+        "series": "请问您今天要来点兔子吗？",
+        "series_en": "Gochūmon wa Usagi Desu ka?",
+        "ip_id": "ip_000156",
+        "cv": "佐仓绫音",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000156"
+        ]
+    },
+    {
+        "name": "空条徐伦",
+        "name_en": "Kūjō Jolyne",
+        "series": "JoJo的奇妙冒险",
+        "series_en": "JoJo's Bizarre Adventure",
+        "ip_id": "ip_000013",
+        "cv": "菲鲁兹·蓝",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000013"
+        ]
+    },
+    {
+        "name": "美树沙耶香",
+        "name_en": "Miki Sayaka",
+        "series": "魔法少女小圆",
+        "series_en": "Puella Magi Madoka★Magika",
+        "ip_id": "ip_000184",
+        "cv": "喜多村英梨",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000184"
+        ]
+    },
+    {
+        "name": "美游·艾德费尔特",
+        "name_en": "Miyu Edelfelt",
+        "series": "Fate系列",
+        "series_en": "Fate Series",
+        "ip_id": "ip_000012",
+        "cv": "名冢佳织",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000012"
+        ]
+    },
+    {
+        "name": "星野梦美",
+        "name_en": "Hoshino Yumemi",
+        "series": "星之梦",
+        "series_en": "Planetarian",
+        "ip_id": "ip_000319",
+        "cv": "铃木惠子",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000319"
+        ]
+    },
+    {
+        "name": "古见硝子",
+        "name_en": "Komi Shōko",
+        "series": "古见同学有交流障碍症",
+        "series_en": "Komi-san wa, Komyushō Desu.",
+        "ip_id": "ip_000320",
+        "cv": "古贺葵",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000320"
+        ]
+    },
+    {
+        "name": "高坂桐乃",
+        "name_en": "Kōsaka Kirino",
+        "series": "我的妹妹哪有这么可爱！",
+        "series_en": "Ore no Imōto",
+        "ip_id": "ip_000100",
+        "cv": "竹达彩奈",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000100"
+        ]
+    },
+    {
+        "name": "露西娜·栉名田",
+        "name_en": "Lucyna Kushinada",
+        "series": "赛博朋克 边缘行者",
+        "series_en": "Cyberpunk: Edgerunners",
+        "ip_id": "ip_000158",
+        "cv": "悠木碧",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000158"
+        ]
+    },
+    {
+        "name": "凑友希那",
+        "name_en": "Minato Yukina",
+        "series": "BanG Dream!",
+        "series_en": "BanG Dream!",
+        "ip_id": "ip_000006",
+        "cv": "相羽爱奈",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000006"
+        ]
+    },
+    {
+        "name": "岛村抱月",
+        "name_en": "Shimamura Hōgetsu",
+        "series": "安达与岛村",
+        "series_en": "Adachi to Shimamura",
+        "ip_id": "ip_000082",
+        "cv": "伊藤美来",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000082"
+        ]
+    },
+    {
+        "name": "真红",
+        "name_en": "Shinku",
+        "series": "蔷薇少女",
+        "series_en": "Rozen Maiden",
+        "ip_id": "ip_000321",
+        "cv": "泽城美雪",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000321"
+        ]
+    },
+    {
+        "name": "小鸟游十花",
+        "name_en": "Takanashi Tōka",
+        "series": "中二病也要谈恋爱！",
+        "series_en": "Chūnibyō demo Koi ga Shitai!",
+        "ip_id": "ip_000035",
+        "cv": "仙台惠理",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000035"
+        ]
+    },
+    {
+        "name": "千户",
+        "name_en": "Chito",
+        "series": "少女终末旅行",
+        "series_en": "Shōjo Shūmatsu Ryokō",
+        "ip_id": "ip_000322",
+        "cv": "水濑祈",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000322"
+        ]
+    },
+    {
+        "name": "市谷有咲",
+        "name_en": "Ichigaya Arisa",
+        "series": "BanG Dream!",
+        "series_en": "BanG Dream!",
+        "ip_id": "ip_000006",
+        "cv": "伊藤彩沙",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000006"
+        ]
+    },
+    {
+        "name": "中森青子",
+        "name_en": "Nakamori Aoko",
+        "series": "魔术快斗",
+        "series_en": "Magic Kaito",
+        "ip_id": "ip_000181",
+        "cv": "岩居由希子",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000181"
+        ]
+    },
+    {
+        "name": "橘万里花",
+        "name_en": "Tachibana Marika",
+        "series": "伪恋",
+        "series_en": "Nisekoi",
+        "ip_id": "ip_000040",
+        "cv": "阿澄佳奈",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000040"
+        ]
+    },
+    {
+        "name": "初春饰利",
+        "name_en": "Uiharu Kazari",
+        "series": "魔法禁书目录",
+        "series_en": "Toaru Series",
+        "ip_id": "ip_000185",
+        "cv": "丰崎爱生",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000185"
+        ]
+    },
+    {
+        "name": "维多利加·德·布洛瓦",
+        "name_en": "Victorique de Blois",
+        "series": "GOSICK",
+        "series_en": "GOSICK",
+        "ip_id": "ip_000323",
+        "cv": "悠木碧",
+        "avatar": "",
+        "match_status": "resolved",
+        "candidate_ip_ids": [
+            "ip_000323"
+        ]
+    }
+]

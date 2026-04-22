@@ -217,13 +217,13 @@ class VoteTracker:
                 eliminated_round = self._find_eliminated_round(vote_rounds, character_name, series_name)
                 if eliminated_round:
                     self._exclude_votes_after_elimination(votes, vote_rounds, eliminated_round)
-
+            
             votes_data.append({
                 'character': character_name,
-                'series': series_name,
+                'series': series_name,  
                 'votes': votes
             })
-
+                
         self._vote_data_cache[cache_key] = votes_data
         return votes_data
 
@@ -260,7 +260,7 @@ class VoteTracker:
         participating_counts: dict[str, int] = {}
 
         total_chars = {(char_data['character'], char_data['series']) for char_data in votes_data}
-        cumulative_eliminated_chars: set[tuple[str, str]] = set()
+            cumulative_eliminated_chars: set[tuple[str, str]] = set()
 
         for round_name in vote_rounds:
             participating_counts[round_name] = len(total_chars.difference(cumulative_eliminated_chars))

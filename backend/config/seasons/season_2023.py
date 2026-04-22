@@ -94,7 +94,7 @@ SEASON_CONFIG = {
             {'character': '结城明日奈', 'series': '刀剑神域'}
         ],
         '淘汰赛第四轮': [
-            {'character': '后藤一里', 'series': '孤独摇滚！'}
+            {'character': '后藤独', 'series': '孤独摇滚！'}
         ]
     },
     'wildcard_rounds': [

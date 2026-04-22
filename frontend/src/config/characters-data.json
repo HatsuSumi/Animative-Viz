@@ -631,22 +631,6 @@
         "cv": "梶裕贵",
         "avatar": ""
     },
-    "char_000080": {
-        "id": "char_000080",
-        "name": "艾莉莎·米哈伊罗夫纳·九条",
-        "name_en": "Alisa Mikhailovna Kujō",
-        "ip_id": "ip_000029",
-        "cv": "上坂堇",
-        "avatar": ""
-    },
-    "char_000081": {
-        "id": "char_000081",
-        "name": "久世政近",
-        "name_en": "Kuze Masachika",
-        "ip_id": "ip_000030",
-        "cv": "天崎滉平",
-        "avatar": ""
-    },
     "char_000082": {
         "id": "char_000082",
         "name": "长瀞早濑",
@@ -2105,7 +2089,7 @@
     },
     "char_000264": {
         "id": "char_000264",
-        "name": "后藤一里",
+        "name": "后藤独",
         "name_en": "Gotō Hitori",
         "ip_id": "ip_000080",
         "cv": "青山吉能",
@@ -6381,6 +6365,446 @@
         "name_en": "Tokiwa",
         "ip_id": "ip_000312",
         "cv": "武内骏辅",
+        "avatar": ""
+    },
+    "char_000799": {
+        "id": "char_000799",
+        "name": "三日月闲",
+        "name_en": "Mikazuki Shizuka",
+        "ip_id": "ip_000313",
+        "cv": "楠木灯",
+        "avatar": ""
+    },
+    "char_000800": {
+        "id": "char_000800",
+        "name": "缠流子",
+        "name_en": "Matoi Ryūko",
+        "ip_id": "ip_000314",
+        "cv": "小清水亚美",
+        "avatar": ""
+    },
+    "char_000801": {
+        "id": "char_000801",
+        "name": "木之下茜",
+        "name_en": "Kinoshita Akane",
+        "ip_id": "ip_000315",
+        "cv": "水濑祈",
+        "avatar": ""
+    },
+    "char_000802": {
+        "id": "char_000802",
+        "name": "佐天泪子",
+        "name_en": "Saten Ruiko",
+        "ip_id": "ip_000185",
+        "cv": "伊藤加奈惠",
+        "avatar": ""
+    },
+    "char_000803": {
+        "id": "char_000803",
+        "name": "希露菲叶特·格雷拉特",
+        "name_en": "Sylphiette Greyrat",
+        "ip_id": "ip_000110",
+        "cv": "茅野爱衣",
+        "avatar": ""
+    },
+    "char_000804": {
+        "id": "char_000804",
+        "name": "高海千歌",
+        "name_en": "Takami Chika",
+        "ip_id": "ip_000016",
+        "cv": "伊波杏树",
+        "avatar": ""
+    },
+    "char_000805": {
+        "id": "char_000805",
+        "name": "月宫亚由",
+        "name_en": "Tsukimiya Ayu",
+        "ip_id": "ip_000316",
+        "cv": "堀江由衣",
+        "avatar": ""
+    },
+    "char_000806": {
+        "id": "char_000806",
+        "name": "三角初华",
+        "name_en": "Misumi Uika",
+        "ip_id": "ip_000006",
+        "cv": "佐佐木李子",
+        "avatar": ""
+    },
+    "char_000807": {
+        "id": "char_000807",
+        "name": "仲村由理",
+        "name_en": "Nakamura Yuri",
+        "ip_id": "ip_000003",
+        "cv": "樱井浩美",
+        "avatar": ""
+    },
+    "char_000808": {
+        "id": "char_000808",
+        "name": "水濑名雪",
+        "name_en": "Minase Nayuki",
+        "ip_id": "ip_000316",
+        "cv": "国府田麻理子",
+        "avatar": ""
+    },
+    "char_000809": {
+        "id": "char_000809",
+        "name": "雾切响子",
+        "name_en": "Kirigiri Kyōko",
+        "ip_id": "ip_000091",
+        "cv": "日笠阳子",
+        "avatar": ""
+    },
+    "char_000810": {
+        "id": "char_000810",
+        "name": "奈良坂真绫",
+        "name_en": "Narasaka Maaya",
+        "ip_id": "ip_000038",
+        "cv": "铃木爱唯",
+        "avatar": ""
+    },
+    "char_000811": {
+        "id": "char_000811",
+        "name": "西森柚咲",
+        "name_en": "Nishimori Yusa",
+        "ip_id": "ip_000008",
+        "cv": "内田真礼",
+        "avatar": ""
+    },
+    "char_000812": {
+        "id": "char_000812",
+        "name": "桔梗",
+        "name_en": "Kikyō",
+        "ip_id": "ip_000196",
+        "cv": "日高范子",
+        "avatar": ""
+    },
+    "char_000813": {
+        "id": "char_000813",
+        "name": "金色暗影",
+        "name_en": "Konjiki no Yami",
+        "ip_id": "ip_000049",
+        "cv": "福圆美里",
+        "avatar": ""
+    },
+    "char_000814": {
+        "id": "char_000814",
+        "name": "RUPA",
+        "name_en": "Rupa",
+        "ip_id": "ip_000235",
+        "cv": "朱李",
+        "avatar": ""
+    },
+    "char_000815": {
+        "id": "char_000815",
+        "name": "柊司",
+        "name_en": "Hiiragi Tsukasa",
+        "ip_id": "ip_000089",
+        "cv": "福原香织",
+        "avatar": ""
+    },
+    "char_000816": {
+        "id": "char_000816",
+        "name": "小野寺小咲",
+        "name_en": "Onodera Kosaki",
+        "ip_id": "ip_000040",
+        "cv": "花泽香菜",
+        "avatar": ""
+    },
+    "char_000817": {
+        "id": "char_000817",
+        "name": "大道寺知世",
+        "name_en": "Daidōji Tomoyo",
+        "ip_id": "ip_000179",
+        "cv": "岩男润子",
+        "avatar": ""
+    },
+    "char_000818": {
+        "id": "char_000818",
+        "name": "瑞吉儿·加德纳",
+        "name_en": "Rachel Gardner",
+        "ip_id": "ip_000118",
+        "cv": "千菅春香",
+        "avatar": ""
+    },
+    "char_000819": {
+        "id": "char_000819",
+        "name": "神乐",
+        "name_en": "Kagura",
+        "ip_id": "ip_000174",
+        "cv": "钉宫理惠",
+        "avatar": ""
+    },
+    "char_000820": {
+        "id": "char_000820",
+        "name": "艾斯德斯",
+        "name_en": "Esdeath",
+        "ip_id": "ip_000108",
+        "cv": "明坂聪美",
+        "avatar": ""
+    },
+    "char_000821": {
+        "id": "char_000821",
+        "name": "蝴蝶忍",
+        "name_en": "Kochō Shinobu",
+        "ip_id": "ip_000178",
+        "cv": "早见沙织",
+        "avatar": ""
+    },
+    "char_000822": {
+        "id": "char_000822",
+        "name": "古手川千纱",
+        "name_en": "Kotegawa Chisa",
+        "ip_id": "ip_000139",
+        "cv": "安济知佳",
+        "avatar": ""
+    },
+    "char_000823": {
+        "id": "char_000823",
+        "name": "克鲁鲁·采佩西",
+        "name_en": "Krul Tepes",
+        "ip_id": "ip_000145",
+        "cv": "悠木碧",
+        "avatar": ""
+    },
+    "char_000824": {
+        "id": "char_000824",
+        "name": "梦梦·贝莉雅·戴比路克",
+        "name_en": "Momo Belia Deviluke",
+        "ip_id": "ip_000049",
+        "cv": "丰崎爱生",
+        "avatar": ""
+    },
+    "char_000825": {
+        "id": "char_000825",
+        "name": "赛丽艾",
+        "name_en": "Serie",
+        "ip_id": "ip_000153",
+        "cv": "伊濑茉莉也",
+        "avatar": ""
+    },
+    "char_000826": {
+        "id": "char_000826",
+        "name": "冬马和纱",
+        "name_en": "Tōma Kazusa",
+        "ip_id": "ip_000135",
+        "cv": "生天目仁美",
+        "avatar": ""
+    },
+    "char_000827": {
+        "id": "char_000827",
+        "name": "露易丝·瓦利埃尔",
+        "name_en": "Louise Vallière",
+        "ip_id": "ip_000200",
+        "cv": "钉宫理惠",
+        "avatar": ""
+    },
+    "char_000828": {
+        "id": "char_000828",
+        "name": "玛奇玛",
+        "name_en": "Makima",
+        "ip_id": "ip_000175",
+        "cv": "楠木灯",
+        "avatar": ""
+    },
+    "char_000829": {
+        "id": "char_000829",
+        "name": "佐仓杏子",
+        "name_en": "Sakura Kyōko",
+        "ip_id": "ip_000184",
+        "cv": "野中蓝",
+        "avatar": ""
+    },
+    "char_000830": {
+        "id": "char_000830",
+        "name": "伊井野弥子",
+        "name_en": "Iino Miko",
+        "ip_id": "ip_000166",
+        "cv": "富田美忧",
+        "avatar": ""
+    },
+    "char_000831": {
+        "id": "char_000831",
+        "name": "式守都",
+        "name_en": "Shikimori Miyako",
+        "ip_id": "ip_000317",
+        "cv": "大西沙织",
+        "avatar": ""
+    },
+    "char_000832": {
+        "id": "char_000832",
+        "name": "纯田真奈",
+        "name_en": "Sumita Mana",
+        "ip_id": "ip_000006",
+        "cv": "反田叶月",
+        "avatar": ""
+    },
+    "char_000833": {
+        "id": "char_000833",
+        "name": "我妻由乃",
+        "name_en": "Gasai Yuno",
+        "ip_id": "ip_000318",
+        "cv": "村田知沙",
+        "avatar": ""
+    },
+    "char_000834": {
+        "id": "char_000834",
+        "name": "星宫六喰",
+        "name_en": "Hoshimiya Mukuro",
+        "ip_id": "ip_000144",
+        "cv": "影山灯",
+        "avatar": ""
+    },
+    "char_000835": {
+        "id": "char_000835",
+        "name": "保登心爱",
+        "name_en": "Hoto Kokoa",
+        "ip_id": "ip_000156",
+        "cv": "佐仓绫音",
+        "avatar": ""
+    },
+    "char_000836": {
+        "id": "char_000836",
+        "name": "空条徐伦",
+        "name_en": "Kūjō Jolyne",
+        "ip_id": "ip_000013",
+        "cv": "菲鲁兹·蓝",
+        "avatar": ""
+    },
+    "char_000837": {
+        "id": "char_000837",
+        "name": "美树沙耶香",
+        "name_en": "Miki Sayaka",
+        "ip_id": "ip_000184",
+        "cv": "喜多村英梨",
+        "avatar": ""
+    },
+    "char_000838": {
+        "id": "char_000838",
+        "name": "美游·艾德费尔特",
+        "name_en": "Miyu Edelfelt",
+        "ip_id": "ip_000012",
+        "cv": "名冢佳织",
+        "avatar": ""
+    },
+    "char_000839": {
+        "id": "char_000839",
+        "name": "星野梦美",
+        "name_en": "Hoshino Yumemi",
+        "ip_id": "ip_000319",
+        "cv": "铃木惠子",
+        "avatar": ""
+    },
+    "char_000840": {
+        "id": "char_000840",
+        "name": "古见硝子",
+        "name_en": "Komi Shōko",
+        "ip_id": "ip_000320",
+        "cv": "古贺葵",
+        "avatar": ""
+    },
+    "char_000841": {
+        "id": "char_000841",
+        "name": "高坂桐乃",
+        "name_en": "Kōsaka Kirino",
+        "ip_id": "ip_000100",
+        "cv": "竹达彩奈",
+        "avatar": ""
+    },
+    "char_000842": {
+        "id": "char_000842",
+        "name": "露西娜·栉名田",
+        "name_en": "Lucyna Kushinada",
+        "ip_id": "ip_000158",
+        "cv": "悠木碧",
+        "avatar": ""
+    },
+    "char_000843": {
+        "id": "char_000843",
+        "name": "凑友希那",
+        "name_en": "Minato Yukina",
+        "ip_id": "ip_000006",
+        "cv": "相羽爱奈",
+        "avatar": ""
+    },
+    "char_000844": {
+        "id": "char_000844",
+        "name": "岛村抱月",
+        "name_en": "Shimamura Hōgetsu",
+        "ip_id": "ip_000082",
+        "cv": "伊藤美来",
+        "avatar": ""
+    },
+    "char_000845": {
+        "id": "char_000845",
+        "name": "真红",
+        "name_en": "Shinku",
+        "ip_id": "ip_000321",
+        "cv": "泽城美雪",
+        "avatar": ""
+    },
+    "char_000846": {
+        "id": "char_000846",
+        "name": "小鸟游十花",
+        "name_en": "Takanashi Tōka",
+        "ip_id": "ip_000035",
+        "cv": "仙台惠理",
+        "avatar": ""
+    },
+    "char_000847": {
+        "id": "char_000847",
+        "name": "千户",
+        "name_en": "Chito",
+        "ip_id": "ip_000322",
+        "cv": "水濑祈",
+        "avatar": ""
+    },
+    "char_000848": {
+        "id": "char_000848",
+        "name": "市谷有咲",
+        "name_en": "Ichigaya Arisa",
+        "ip_id": "ip_000006",
+        "cv": "伊藤彩沙",
+        "avatar": ""
+    },
+    "char_000849": {
+        "id": "char_000849",
+        "name": "中森青子",
+        "name_en": "Nakamori Aoko",
+        "ip_id": "ip_000181",
+        "cv": "岩居由希子",
+        "avatar": ""
+    },
+    "char_000850": {
+        "id": "char_000850",
+        "name": "橘万里花",
+        "name_en": "Tachibana Marika",
+        "ip_id": "ip_000040",
+        "cv": "阿澄佳奈",
+        "avatar": ""
+    },
+    "char_000851": {
+        "id": "char_000851",
+        "name": "初春饰利",
+        "name_en": "Uiharu Kazari",
+        "ip_id": "ip_000185",
+        "cv": "丰崎爱生",
+        "avatar": ""
+    },
+    "char_000852": {
+        "id": "char_000852",
+        "name": "维多利加·德·布洛瓦",
+        "name_en": "Victorique de Blois",
+        "ip_id": "ip_000323",
+        "cv": "悠木碧",
+        "avatar": ""
+    },
+    "char_000853": {
+        "id": "char_000853",
+        "name": "拉姆",
+        "name_en": "Ram",
+        "ip_id": "ip_000019",
+        "cv": "村川梨衣",
         "avatar": ""
     }
 }
