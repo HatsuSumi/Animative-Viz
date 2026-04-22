@@ -95,7 +95,7 @@ const CumulativeVotesPage = () => {
     <>
       <div style={{ position: 'absolute', width: '100%', zIndex: 1 }}>
         <div className="chart-page-header">
-          <h1>世萌{currentSeason}赛季 角色累计得票统计</h1>
+          <h1>世萌{currentSeason}赛季 恒星女子组得票统计</h1>
         </div>
         <div className="progress-container">
           <div 
