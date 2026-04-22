@@ -39,6 +39,12 @@ function homeFlowReducer(state, action) {
         step: FLOW_STEP.SELECT_COLUMNS
       };
 
+    case 'OPEN_SPECIAL_ROUNDS_SELECTION':
+      return {
+        ...state,
+        step: FLOW_STEP.SELECT_SPECIAL_ROUNDS
+      };
+
     case 'CLOSE_COLUMN_SELECTION':
       return {
         ...state,
@@ -48,8 +54,7 @@ function homeFlowReducer(state, action) {
     case 'SELECT_COLUMNS':
       return {
         ...state,
-        selectedColumns: action.selectedColumns,
-        step: FLOW_STEP.SELECT_SPECIAL_ROUNDS
+        selectedColumns: action.selectedColumns
       };
 
     case 'BACK_TO_COLUMN_SELECTION':
@@ -68,7 +73,12 @@ function homeFlowReducer(state, action) {
       return {
         ...state,
         excludeWildcard: action.excludeWildcard,
-        excludeRanking: action.excludeRanking,
+        excludeRanking: action.excludeRanking
+      };
+
+    case 'OPEN_RECORDING_SELECTION':
+      return {
+        ...state,
         step: FLOW_STEP.SELECT_RECORDING
       };
 
@@ -135,11 +145,15 @@ const HomePage = () => {
     }
   };
 
-  const handleColumnSelection = ({ selectedColumns }) => {
+  const handleColumnSelectionConfirm = ({ selectedColumns }) => {
     dispatch({
       type: 'SELECT_COLUMNS',
       selectedColumns
     });
+
+    setTimeout(() => {
+      dispatch({ type: 'OPEN_SPECIAL_ROUNDS_SELECTION' });
+    }, 0);
   };
 
   const handleColumnExclusionCancel = () => {
@@ -160,6 +174,10 @@ const HomePage = () => {
       excludeWildcard,
       excludeRanking
     });
+
+    setTimeout(() => {
+      dispatch({ type: 'OPEN_RECORDING_SELECTION' });
+    }, 0);
   };
 
   const handleRecordingSelection = async (shouldRecord) => {
@@ -215,10 +233,11 @@ const HomePage = () => {
           />
 
           <ColumnExclusionModal
+          contextId={contextId}
           show={step === FLOW_STEP.SELECT_COLUMNS}
             initialSelectedColumns={selectedColumns}
             onClose={handleColumnExclusionCancel}
-            onConfirm={handleColumnSelection}
+            onConfirm={handleColumnSelectionConfirm}
           />
 
           <ExcludeSpecialRoundsModal 

@@ -260,7 +260,7 @@ class VoteTracker:
         participating_counts: dict[str, int] = {}
 
         total_chars = {(char_data['character'], char_data['series']) for char_data in votes_data}
-            cumulative_eliminated_chars: set[tuple[str, str]] = set()
+        cumulative_eliminated_chars: set[tuple[str, str]] = set()
 
         for round_name in vote_rounds:
             participating_counts[round_name] = len(total_chars.difference(cumulative_eliminated_chars))

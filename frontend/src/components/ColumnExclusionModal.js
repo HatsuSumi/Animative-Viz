@@ -4,7 +4,13 @@ import { createPortal } from 'react-dom';
 import { getVoteRounds } from '../services/api';
 import '../styles/columnexclusionmodal.css';
 
-const ColumnExclusionModal = ({ onConfirm, onClose, initialSelectedColumns = [], show }) => {
+const ColumnExclusionModal = ({
+  contextId,
+  onConfirm,
+  onClose,
+  initialSelectedColumns = [],
+  show
+}) => {
   const [selectedColumns, setSelectedColumns] = useState(initialSelectedColumns);
   const [voteColumns, setVoteColumns] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,7 +22,7 @@ const ColumnExclusionModal = ({ onConfirm, onClose, initialSelectedColumns = [],
 
     const fetchVoteRounds = async () => {
       try {
-        const data = await getVoteRounds();
+        const data = await getVoteRounds(contextId);
         setVoteColumns(data || []);  
         setLoading(false);
       } catch (error) {
@@ -27,7 +33,7 @@ const ColumnExclusionModal = ({ onConfirm, onClose, initialSelectedColumns = [],
     };
 
     fetchVoteRounds();
-  }, [show]);  
+  }, [contextId, show]);  
 
   const handleColumnClick = (column) => {
     setSelectedColumns(prev => {
