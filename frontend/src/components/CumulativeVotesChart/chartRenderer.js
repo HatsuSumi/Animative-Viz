@@ -175,10 +175,24 @@ export function renderLabels({
       voteTspan
         .text(() => getVoteLabelText({
           character: d.character,
-          vote: currentVote,
+          vote: startVote,
           finalRank
         }))
-        .style('fill', getVoteLabelColor(finalRank, finalRankConfig));
+        .style('fill', getVoteLabelColor(finalRank, finalRankConfig))
+        .transition()
+        .duration(duration)
+        .ease(easing)
+        .delay(() => (displayData.length - d.rank) * delayFactor)
+        .tween('text', function() {
+          const interpolate = d3.interpolateNumber(startVote, currentVote);
+          return function(t) {
+            this.textContent = getVoteLabelText({
+              character: d.character,
+              vote: Math.round(interpolate(t)),
+              finalRank
+            });
+          };
+        });
 
       const prevRankVotes = getPrevRankVotes(displayData, d.rank);
       if (prevRankVotes && d.rank > 1) {
@@ -191,7 +205,19 @@ export function renderLabels({
 
         trendTspan
           .style('fill', getTrendColor(diff, trendConfig))
-          .text(getTrendText(diff));
+          .text(getTrendText(d.prevRoundDiff || 0))
+          .transition()
+          .duration(duration)
+          .ease(easing)
+          .delay(() => (displayData.length - d.rank) * delayFactor)
+          .tween('text', function() {
+            const startDiff = d.prevRoundDiff || 0;
+            const endDiff = diff;
+            const interpolate = d3.interpolateNumber(startDiff, endDiff);
+            return function(t) {
+              this.textContent = getTrendText(interpolate(t));
+            };
+          });
       } else if (!trendTspan.empty()) {
         trendTspan.remove();
       }
