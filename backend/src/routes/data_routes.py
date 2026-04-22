@@ -180,7 +180,7 @@ def get_characters_info(context_id: Optional[str] = None) -> list[dict[str, obje
         if not characters_info:
             raise ApiError(404, 'CHARACTERS_INFO_NOT_FOUND', '未找到角色信息')
 
-        return build_characters_info_response(characters_info)
+        return build_characters_info_response(characters_info, vote_tracker.season)
 
     except HTTPException as error:
         _rethrow_http_error(error)
@@ -210,7 +210,7 @@ def get_cumulative_votes_page_data(request: CumulativeVotesPageRequest) -> dict[
         if not characters_info:
             raise ApiError(404, 'CHARACTERS_INFO_NOT_FOUND', '未找到角色信息')
 
-        characters_response = build_characters_info_response(characters_info)
+        characters_response = build_characters_info_response(characters_info, vote_tracker.season)
         final_ranks = {
             character['id']: character['rank']
             for character in characters_response
