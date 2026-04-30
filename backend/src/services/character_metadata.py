@@ -15,15 +15,14 @@ CHARACTER_LOOKUP_PATH = os.path.join(PROJECT_ROOT, 'frontend', 'src', 'config', 
 RANKINGS_DATA_PATH = os.path.join(SRC_DIR, 'data', 'rankings.json')
 
 
-class RankingsData(TypedDict):
-    season: Optional[str]
-    rankings: dict[str, int]
+class MultiSeasonRankingsData(TypedDict):
+    seasons: dict[str, dict[str, int]]
 
 
 _characters_by_id: dict[str, dict[str, Any]] = {}
 _ips_by_id: dict[str, dict[str, Any]] = {}
 _character_lookup: dict[str, str] = {}
-_rankings_data: Optional[RankingsData] = None
+_rankings_data: Optional[MultiSeasonRankingsData] = None
 
 
 def _load_json_file(path: str, description: str) -> Any:
@@ -41,43 +40,63 @@ def _require_character_lookup() -> dict[str, str]:
     return _character_lookup
 
 
-def _load_rankings() -> RankingsData:
+def _validate_rankings_map(rankings: Any, description: str) -> dict[str, int]:
+    if not isinstance(rankings, dict):
+        raise RuntimeError(f'{description}必须是对象')
+
+    normalized_rankings: dict[str, int] = {}
+    for character_id, rank in rankings.items():
+        if not isinstance(character_id, str):
+            raise RuntimeError(f'{description}中的角色 ID 必须是字符串')
+        if not isinstance(rank, int):
+            raise RuntimeError(f'{description}中的排名必须是整数: {character_id}')
+        normalized_rankings[character_id] = rank
+
+    return normalized_rankings
+
+
+def _normalize_rankings_data(raw_rankings_data: Any) -> MultiSeasonRankingsData:
+    seasons = raw_rankings_data.get('seasons')
+    if not isinstance(seasons, dict):
+        raise RuntimeError('排名数据必须包含 seasons 字段，且其值必须是对象')
+
+    normalized_seasons: dict[str, dict[str, int]] = {}
+    for season, rankings in seasons.items():
+        if not isinstance(season, str):
+            raise RuntimeError('排名数据中的赛季键必须是字符串')
+        normalized_seasons[season] = _validate_rankings_map(rankings, f'赛季 {season} 的排名数据')
+
+    return {'seasons': normalized_seasons}
+
+
+def _load_rankings() -> MultiSeasonRankingsData:
     global _rankings_data
 
     if _rankings_data is not None:
         return _rankings_data
 
-    rankings_data = _load_json_file(RANKINGS_DATA_PATH, '排名数据')
-    rankings = rankings_data.get('rankings')
-    season = rankings_data.get('season')
-
-    if season is not None and not isinstance(season, str):
-        raise RuntimeError('排名数据的 season 字段必须是字符串或 null')
-
-    if not isinstance(rankings, dict):
-        raise RuntimeError('排名数据缺少 rankings 字段')
-
-    _rankings_data = {
-        'season': season,
-        'rankings': rankings,
-    }
+    raw_rankings_data = _load_json_file(RANKINGS_DATA_PATH, '排名数据')
+    _rankings_data = _normalize_rankings_data(raw_rankings_data)
     return _rankings_data
 
 
 def _get_rankings_for_season(season: Optional[str]) -> dict[str, int]:
     rankings_data = _load_rankings()
-    rankings_season = rankings_data['season']
+    rankings_by_season = rankings_data['seasons']
 
-    if season is None or rankings_season is None:
-        return rankings_data['rankings']
+    if season is None:
+        if len(rankings_by_season) == 1:
+            return next(iter(rankings_by_season.values()))
 
-    if rankings_season != season:
-        logger.warning(
-            f'排名数据赛季不匹配，已忽略排名。rankings_season={rankings_season}, current_season={season}'
-        )
+        logger.warning('未提供赛季，且存在多个赛季排名数据，已忽略排名')
         return {}
 
-    return rankings_data['rankings']
+    rankings = rankings_by_season.get(season)
+    if rankings is None:
+        logger.warning(f'未找到赛季 {season} 的排名数据，已忽略排名')
+        return {}
+
+    return rankings
 
 
 def load_characters_data() -> None:
@@ -117,13 +136,13 @@ def build_votes_response(result: VotesByRoundsResult) -> dict[str, Any]:
             'id': character_id,
             'character': character,
             'ip': series,
-            'rounds': rounds_data
+            'rounds': rounds_data,
         })
 
     return {
         'votes_data': processed_data,
         'vote_rounds': result['vote_rounds'],
-        'participating_counts': result['participating_counts']
+        'participating_counts': result['participating_counts'],
     }
 
 
@@ -158,4 +177,3 @@ def build_characters_info_response(
             char_info['ip_season'] = ip_meta.get('season')
 
     return cast(list[dict[str, Any]], characters_info)
-

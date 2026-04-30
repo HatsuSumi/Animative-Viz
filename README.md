@@ -454,11 +454,11 @@ backend/
 
 **`backend/src/services/file_storage.py`**
 - 上传文件存储服务
-- 负责文件落盘、重复文件判断、记录最新文件路径
+- 负责文件落盘、重复文件判断，并为导入结果创建数据上下文
 
 **`backend/src/services/vote_tracker_store.py`**
 - VoteTracker 实例管理
-- 根据 `backend/data/.latest` 懒加载当前数据文件
+- 根据 `backend/data/contexts/<context_id>.txt` 恢复上下文对应的数据文件
 
 **`backend/src/services/character_metadata.py`**
 - 角色元数据补充与响应组装
@@ -499,13 +499,13 @@ backend/
 - 全局配置
 - 管理 API 前缀、CORS 等后端基础设置
 
-**`backend/data/.latest`**
-- 当前最新数据文件路径
-- 服务重启后会据此恢复当前赛季数据
+**`backend/data/contexts/`**
+- 数据上下文映射目录
+- 保存 `context_id` 到 CSV 文件路径的持久化映射
 
 **`backend/src/data/rankings.json`**
-- 排名数据
-- 用于角色详情接口中的名次补充
+- 多赛季排名数据
+- 按赛季保存 `character_id -> rank` 映射，供角色详情接口补充名次
 
 #### 脚本与依赖
 
@@ -752,30 +752,36 @@ CSV 至少要与当前项目的基础列约定一致：
 
 如果这个新赛季需要正确展示角色最终排名，还要同步检查 `backend/src/data/rankings.json`。
 
-当前实现会在组装角色信息时直接读取这个文件里的 `rankings` 字段，并填充到角色的 `rank` 上，但不会校验文件里的 `season` 是否和当前导入赛季一致。
+当前实现只接受多赛季结构，并会在组装角色信息时按当前赛季读取对应的排名映射。
 
 这意味着：
 
-1. `rankings.json` 仍然是旧赛季时，新赛季页面上的 `rank` 可能继续显示旧赛季排名，或者拿不到正确排名
-2. 只有在你已经确定了该赛季最终排名时，才应该把 `rankings.json` 切到新赛季对应内容
-3. 还没开赛、还没完赛，或者当前只是做赛前配置录入时，不应该为了“新增赛季”就硬改 `rankings.json`
+1. `rankings.json` 必须使用 `seasons` 结构，而不是旧的单赛季结构
+2. 新增赛季时，不需要覆盖其他赛季数据，而是把当前赛季排名追加到 `seasons.<season>` 下
+3. 只有在你已经确定了该赛季最终排名时，才应该补齐该赛季对应的排名数据
+4. 还没开赛、还没完赛，或者当前只是做赛前配置录入时，可以暂时不添加该赛季排名
 
 建议按下面规则处理：
 
-1. 只是新增赛季配置、导入 CSV、验证轮次展示时，可以先不改 `rankings.json`
-2. 需要验证最终排名展示时，再把 `backend/src/data/rankings.json` 更新为该赛季对应排名数据
-3. 更新时至少检查两个字段：
-   `season` 是否是当前赛季
-   `rankings` 是否是当前赛季角色 ID 到名次的映射
+1. 只是新增赛季配置、导入 CSV、验证轮次展示时，可以先不补该赛季的 `rankings`
+2. 需要验证最终排名展示时，再把当前赛季排名补到 `backend/src/data/rankings.json` 的 `seasons` 对象中
+3. 更新时至少检查两个点：
+   当前赛季 key 是否存在
+   对应值是否是当前赛季角色 ID 到名次的映射对象
 
 示例结构：
 
 ```json
 {
-  "season": "2024",
-  "rankings": {
-    "char_xxxxxx": 1,
-    "char_yyyyyy": 2
+  "seasons": {
+    "2023": {
+      "char_xxxxxx": 1,
+      "char_yyyyyy": 2
+    },
+    "2024": {
+      "char_aaaaaa": 1,
+      "char_bbbbbb": 2
+    }
   }
 }
 ```
@@ -786,7 +792,7 @@ CSV 至少要与当前项目的基础列约定一致：
 
 1. 运行 Python 静态分析，确认配置改动没有破坏类型约束
 2. 实际上传新赛季 CSV，确认轮次匹配、接口返回和页面展示都正常
-3. 涉及最终排名展示时，额外确认 `rankings.json` 已切到当前赛季且页面上的 `rank` 显示正确
+3. 涉及最终排名展示时，额外确认 `rankings.json` 中已存在当前赛季对应的 `seasons.<season>` 数据，且页面上的 `rank` 显示正确
 
 建议命令如下：
 
@@ -842,6 +848,6 @@ cd backend
 1. 后端从 `YYYY_season.csv` 文件名识别赛季
 2. 后端从 `backend/config/seasons/` 读取对应赛季规则
 3. 前端会结合后端返回的当前赛季信息与 `frontend/src/config/seasonsConfig.json` 里的对应展示配置进行渲染
-4. 角色最终排名展示还依赖 `backend/src/data/rankings.json`，当前实现只读取其中的 `rankings` 字段，不校验 `season` 是否和当前赛季一致
+4. 角色最终排名展示还依赖 `backend/src/data/rankings.json`，当前实现会按当前赛季读取 `seasons.<season>` 下的排名数据
 5. CSV 列名、后端轮次配置、前端轮次配置三者对齐后，整套展示流程即可工作
 

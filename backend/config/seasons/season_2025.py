@@ -188,6 +188,9 @@ SEASON_CONFIG = {
         '淘汰赛阶段轮次7': [
             {'character': '时崎狂三', 'series': '约会大作战'}
         ],
+        '淘汰赛阶段轮次8': [
+            { 'character': '后藤独', 'series': '孤独摇滚！'}
+        ]
     }
 }
 

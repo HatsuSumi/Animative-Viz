@@ -647,9 +647,9 @@
         "淘汰赛阶段轮次4": { "startTime": "2026/04/07", "totalVoters": 2580 },
         "淘汰赛阶段轮次5": { "startTime": "2026/04/11", "totalVoters": 2018 },
         "淘汰赛阶段轮次6": { "startTime": "2026/04/15", "totalVoters": 6838 },
-        "淘汰赛阶段轮次7": { "startTime": "", "totalVoters": "" },
-        "淘汰赛阶段轮次8": { "startTime": "", "totalVoters": "" },
-        "淘汰赛阶段轮次9": { "startTime": "", "totalVoters": "" }
+        "淘汰赛阶段轮次7": { "startTime": "2026/04/19", "totalVoters": 4121 },
+        "淘汰赛阶段轮次8": { "startTime": "2026/04/23", "totalVoters": 4229 },
+        "淘汰赛阶段轮次9": { "startTime": "2026/04/27", "totalVoters": 2345 }
       },
       "layout": {
         "text": {
