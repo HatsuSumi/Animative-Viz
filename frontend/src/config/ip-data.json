@@ -2,2247 +2,1926 @@
     "ip_000001": {
         "id": "ip_000001",
         "name": "86 -不存在的战区-",
-        "name_short": "86 -不存在的战区-",
         "year": 2021,
         "season": 4
     },
     "ip_000002": {
         "id": "ip_000002",
         "name": "AIR",
-        "name_short": "AIR",
         "year": 2005,
         "season": 1
     },
     "ip_000003": {
         "id": "ip_000003",
         "name": "Angel Beats!",
-        "name_short": "Angel Beats!",
         "year": 2010,
         "season": 4
     },
     "ip_000004": {
         "id": "ip_000004",
         "name": "Another",
-        "name_short": "Another",
         "year": 2012,
         "season": 1
     },
     "ip_000005": {
         "id": "ip_000005",
         "name": "BLEACH",
-        "name_short": "BLEACH",
         "year": 2004,
         "season": 10
     },
     "ip_000006": {
         "id": "ip_000006",
         "name": "BanG Dream!",
-        "name_short": "BanG Dream!",
         "year": 2017,
         "season": 1
     },
     "ip_000007": {
         "id": "ip_000007",
         "name": "CLANNAD",
-        "name_short": "CLANNAD",
         "year": 2007,
         "season": 10
     },
     "ip_000008": {
         "id": "ip_000008",
         "name": "Charlotte",
-        "name_short": "Charlotte",
         "year": 2015,
         "season": 7
     },
     "ip_000009": {
         "id": "ip_000009",
         "name": "Code Geass",
-        "name_short": "Code Geass",
         "year": 2006,
         "season": 10
     },
     "ip_000010": {
         "id": "ip_000010",
         "name": "Darling in the FranXX",
-        "name_short": "Darling in the FranXX",
         "year": 2018,
         "season": 1
     },
     "ip_000011": {
         "id": "ip_000011",
         "name": "Dr.STONE 石纪元",
-        "name_short": "Dr.STONE 石纪元",
         "year": 2019,
         "season": 7
     },
     "ip_000012": {
         "id": "ip_000012",
         "name": "Fate系列",
-        "name_short": "Fate系列",
         "year": 2006,
         "season": 1
     },
     "ip_000013": {
         "id": "ip_000013",
         "name": "JoJo的奇妙冒险",
-        "name_short": "JoJo的奇妙冒险",
         "year": 2012,
         "season": 10
     },
     "ip_000014": {
         "id": "ip_000014",
         "name": "Kizuna AI株式会社",
-        "name_short": "Kizuna AI株式会社",
         "year": 0,
         "season": 0
     },
     "ip_000015": {
         "id": "ip_000015",
         "name": "Little Busters!",
-        "name_short": "Little Busters!",
         "year": 2012,
         "season": 10
     },
     "ip_000016": {
         "id": "ip_000016",
         "name": "LoveLive!系列",
-        "name_short": "LoveLive!系列",
         "year": 2013,
         "season": 1
     },
     "ip_000017": {
         "id": "ip_000017",
         "name": "NO GAME NO LIFE 游戏人生",
-        "name_short": "NO GAME NO LIFE 游戏人生",
         "year": 2014,
         "season": 4
     },
     "ip_000018": {
         "id": "ip_000018",
         "name": "OVERLORD",
-        "name_short": "OVERLORD",
         "year": 2015,
         "season": 7
     },
     "ip_000019": {
         "id": "ip_000019",
         "name": "Re:从零开始的异世界生活",
-        "name_short": "Re:从零开始的异世界生活",
         "year": 2016,
         "season": 4
     },
     "ip_000020": {
         "id": "ip_000020",
         "name": "ReLIFE",
-        "name_short": "ReLIFE",
         "year": 2016,
         "season": 7
     },
     "ip_000021": {
         "id": "ip_000021",
         "name": "SSSS.DYNAZENON",
-        "name_short": "SSSS.DYNAZENON",
         "year": 2021,
         "season": 4
     },
     "ip_000022": {
         "id": "ip_000022",
         "name": "SSSS.GRIDMAN",
-        "name_short": "SSSS.GRIDMAN",
         "year": 0,
         "season": 0
     },
     "ip_000023": {
         "id": "ip_000023",
         "name": "School Days",
-        "name_short": "School Days",
         "year": 2007,
         "season": 7
     },
     "ip_000024": {
         "id": "ip_000024",
         "name": "Summer Pockets",
-        "name_short": "Summer Pockets",
         "year": 0,
         "season": 0
     },
     "ip_000025": {
         "id": "ip_000025",
         "name": "VOCALOID",
-        "name_short": "VOCALOID",
         "year": 2007,
         "season": 7
     },
     "ip_000026": {
         "id": "ip_000026",
         "name": "【我推的孩子】",
-        "name_short": "【我推的孩子】",
         "year": 2023,
         "season": 4
     },
     "ip_000027": {
         "id": "ip_000027",
         "name": "一拳超人",
-        "name_short": "一拳超人",
         "year": 0,
         "season": 0
     },
     "ip_000028": {
         "id": "ip_000028",
         "name": "七大罪",
-        "name_short": "七大罪",
         "year": 0,
         "season": 0
     },
     "ip_000031": {
         "id": "ip_000031",
         "name": "不要欺负我，长瀞同学",
-        "name_short": "不要欺负我，长瀞同学",
         "year": 0,
         "season": 0
     },
     "ip_000032": {
         "id": "ip_000032",
         "name": "东京卍复仇者",
-        "name_short": "东京卍复仇者",
         "year": 0,
         "season": 0
     },
     "ip_000033": {
         "id": "ip_000033",
         "name": "东京食尸鬼",
-        "name_short": "东京食尸鬼",
         "year": 2014,
         "season": 7
     },
     "ip_000034": {
         "id": "ip_000034",
         "name": "东方Project",
-        "name_short": "东方Project",
         "year": 0,
         "season": 0
     },
     "ip_000035": {
         "id": "ip_000035",
         "name": "中二病也要谈恋爱！",
-        "name_short": "中二病也要谈恋爱！",
         "year": 2012,
         "season": 10
     },
     "ip_000036": {
         "id": "ip_000036",
         "name": "为美好的世界献上祝福！",
-        "name_short": "为美好的世界献上祝福！",
         "year": 2016,
         "season": 1
     },
     "ip_000037": {
         "id": "ip_000037",
         "name": "久保同学不放过我",
-        "name_short": "久保同学不放过我",
         "year": 2023,
         "season": 1
     },
     "ip_000038": {
         "id": "ip_000038",
         "name": "义妹生活",
-        "name_short": "义妹生活",
         "year": 0,
         "season": 0
     },
     "ip_000039": {
         "id": "ip_000039",
         "name": "五等分的新娘",
-        "name_short": "五等分的新娘",
         "year": 2019,
         "season": 1
     },
     "ip_000040": {
         "id": "ip_000040",
         "name": "伪恋",
-        "name_short": "伪恋",
         "year": 2014,
         "season": 1
     },
     "ip_000041": {
         "id": "ip_000041",
         "name": "你的名字。",
-        "name_short": "你的名字。",
         "year": 2016,
         "season": 7
     },
     "ip_000042": {
         "id": "ip_000042",
         "name": "偶像大师",
-        "name_short": "偶像大师",
         "year": 0,
         "season": 0
     },
     "ip_000043": {
         "id": "ip_000043",
         "name": "偶活学园",
-        "name_short": "偶活学园",
         "year": 0,
         "season": 0
     },
     "ip_000044": {
         "id": "ip_000044",
         "name": "关于我在无意间被隔壁的天使变成废柴这件事",
-        "name_short": "关于我在无意间被隔壁的天使变成废柴这件事",
         "year": 0,
         "season": 0
     },
     "ip_000045": {
         "id": "ip_000045",
         "name": "关于我转生变成史莱姆这档事",
-        "name_short": "关于我转生变成史莱姆这档事",
         "year": 0,
         "season": 0
     },
     "ip_000046": {
         "id": "ip_000046",
         "name": "冰海战记",
-        "name_short": "冰海战记",
         "year": 0,
         "season": 0
     },
     "ip_000047": {
         "id": "ip_000047",
         "name": "冰菓",
-        "name_short": "冰菓",
         "year": 2012,
         "season": 4
     },
     "ip_000048": {
         "id": "ip_000048",
         "name": "凉宫春日的忧郁",
-        "name_short": "凉宫春日的忧郁",
         "year": 2006,
         "season": 4
     },
     "ip_000049": {
         "id": "ip_000049",
         "name": "出包王女",
-        "name_short": "出包王女",
         "year": 0,
         "season": 0
     },
     "ip_000050": {
         "id": "ip_000050",
         "name": "刀剑神域",
-        "name_short": "刀剑神域",
         "year": 2012,
         "season": 7
     },
     "ip_000051": {
         "id": "ip_000051",
         "name": "初音岛",
-        "name_short": "初音岛",
         "year": 0,
         "season": 0
     },
     "ip_000052": {
         "id": "ip_000052",
         "name": "别当欧尼酱了！",
-        "name_short": "别当欧尼酱了！",
         "year": 2023,
         "season": 1
     },
     "ip_000053": {
         "id": "ip_000053",
         "name": "剑风传奇",
-        "name_short": "剑风传奇",
         "year": 1997,
         "season": 10
     },
     "ip_000054": {
         "id": "ip_000054",
         "name": "可塑性记忆",
-        "name_short": "可塑性记忆",
         "year": 2015,
         "season": 4
     },
     "ip_000055": {
         "id": "ip_000055",
         "name": "名侦探柯南",
-        "name_short": "名侦探柯南",
         "year": 1996,
         "season": 1
     },
     "ip_000056": {
         "id": "ip_000056",
         "name": "吹响！上低音号",
-        "name_short": "吹响！上低音号",
         "year": 2015,
         "season": 4
     },
     "ip_000057": {
         "id": "ip_000057",
         "name": "命运石之门",
-        "name_short": "命运石之门",
         "year": 2011,
         "season": 4
     },
     "ip_000058": {
         "id": "ip_000058",
         "name": "咒术回战",
-        "name_short": "咒术回战",
         "year": 2020,
         "season": 10
     },
     "ip_000059": {
         "id": "ip_000059",
         "name": "哆啦A梦",
-        "name_short": "哆啦A梦",
         "year": 1973,
         "season": 4
     },
     "ip_000060": {
         "id": "ip_000060",
         "name": "哥布林猎人",
-        "name_short": "哥布林猎人",
         "year": 2018,
         "season": 10
     },
     "ip_000061": {
         "id": "ip_000061",
         "name": "喜欢的人忘记戴眼镜了",
-        "name_short": "喜欢的人忘记戴眼镜了",
         "year": 0,
         "season": 0
     },
     "ip_000062": {
         "id": "ip_000062",
         "name": "四月是你的谎言",
-        "name_short": "四月是你的谎言",
         "year": 2014,
         "season": 10
     },
     "ip_000063": {
         "id": "ip_000063",
         "name": "因为太怕痛就全点防御力了",
-        "name_short": "因为太怕痛就全点防御力了",
         "year": 0,
         "season": 0
     },
     "ip_000064": {
         "id": "ip_000064",
         "name": "在下坂本，有何贵干？",
-        "name_short": "在下坂本，有何贵干？",
         "year": 0,
         "season": 0
     },
     "ip_000065": {
         "id": "ip_000065",
         "name": "在地下城寻求邂逅是否搞错了什么",
-        "name_short": "在地下城寻求邂逅是否搞错了什么",
         "year": 0,
         "season": 0
     },
     "ip_000066": {
         "id": "ip_000066",
         "name": "地狱乐",
-        "name_short": "地狱乐",
         "year": 0,
         "season": 0
     },
     "ip_000067": {
         "id": "ip_000067",
         "name": "地缚少年花子君",
-        "name_short": "地缚少年花子君",
         "year": 2020,
         "season": 1
     },
     "ip_000068": {
         "id": "ip_000068",
         "name": "埃罗芒阿老师",
-        "name_short": "埃罗芒阿老师",
         "year": 2017,
         "season": 4
     },
     "ip_000069": {
         "id": "ip_000069",
         "name": "堀与宫村",
-        "name_short": "堀与宫村",
         "year": 2021,
         "season": 1
     },
     "ip_000070": {
         "id": "ip_000070",
         "name": "境界的彼方",
-        "name_short": "境界的彼方",
         "year": 2013,
         "season": 10
     },
     "ip_000071": {
         "id": "ip_000071",
         "name": "声之形",
-        "name_short": "声之形",
         "year": 2016,
         "season": 7
     },
     "ip_000072": {
         "id": "ip_000072",
         "name": "夏日重现",
-        "name_short": "夏日重现",
         "year": 2022,
         "season": 4
     },
     "ip_000073": {
         "id": "ip_000073",
         "name": "夏目友人帐",
-        "name_short": "夏目友人帐",
         "year": 2008,
         "season": 7
     },
     "ip_000074": {
         "id": "ip_000074",
         "name": "夕阳染红的坡道",
-        "name_short": "夕阳染红的坡道",
         "year": 0,
         "season": 0
     },
     "ip_000075": {
         "id": "ip_000075",
         "name": "天使降临到了我身边！",
-        "name_short": "天使降临到了我身边！",
         "year": 2019,
         "season": 1
     },
     "ip_000076": {
         "id": "ip_000076",
         "name": "天气之子",
-        "name_short": "天气之子",
         "year": 2019,
         "season": 7
     },
     "ip_000077": {
         "id": "ip_000077",
         "name": "契约之吻",
-        "name_short": "契约之吻",
         "year": 2022,
         "season": 7
     },
     "ip_000078": {
         "id": "ip_000078",
         "name": "女友成堆",
-        "name_short": "女友成堆",
         "year": 0,
         "season": 0
     },
     "ip_000079": {
         "id": "ip_000079",
         "name": "女神异闻录5",
-        "name_short": "女神异闻录5",
         "year": 2018,
         "season": 4
     },
     "ip_000080": {
         "id": "ip_000080",
         "name": "孤独摇滚！",
-        "name_short": "孤独摇滚！",
         "year": 2022,
         "season": 10
     },
     "ip_000081": {
         "id": "ip_000081",
         "name": "守护甜心",
-        "name_short": "守护甜心",
         "year": 0,
         "season": 0
     },
     "ip_000082": {
         "id": "ip_000082",
         "name": "安达与岛村",
-        "name_short": "安达与岛村",
         "year": 2020,
         "season": 10
     },
     "ip_000083": {
         "id": "ip_000083",
         "name": "宝可梦",
-        "name_short": "宝可梦",
         "year": 1997,
         "season": 4
     },
     "ip_000084": {
         "id": "ip_000084",
         "name": "寄生兽",
-        "name_short": "寄生兽",
         "year": 2014,
         "season": 10
     },
     "ip_000085": {
         "id": "ip_000085",
         "name": "小林家的龙女仆",
-        "name_short": "小林家的龙女仆",
         "year": 2017,
         "season": 1
     },
     "ip_000086": {
         "id": "ip_000086",
         "name": "尼尔：机械纪元",
-        "name_short": "尼尔：机械纪元",
         "year": 0,
         "season": 0
     },
     "ip_000087": {
         "id": "ip_000087",
         "name": "崩坏3rd",
-        "name_short": "崩坏3rd",
         "year": 0,
         "season": 0
     },
     "ip_000088": {
         "id": "ip_000088",
         "name": "干物妹！小埋",
-        "name_short": "干物妹！小埋",
         "year": 2015,
         "season": 7
     },
     "ip_000089": {
         "id": "ip_000089",
         "name": "幸运☆星",
-        "name_short": "幸运☆星",
         "year": 2007,
         "season": 4
     },
     "ip_000090": {
         "id": "ip_000090",
         "name": "异世界舅舅",
-        "name_short": "异世界舅舅",
         "year": 0,
         "season": 0
     },
     "ip_000091": {
         "id": "ip_000091",
         "name": "弹丸论破",
-        "name_short": "弹丸论破",
         "year": 2013,
         "season": 7
     },
     "ip_000092": {
         "id": "ip_000092",
         "name": "彻夜之歌",
-        "name_short": "彻夜之歌",
         "year": 2022,
         "season": 7
     },
     "ip_000093": {
         "id": "ip_000093",
         "name": "心理测量者",
-        "name_short": "心理测量者",
         "year": 0,
         "season": 0
     },
     "ip_000094": {
         "id": "ip_000094",
         "name": "总之就是非常可爱",
-        "name_short": "总之就是非常可爱",
         "year": 2020,
         "season": 10
     },
     "ip_000095": {
         "id": "ip_000095",
         "name": "悠哉日常大王",
-        "name_short": "悠哉日常大王",
         "year": 2013,
         "season": 10
     },
     "ip_000096": {
         "id": "ip_000096",
         "name": "想要成为影之实力者！",
-        "name_short": "想要成为影之实力者！",
         "year": 2022,
         "season": 10
     },
     "ip_000097": {
         "id": "ip_000097",
         "name": "我们仍未知道那天所看见的花的名字。",
-        "name_short": "我们仍未知道那天所看见的花的名字。",
         "year": 2011,
         "season": 4
     },
     "ip_000098": {
         "id": "ip_000098",
         "name": "我们无法一起学习",
-        "name_short": "我们无法一起学习",
         "year": 0,
         "season": 0
     },
     "ip_000099": {
         "id": "ip_000099",
         "name": "我心里危险的东西",
-        "name_short": "我心里危险的东西",
         "year": 2023,
         "season": 4
     },
     "ip_000100": {
         "id": "ip_000100",
         "name": "我的妹妹哪有这么可爱！",
-        "name_short": "我的妹妹哪有这么可爱！",
         "year": 2010,
         "season": 10
     },
     "ip_000101": {
         "id": "ip_000101",
         "name": "我的青春恋爱物语果然有问题。",
-        "name_short": "我的青春恋爱物语果然有问题。",
         "year": 2013,
         "season": 4
     },
     "ip_000102": {
         "id": "ip_000102",
         "name": "打工吧！魔王大人",
-        "name_short": "打工吧！魔王大人",
         "year": 0,
         "season": 0
     },
     "ip_000103": {
         "id": "ip_000103",
         "name": "排球少年！！",
-        "name_short": "排球少年！！",
         "year": 2014,
         "season": 4
     },
     "ip_000104": {
         "id": "ip_000104",
         "name": "摇曳露营△",
-        "name_short": "摇曳露营△",
         "year": 2018,
         "season": 1
     },
     "ip_000105": {
         "id": "ip_000105",
         "name": "擅长捉弄的高木同学",
-        "name_short": "擅长捉弄的高木同学",
         "year": 2018,
         "season": 1
     },
     "ip_000106": {
         "id": "ip_000106",
         "name": "政宗君的复仇",
-        "name_short": "政宗君的复仇",
         "year": 0,
         "season": 0
     },
     "ip_000107": {
         "id": "ip_000107",
         "name": "文豪野犬",
-        "name_short": "文豪野犬",
         "year": 2016,
         "season": 4
     },
     "ip_000108": {
         "id": "ip_000108",
         "name": "斩·赤红之瞳！",
-        "name_short": "斩·赤红之瞳！",
         "year": 2014,
         "season": 7
     },
     "ip_000109": {
         "id": "ip_000109",
         "name": "新世纪福音战士",
-        "name_short": "新世纪福音战士",
         "year": 1995,
         "season": 10
     },
     "ip_000110": {
         "id": "ip_000110",
         "name": "无职转生",
-        "name_short": "无职转生",
         "year": 2021,
         "season": 1
     },
     "ip_000111": {
         "id": "ip_000111",
         "name": "明日方舟",
-        "name_short": "明日方舟",
         "year": 0,
         "season": 0
     },
     "ip_000112": {
         "id": "ip_000112",
         "name": "星空的记忆",
-        "name_short": "星空的记忆",
         "year": 0,
         "season": 0
     },
     "ip_000113": {
         "id": "ip_000113",
         "name": "暗杀教室",
-        "name_short": "暗杀教室",
         "year": 2015,
         "season": 1
     },
     "ip_000114": {
         "id": "ip_000114",
         "name": "更衣人偶坠入爱河",
-        "name_short": "更衣人偶坠入爱河",
         "year": 2022,
         "season": 1
     },
     "ip_000115": {
         "id": "ip_000115",
         "name": "月刊少女野崎君",
-        "name_short": "月刊少女野崎君",
         "year": 2014,
         "season": 7
     },
     "ip_000116": {
         "id": "ip_000116",
         "name": "月色真美",
-        "name_short": "月色真美",
         "year": 2017,
         "season": 4
     },
     "ip_000117": {
         "id": "ip_000117",
         "name": "末日时在做什么？有没有空？可以来拯救吗？",
-        "name_short": "末日时在做什么？有没有空？可以来拯救吗？",
         "year": 2017,
         "season": 4
     },
     "ip_000118": {
         "id": "ip_000118",
         "name": "杀戮的天使",
-        "name_short": "杀戮的天使",
         "year": 2018,
         "season": 7
     },
     "ip_000119": {
         "id": "ip_000119",
         "name": "校园迷糊大王",
-        "name_short": "校园迷糊大王",
         "year": 0,
         "season": 0
     },
     "ip_000120": {
         "id": "ip_000120",
         "name": "樱花庄的宠物女孩",
-        "name_short": "樱花庄的宠物女孩",
         "year": 2012,
         "season": 10
     },
     "ip_000121": {
         "id": "ip_000121",
         "name": "欢迎来到实力至上主义的教室",
-        "name_short": "欢迎来到实力至上主义的教室",
         "year": 2017,
         "season": 7
     },
     "ip_000122": {
         "id": "ip_000122",
         "name": "死亡笔记",
-        "name_short": "死亡笔记",
         "year": 2006,
         "season": 10
     },
     "ip_000123": {
         "id": "ip_000123",
         "name": "死神少爷与黑女仆",
-        "name_short": "死神少爷与黑女仆",
         "year": 0,
         "season": 0
     },
     "ip_000124": {
         "id": "ip_000124",
         "name": "浪客剑心",
-        "name_short": "浪客剑心",
         "year": 1996,
         "season": 1
     },
     "ip_000125": {
         "id": "ip_000125",
         "name": "海贼王",
-        "name_short": "海贼王",
         "year": 1999,
         "season": 10
     },
     "ip_000126": {
         "id": "ip_000126",
         "name": "火影忍者",
-        "name_short": "火影忍者",
         "year": 2002,
         "season": 10
     },
     "ip_000127": {
         "id": "ip_000127",
         "name": "灼眼的夏娜",
-        "name_short": "灼眼的夏娜",
         "year": 2005,
         "season": 10
     },
     "ip_000128": {
         "id": "ip_000128",
         "name": "物语系列",
-        "name_short": "物语系列",
         "year": 2009,
         "season": 7
     },
     "ip_000129": {
         "id": "ip_000129",
         "name": "狼与香辛料",
-        "name_short": "狼与香辛料",
         "year": 2008,
         "season": 1
     },
     "ip_000130": {
         "id": "ip_000130",
         "name": "玉子市场",
-        "name_short": "玉子市场",
         "year": 2013,
         "season": 1
     },
     "ip_000131": {
         "id": "ip_000131",
         "name": "珈百璃的堕落",
-        "name_short": "珈百璃的堕落",
         "year": 2017,
         "season": 1
     },
     "ip_000132": {
         "id": "ip_000132",
         "name": "甘城光辉游乐园",
-        "name_short": "甘城光辉游乐园",
         "year": 2014,
         "season": 10
     },
     "ip_000133": {
         "id": "ip_000133",
         "name": "白圣女与黑牧师",
-        "name_short": "白圣女与黑牧师",
         "year": 2023,
         "season": 7
     },
     "ip_000134": {
         "id": "ip_000134",
         "name": "白箱",
-        "name_short": "白箱",
         "year": 2014,
         "season": 10
     },
     "ip_000135": {
         "id": "ip_000135",
         "name": "白色相簿2",
-        "name_short": "白色相簿2",
         "year": 0,
         "season": 0
     },
     "ip_000136": {
         "id": "ip_000136",
         "name": "百变的七仓同学",
-        "name_short": "百变的七仓同学",
         "year": 0,
         "season": 0
     },
     "ip_000137": {
         "id": "ip_000137",
         "name": "盾之勇者成名录",
-        "name_short": "盾之勇者成名录",
         "year": 0,
         "season": 0
     },
     "ip_000138": {
         "id": "ip_000138",
         "name": "看得见的女孩",
-        "name_short": "看得见的女孩",
         "year": 2021,
         "season": 10
     },
     "ip_000139": {
         "id": "ip_000139",
         "name": "碧蓝之海",
-        "name_short": "碧蓝之海",
         "year": 2018,
         "season": 7
     },
     "ip_000140": {
         "id": "ip_000140",
         "name": "租借女友",
-        "name_short": "租借女友",
         "year": 0,
         "season": 0
     },
     "ip_000141": {
         "id": "ip_000141",
         "name": "空之境界",
-        "name_short": "空之境界",
         "year": 2013,
         "season": 7
     },
     "ip_000142": {
         "id": "ip_000142",
         "name": "笨蛋、测验、召唤兽",
-        "name_short": "笨蛋、测验、召唤兽",
         "year": 2010,
         "season": 1
     },
     "ip_000143": {
         "id": "ip_000143",
         "name": "紫罗兰永恒花园",
-        "name_short": "紫罗兰永恒花园",
         "year": 2018,
         "season": 1
     },
     "ip_000144": {
         "id": "ip_000144",
         "name": "约会大作战",
-        "name_short": "约会大作战",
         "year": 2013,
         "season": 4
     },
     "ip_000145": {
         "id": "ip_000145",
         "name": "终结的炽天使",
-        "name_short": "终结的炽天使",
         "year": 2015,
         "season": 4
     },
     "ip_000146": {
         "id": "ip_000146",
         "name": "继母的拖油瓶是我的前女友",
-        "name_short": "继母的拖油瓶是我的前女友",
         "year": 2022,
         "season": 7
     },
     "ip_000147": {
         "id": "ip_000147",
         "name": "缘之空",
-        "name_short": "缘之空",
         "year": 2010,
         "season": 10
     },
     "ip_000148": {
         "id": "ip_000148",
         "name": "罪恶王冠",
-        "name_short": "罪恶王冠",
         "year": 2011,
         "season": 10
     },
     "ip_000149": {
         "id": "ip_000149",
         "name": "美妙天堂",
-        "name_short": "美妙天堂",
         "year": 0,
         "season": 0
     },
     "ip_000150": {
         "id": "ip_000150",
         "name": "致不灭的你",
-        "name_short": "致不灭的你",
         "year": 0,
         "season": 0
     },
     "ip_000151": {
         "id": "ip_000151",
         "name": "药屋少女的呢喃",
-        "name_short": "药屋少女的呢喃",
         "year": 2023,
         "season": 10
     },
     "ip_000152": {
         "id": "ip_000152",
         "name": "莉可丽丝",
-        "name_short": "莉可丽丝",
         "year": 2022,
         "season": 7
     },
     "ip_000153": {
         "id": "ip_000153",
         "name": "葬送的芙莉莲",
-        "name_short": "葬送的芙莉莲",
         "year": 2023,
         "season": 10
     },
     "ip_000154": {
         "id": "ip_000154",
         "name": "蓝色监狱",
-        "name_short": "蓝色监狱",
         "year": 0,
         "season": 0
     },
     "ip_000155": {
         "id": "ip_000155",
         "name": "蜡笔小新",
-        "name_short": "蜡笔小新",
         "year": 1992,
         "season": 4
     },
     "ip_000156": {
         "id": "ip_000156",
         "name": "请问您今天要来点兔子吗？",
-        "name_short": "请问您今天要来点兔子吗？",
         "year": 2014,
         "season": 4
     },
     "ip_000157": {
         "id": "ip_000157",
         "name": "败犬女主太多了！",
-        "name_short": "败犬女主太多了！",
         "year": 2024,
         "season": 7
     },
     "ip_000158": {
         "id": "ip_000158",
         "name": "赛博朋克 边缘行者",
-        "name_short": "赛博朋克 边缘行者",
         "year": 2022,
         "season": 7
     },
     "ip_000159": {
         "id": "ip_000159",
         "name": "赛马娘 Pretty Derby",
-        "name_short": "赛马娘 Pretty Derby",
         "year": 2018,
         "season": 4
     },
     "ip_000160": {
         "id": "ip_000160",
         "name": "超超超超超喜欢你的100个女朋友",
-        "name_short": "超超超超超喜欢你的100个女朋友",
         "year": 2023,
         "season": 10
     },
     "ip_000161": {
         "id": "ip_000161",
         "name": "跃动青春",
-        "name_short": "跃动青春",
         "year": 0,
         "season": 0
     },
     "ip_000162": {
         "id": "ip_000162",
         "name": "路人女主的养成方法",
-        "name_short": "路人女主的养成方法",
         "year": 2015,
         "season": 1
     },
     "ip_000163": {
         "id": "ip_000163",
         "name": "路人超能100",
-        "name_short": "路人超能100",
         "year": 2016,
         "season": 7
     },
     "ip_000164": {
         "id": "ip_000164",
         "name": "转生王女与天才千金的魔法革命",
-        "name_short": "转生王女与天才千金的魔法革命",
         "year": 0,
         "season": 0
     },
     "ip_000165": {
         "id": "ip_000165",
         "name": "轻音少女",
-        "name_short": "轻音少女",
         "year": 2009,
         "season": 10
     },
     "ip_000166": {
         "id": "ip_000166",
         "name": "辉夜大小姐想让我告白～天才们的恋爱头脑战～",
-        "name_short": "辉夜大小姐想让我告白～天才们的恋爱头脑战～",
         "year": 2019,
         "season": 1
     },
     "ip_000167": {
         "id": "ip_000167",
         "name": "进击的巨人",
-        "name_short": "进击的巨人",
         "year": 2013,
         "season": 4
     },
     "ip_000168": {
         "id": "ip_000168",
         "name": "通往夏天的隧道，再见的出口",
-        "name_short": "通往夏天的隧道，再见的出口",
         "year": 2022,
         "season": 7
     },
     "ip_000169": {
         "id": "ip_000169",
         "name": "邪神与厨二病少女",
-        "name_short": "邪神与厨二病少女",
         "year": 0,
         "season": 0
     },
     "ip_000170": {
         "id": "ip_000170",
         "name": "野良神",
-        "name_short": "野良神",
         "year": 2014,
         "season": 1
     },
     "ip_000171": {
         "id": "ip_000171",
         "name": "钢之炼金术师",
-        "name_short": "钢之炼金术师",
         "year": 0,
         "season": 0
     },
     "ip_000172": {
         "id": "ip_000172",
         "name": "铃芽之旅",
-        "name_short": "铃芽之旅",
         "year": 0,
         "season": 0
     },
     "ip_000173": {
         "id": "ip_000173",
         "name": "银河英雄传说",
-        "name_short": "银河英雄传说",
         "year": 1988,
         "season": 1
     },
     "ip_000174": {
         "id": "ip_000174",
         "name": "银魂",
-        "name_short": "银魂",
         "year": 2006,
         "season": 4
     },
     "ip_000175": {
         "id": "ip_000175",
         "name": "电锯人",
-        "name_short": "电锯人",
         "year": 0,
         "season": 0
     },
     "ip_000176": {
         "id": "ip_000176",
         "name": "间谍过家家",
-        "name_short": "间谍过家家",
         "year": 2022,
         "season": 4
     },
     "ip_000177": {
         "id": "ip_000177",
         "name": "青春猪头少年系列",
-        "name_short": "青春猪头少年系列",
         "year": 2018,
         "season": 10
     },
     "ip_000178": {
         "id": "ip_000178",
         "name": "鬼灭之刃",
-        "name_short": "鬼灭之刃",
         "year": 2019,
         "season": 4
     },
     "ip_000179": {
         "id": "ip_000179",
         "name": "魔卡少女樱",
-        "name_short": "魔卡少女樱",
         "year": 1998,
         "season": 4
     },
     "ip_000180": {
         "id": "ip_000180",
         "name": "魔女之旅",
-        "name_short": "魔女之旅",
         "year": 0,
         "season": 0
     },
     "ip_000181": {
         "id": "ip_000181",
         "name": "魔术快斗",
-        "name_short": "魔术快斗",
         "year": 2010,
         "season": 4
     },
     "ip_000182": {
         "id": "ip_000182",
         "name": "魔法使的新娘",
-        "name_short": "魔法使的新娘",
         "year": 0,
         "season": 0
     },
     "ip_000183": {
         "id": "ip_000183",
         "name": "魔法少女奈叶",
-        "name_short": "魔法少女奈叶",
         "year": 0,
         "season": 0
     },
     "ip_000184": {
         "id": "ip_000184",
         "name": "魔法少女小圆",
-        "name_short": "魔法少女小圆",
         "year": 2011,
         "season": 1
     },
     "ip_000185": {
         "id": "ip_000185",
         "name": "魔法禁书目录",
-        "name_short": "魔法禁书目录",
         "year": 2008,
         "season": 10
     },
     "ip_000186": {
         "id": "ip_000186",
         "name": "鲁邦三世",
-        "name_short": "鲁邦三世",
         "year": 1971,
         "season": 10
     },
     "ip_000187": {
         "id": "ip_000187",
         "name": "黑色四叶草",
-        "name_short": "黑色四叶草",
         "year": 2017,
         "season": 10
     },
     "ip_000188": {
         "id": "ip_000188",
         "name": "齐木楠雄的灾难",
-        "name_short": "齐木楠雄的灾难",
         "year": 2016,
         "season": 7
     },
     "ip_000189": {
         "id": "ip_000189",
         "name": "龙与虎",
-        "name_short": "龙与虎",
         "year": 2008,
         "season": 10
     },
     "ip_000190": {
         "id": "ip_000190",
         "name": "龙王的工作！",
-        "name_short": "龙王的工作！",
         "year": 2018,
         "season": 1
     },
     "ip_000191": {
         "id": "ip_000191",
         "name": "龙珠",
-        "name_short": "龙珠",
         "year": 1986,
         "season": 1
     },
     "ip_000192": {
         "id": "ip_000192",
         "name": "星际牛仔",
-        "name_short": "星际牛仔",
         "year": 1998,
         "season": 4
     },
     "ip_000193": {
         "id": "ip_000193",
         "name": "Rewrite",
-        "name_short": "Rewrite",
         "year": 2016,
         "season": 7
     },
     "ip_000194": {
         "id": "ip_000194",
         "name": "黑之契约者",
-        "name_short": "黑之契约者",
         "year": 2007,
         "season": 4
     },
     "ip_000195": {
         "id": "ip_000195",
         "name": "工作细胞",
-        "name_short": "工作细胞",
         "year": 2018,
         "season": 7
     },
     "ip_000196": {
         "id": "ip_000196",
         "name": "犬夜叉",
-        "name_short": "犬夜叉",
         "year": 2000,
         "season": 10
     },
     "ip_000197": {
         "id": "ip_000197",
         "name": "这个美术社大有问题！",
-        "name_short": "这个美术社大有问题！",
         "year": 2016,
         "season": 7
     },
     "ip_000198": {
         "id": "ip_000198",
         "name": "魔法科高中的劣等生",
-        "name_short": "魔法科高中的劣等生",
         "year": 2014,
         "season": 4
     },
     "ip_000199": {
         "id": "ip_000199",
         "name": "HUNTER×HUNTER",
-        "name_short": "HUNTER×HUNTER",
         "year": 1999,
         "season": 10
     },
     "ip_000200": {
         "id": "ip_000200",
         "name": "零之使魔",
-        "name_short": "零之使魔",
         "year": 2006,
         "season": 7
     },
     "ip_000201": {
         "id": "ip_000201",
         "name": "黑塔利亚",
-        "name_short": "黑塔利亚",
         "year": 2009,
         "season": 1
     },
     "ip_000202": {
         "id": "ip_000202",
         "name": "旋风管家！",
-        "name_short": "旋风管家！",
         "year": 2007,
         "season": 4
     },
     "ip_000203": {
         "id": "ip_000203",
         "name": "会长是女仆大人！",
-        "name_short": "会长是女仆大人！",
         "year": 2010,
         "season": 4
     },
     "ip_000204": {
         "id": "ip_000204",
         "name": "悠久之翼",
-        "name_short": "悠久之翼",
         "year": 2007,
         "season": 10
     },
     "ip_000205": {
         "id": "ip_000205",
         "name": "虚构推理",
-        "name_short": "虚构推理",
         "year": 2020,
         "season": 1
     },
     "ip_000206": {
         "id": "ip_000206",
         "name": "憧憬成为魔法少女",
-        "name_short": "憧憬成为魔法少女",
         "year": 2024,
         "season": 1
     },
     "ip_000207": {
         "id": "ip_000207",
         "name": "迷宫饭",
-        "name_short": "迷宫饭",
         "year": 2024,
         "season": 1
     },
     "ip_000208": {
         "id": "ip_000208",
         "name": "指尖相触，恋恋不舍",
-        "name_short": "指尖相触，恋恋不舍",
         "year": 2024,
         "season": 1
     },
     "ip_000209": {
         "id": "ip_000209",
         "name": "轮回七次的恶役千金，在前敌国享受随心所欲的新婚生活",
-        "name_short": "轮回七次的恶役千金，在前敌国享受随心所欲的新婚生活",
         "year": 2024,
         "season": 1
     },
     "ip_000210": {
         "id": "ip_000210",
         "name": "愚蠢天使与恶魔共舞",
-        "name_short": "愚蠢天使与恶魔共舞",
         "year": 2024,
         "season": 1
     },
     "ip_000211": {
         "id": "ip_000211",
         "name": "公主大人，接下来是“拷问”时间",
-        "name_short": "公主大人，接下来是“拷问”时间",
         "year": 2024,
         "season": 1
     },
     "ip_000212": {
         "id": "ip_000212",
         "name": "魔都精兵的奴隶",
-        "name_short": "魔都精兵的奴隶",
         "year": 2024,
         "season": 1
     },
     "ip_000213": {
         "id": "ip_000213",
         "name": "最弱的驯养师开启的捡垃圾的旅途。",
-        "name_short": "最弱的驯养师开启的捡垃圾的旅途。",
         "year": 2024,
         "season": 1
     },
     "ip_000214": {
         "id": "ip_000214",
         "name": "北海道辣妹贼拉可爱",
-        "name_short": "北海道辣妹贼拉可爱",
         "year": 2024,
         "season": 1
     },
     "ip_000215": {
         "id": "ip_000215",
         "name": "金属口红",
-        "name_short": "金属口红",
         "year": 2024,
         "season": 1
     },
     "ip_000216": {
         "id": "ip_000216",
         "name": "佐佐木与文鸟小哔",
-        "name_short": "佐佐木与文鸟小哔",
         "year": 2024,
         "season": 1
     },
     "ip_000217": {
         "id": "ip_000217",
         "name": "弱势角色友崎君",
-        "name_short": "弱势角色友崎君",
         "year": 2021,
         "season": 1
     },
     "ip_000218": {
         "id": "ip_000218",
         "name": "反派千金等级99～我是隐藏头目但不是魔王～",
-        "name_short": "反派千金等级99～我是隐藏头目但不是魔王～",
         "year": 2024,
         "season": 1
     },
     "ip_000219": {
         "id": "ip_000219",
         "name": "我独自升级",
-        "name_short": "我独自升级",
         "year": 2024,
         "season": 1
     },
     "ip_000220": {
         "id": "ip_000220",
         "name": "因为不是真正的伙伴而被逐出勇者队伍，流落到边境展开慢活人生",
-        "name_short": "因为不是真正的伙伴而被逐出勇者队伍，流落到边境展开慢活人生",
         "year": 2021,
         "season": 10
     },
     "ip_000221": {
         "id": "ip_000221",
         "name": "美妙宠物 光之美少女！",
-        "name_short": "美妙宠物 光之美少女！",
         "year": 2024,
         "season": 1
     },
     "ip_000222": {
         "id": "ip_000222",
         "name": "福星小子",
-        "name_short": "福星小子",
         "year": 1981,
         "season": 10
     },
     "ip_000223": {
         "id": "ip_000223",
         "name": "月光下的异世界之旅",
-        "name_short": "月光下的异世界之旅",
         "year": 2021,
         "season": 7
     },
     "ip_000224": {
         "id": "ip_000224",
         "name": "物理魔法使马修",
-        "name_short": "物理魔法使马修",
         "year": 2023,
         "season": 4
     },
     "ip_000225": {
         "id": "ip_000225",
         "name": "战国妖狐",
-        "name_short": "战国妖狐",
         "year": 2024,
         "season": 1
     },
     "ip_000226": {
         "id": "ip_000226",
         "name": "婚戒物语",
-        "name_short": "婚戒物语",
         "year": 2024,
         "season": 1
     },
     "ip_000227": {
         "id": "ip_000227",
         "name": "治愈魔法的错误使用法～奔赴战场的回复要员～",
-        "name_short": "治愈魔法的错误使用法～奔赴战场的回复要员～",
         "year": 2024,
         "season": 1
     },
     "ip_000228": {
         "id": "ip_000228",
         "name": "王者天下",
-        "name_short": "王者天下",
         "year": 2012,
         "season": 4
     },
     "ip_000229": {
         "id": "ip_000229",
         "name": "休假日的坏人先生",
-        "name_short": "休假日的坏人先生",
         "year": 2024,
         "season": 1
     },
     "ip_000230": {
         "id": "ip_000230",
         "name": "秒杀外挂太强了，异世界的家伙们根本就不是对手。",
-        "name_short": "秒杀外挂太强了，异世界的家伙们根本就不是对手。",
         "year": 2024,
         "season": 1
     },
     "ip_000231": {
         "id": "ip_000231",
         "name": "不死不幸",
-        "name_short": "不死不幸",
         "year": 2023,
         "season": 10
     },
     "ip_000232": {
         "id": "ip_000232",
         "name": "勇气爆发BANG BRAVERN",
-        "name_short": "勇气爆发BANG BRAVERN",
         "year": 2024,
         "season": 1
     },
     "ip_000233": {
         "id": "ip_000233",
         "name": "事与愿违的不死冒险者",
-        "name_short": "事与愿违的不死冒险者",
         "year": 2024,
         "season": 1
     },
     "ip_000234": {
         "id": "ip_000234",
         "name": "异修罗",
-        "name_short": "异修罗",
         "year": 2024,
         "season": 1
     },
     "ip_000235": {
         "id": "ip_000235",
         "name": "少女乐队的呐喊",
-        "name_short": "少女乐队的呐喊",
         "year": 2024,
         "season": 4
     },
     "ip_000236": {
         "id": "ip_000236",
         "name": "夜晚的水母不会游泳",
-        "name_short": "夜晚的水母不会游泳",
         "year": 2024,
         "season": 4
     },
     "ip_000237": {
         "id": "ip_000237",
         "name": "恋语轻唱",
-        "name_short": "恋语轻唱",
         "year": 2024,
         "season": 4
     },
     "ip_000238": {
         "id": "ip_000238",
         "name": "从Lv2开始开外挂的前勇者候补过着悠哉异世界生活",
-        "name_short": "从Lv2开始开外挂的前勇者候补过着悠哉异世界生活",
         "year": 2024,
         "season": 4
     },
     "ip_000239": {
         "id": "ip_000239",
         "name": "怪人的沙拉碗",
-        "name_short": "怪人的沙拉碗",
         "year": 2024,
         "season": 4
     },
     "ip_000240": {
         "id": "ip_000240",
         "name": "夜樱家的大作战",
-        "name_short": "夜樱家的大作战",
         "year": 2024,
         "season": 4
     },
     "ip_000241": {
         "id": "ip_000241",
         "name": "声优广播的幕前幕后",
-        "name_short": "声优广播的幕前幕后",
         "year": 2024,
         "season": 4
     },
     "ip_000242": {
         "id": "ip_000242",
         "name": "老夫老妻重返青春",
-        "name_short": "老夫老妻重返青春",
         "year": 2024,
         "season": 4
     },
     "ip_000243": {
         "id": "ip_000243",
         "name": "蔚蓝档案",
-        "name_short": "蔚蓝档案",
         "year": 2024,
         "season": 4
     },
     "ip_000244": {
         "id": "ip_000244",
         "name": "单人房、日照一般、附天使。",
-        "name_short": "单人房、日照一般、附天使。",
         "year": 2024,
         "season": 4
     },
     "ip_000245": {
         "id": "ip_000245",
         "name": "末班列车去哪里？",
-        "name_short": "末班列车去哪里？",
         "year": 2024,
         "season": 4
     },
     "ip_000246": {
         "id": "ip_000246",
         "name": "身为魔王的我娶了奴隶精灵为妻，该如何表白我的爱？",
-        "name_short": "身为魔王的我娶了奴隶精灵为妻，该如何表白我的爱？",
         "year": 2024,
         "season": 4
     },
     "ip_000247": {
         "id": "ip_000247",
         "name": "黑执事",
-        "name_short": "黑执事",
         "year": 2008,
         "season": 10
     },
     "ip_000248": {
         "id": "ip_000248",
         "name": "转生七王子的魔法全解",
-        "name_short": "转生七王子的魔法全解",
         "year": 2024,
         "season": 4
     },
     "ip_000249": {
         "id": "ip_000249",
         "name": "失忆投捕",
-        "name_short": "失忆投捕",
         "year": 2024,
         "season": 4
     },
     "ip_000250": {
         "id": "ip_000250",
         "name": "雀魂麻将",
-        "name_short": "雀魂麻将",
         "year": 2022,
         "season": 4
     },
     "ip_000251": {
         "id": "ip_000251",
         "name": "WIND BREAKER 防风铃",
-        "name_short": "WIND BREAKER 防风铃",
         "year": 2024,
         "season": 4
     },
     "ip_000252": {
         "id": "ip_000252",
         "name": "怪兽8号",
-        "name_short": "怪兽8号",
         "year": 2024,
         "season": 4
     },
     "ip_000253": {
         "id": "ip_000253",
         "name": "渴求游戏之神",
-        "name_short": "渴求游戏之神",
         "year": 2024,
         "season": 4
     },
     "ip_000254": {
         "id": "ip_000254",
         "name": "魔王学院的不适任者",
-        "name_short": "魔王学院的不适任者",
         "year": 2020,
         "season": 7
     },
     "ip_000255": {
         "id": "ip_000255",
         "name": "花野井同学和相思病",
-        "name_short": "花野井同学和相思病",
         "year": 2024,
         "season": 4
     },
     "ip_000256": {
         "id": "ip_000256",
         "name": "Unnamed Memory",
-        "name_short": "Unnamed Memory",
         "year": 2024,
         "season": 4
     },
     "ip_000257": {
         "id": "ip_000257",
         "name": "调酒师",
-        "name_short": "调酒师",
         "year": 2006,
         "season": 10
     },
     "ip_000258": {
         "id": "ip_000258",
         "name": "ATRI -My Dear Moments-",
-        "name_short": "ATRI -My Dear Moments-",
         "year": 2024,
         "season": 7
     },
     "ip_000259": {
         "id": "ip_000259",
         "name": "不时轻声地以俄语遮羞的邻座艾莉同学",
-        "name_short": "不时轻声地以俄语遮羞的邻座艾莉同学",
         "year": 2024,
         "season": 7
     },
     "ip_000260": {
         "id": "ip_000260",
         "name": "疑似后宫",
-        "name_short": "疑似后宫",
         "year": 2024,
         "season": 7
     },
     "ip_000261": {
         "id": "ip_000261",
         "name": "鹿乃子乃子乃子虎视眈眈",
-        "name_short": "鹿乃子乃子乃子虎视眈眈",
         "year": 2024,
         "season": 7
     },
     "ip_000262": {
         "id": "ip_000262",
         "name": "小市民系列",
-        "name_short": "小市民系列",
         "year": 2024,
         "season": 7
     },
     "ip_000263": {
         "id": "ip_000263",
         "name": "2.5次元的诱惑",
-        "name_short": "2.5次元的诱惑",
         "year": 2024,
         "season": 7
     },
     "ip_000264": {
         "id": "ip_000264",
         "name": "前辈是男孩子",
-        "name_short": "前辈是男孩子",
         "year": 2024,
         "season": 7
     },
     "ip_000265": {
         "id": "ip_000265",
         "name": "魔法少女与邪恶曾经敌对。",
-        "name_short": "魔法少女与邪恶曾经敌对。",
         "year": 2024,
         "season": 7
     },
     "ip_000266": {
         "id": "ip_000266",
         "name": "蓦然回首",
-        "name_short": "蓦然回首",
         "year": 2024,
         "season": 7
     },
     "ip_000267": {
         "id": "ip_000267",
         "name": "身为VTuber的我因为忘记关台而成了传说",
-        "name_short": "身为VTuber的我因为忘记关台而成了传说",
         "year": 2024,
         "season": 7
     },
     "ip_000268": {
         "id": "ip_000268",
         "name": "深夜Punch",
-        "name_short": "深夜Punch",
         "year": 2024,
         "season": 7
     },
     "ip_000269": {
         "id": "ip_000269",
         "name": "擅长逃跑的殿下",
-        "name_short": "擅长逃跑的殿下",
         "year": 2024,
         "season": 7
     },
     "ip_000270": {
         "id": "ip_000270",
         "name": "杖与剑的魔剑谭",
-        "name_short": "杖与剑的魔剑谭",
         "year": 2024,
         "season": 7
     },
     "ip_000271": {
         "id": "ip_000271",
         "name": "异世界自杀小队",
-        "name_short": "异世界自杀小队",
         "year": 2024,
         "season": 7
     },
     "ip_000272": {
         "id": "ip_000272",
         "name": "地下城里的人们",
-        "name_short": "地下城里的人们",
         "year": 2024,
         "season": 7
     },
     "ip_000273": {
         "id": "ip_000273",
         "name": "亦叶亦花",
-        "name_short": "亦叶亦花",
         "year": 2024,
         "season": 7
     },
     "ip_000274": {
         "id": "ip_000274",
         "name": "瑞克和莫蒂",
-        "name_short": "瑞克和莫蒂",
         "year": 2024,
         "season": 7
     },
     "ip_000275": {
         "id": "ip_000275",
         "name": "哎咕岛消失的舔甜歌姬",
-        "name_short": "哎咕岛消失的舔甜歌姬",
         "year": 2024,
         "season": 7
     },
     "ip_000276": {
         "id": "ip_000276",
         "name": "好想告诉你",
-        "name_short": "好想告诉你",
         "year": 2009,
         "season": 10
     },
     "ip_000277": {
         "id": "ip_000277",
         "name": "为何我的世界被遗忘了？",
-        "name_short": "为何我的世界被遗忘了？",
         "year": 2024,
         "season": 7
     },
     "ip_000278": {
         "id": "ip_000278",
         "name": "异世界失格",
-        "name_short": "异世界失格",
         "year": 2024,
         "season": 7
     },
     "ip_000279": {
         "id": "ip_000279",
         "name": "双生恋情密不可分",
-        "name_short": "双生恋情密不可分",
         "year": 2024,
         "season": 7
     },
     "ip_000280": {
         "id": "ip_000280",
         "name": "转生成为了只有乙女游戏破灭Flag的邪恶大小姐",
-        "name_short": "转生成为了只有乙女游戏破灭Flag的邪恶大小姐",
         "year": 2020,
         "season": 4
     },
     "ip_000281": {
         "id": "ip_000281",
         "name": "我的妻子没有感情",
-        "name_short": "我的妻子没有感情",
         "year": 2024,
         "season": 7
     },
     "ip_000282": {
         "id": "ip_000282",
         "name": "黄昏光影",
-        "name_short": "黄昏光影",
         "year": 2024,
         "season": 7
     },
     "ip_000283": {
         "id": "ip_000283",
         "name": "神之塔",
-        "name_short": "神之塔",
         "year": 2020,
         "season": 4
     },
     "ip_000284": {
         "id": "ip_000284",
         "name": "妖精的尾巴",
-        "name_short": "妖精的尾巴",
         "year": 2009,
         "season": 10
     },
     "ip_000285": {
         "id": "ip_000285",
         "name": "青之箱",
-        "name_short": "青之箱",
         "year": 2024,
         "season": 10
     },
     "ip_000286": {
         "id": "ip_000286",
         "name": "胆大党",
-        "name_short": "胆大党",
         "year": 2024,
         "season": 10
     },
     "ip_000287": {
         "id": "ip_000287",
         "name": "缘结甘神家",
-        "name_short": "缘结甘神家",
         "year": 2024,
         "season": 10
     },
     "ip_000288": {
         "id": "ip_000288",
         "name": "噗妮露是可爱史莱姆",
-        "name_short": "噗妮露是可爱史莱姆",
         "year": 2024,
         "season": 10
     },
     "ip_000289": {
         "id": "ip_000289",
         "name": "魔王2099",
-        "name_short": "魔王2099",
         "year": 2024,
         "season": 10
     },
     "ip_000290": {
         "id": "ip_000290",
         "name": "常轨脱离Creative",
-        "name_short": "常轨脱离Creative",
         "year": 2024,
         "season": 10
     },
     "ip_000291": {
         "id": "ip_000291",
         "name": "听说你们要结婚！？",
-        "name_short": "听说你们要结婚！？",
         "year": 2024,
         "season": 10
     },
     "ip_000292": {
         "id": "ip_000292",
         "name": "成为名垂青史的恶役千金吧",
-        "name_short": "成为名垂青史的恶役千金吧",
         "year": 2024,
         "season": 10
     },
     "ip_000293": {
         "id": "ip_000293",
         "name": "妻子变成小学生。",
-        "name_short": "妻子变成小学生。",
         "year": 2024,
         "season": 10
     },
     "ip_000294": {
         "id": "ip_000294",
         "name": "乱马½",
-        "name_short": "乱马½",
         "year": 1989,
         "season": 4
     },
     "ip_000295": {
         "id": "ip_000295",
         "name": "女仆冥土小姐。",
-        "name_short": "女仆冥土小姐。",
         "year": 2024,
         "season": 10
     },
     "ip_000296": {
         "id": "ip_000296",
         "name": "重启人生的千金小姐正在攻略龙帝陛下",
-        "name_short": "重启人生的千金小姐正在攻略龙帝陛下",
         "year": 2024,
         "season": 10
     },
     "ip_000297": {
         "id": "ip_000297",
         "name": "平凡职业成就世界最强",
-        "name_short": "平凡职业成就世界最强",
         "year": 2019,
         "season": 7
     },
     "ip_000298": {
         "id": "ip_000298",
         "name": "悲喜渔生",
-        "name_short": "悲喜渔生",
         "year": 2024,
         "season": 10
     },
     "ip_000299": {
         "id": "ip_000299",
         "name": "Acro Trip 顶尖恶路",
-        "name_short": "Acro Trip 顶尖恶路",
         "year": 2024,
         "season": 10
     },
     "ip_000300": {
         "id": "ip_000300",
         "name": "魔法光源股份有限公司",
-        "name_short": "魔法光源股份有限公司",
         "year": 2024,
         "season": 10
     },
     "ip_000301": {
         "id": "ip_000301",
         "name": "地。-关于地球的运动-",
-        "name_short": "地。-关于地球的运动-",
         "year": 2024,
         "season": 10
     },
     "ip_000302": {
         "id": "ip_000302",
         "name": "精灵幻想记",
-        "name_short": "精灵幻想记",
         "year": 2021,
         "season": 7
     },
     "ip_000303": {
         "id": "ip_000303",
         "name": "鸭乃桥论的禁忌推理",
-        "name_short": "鸭乃桥论的禁忌推理",
         "year": 2023,
         "season": 10
     },
     "ip_000304": {
         "id": "ip_000304",
         "name": "再见龙生，你好人生",
-        "name_short": "再见龙生，你好人生",
         "year": 2024,
         "season": 10
     },
     "ip_000305": {
         "id": "ip_000305",
         "name": "青之壬生浪",
-        "name_short": "青之壬生浪",
         "year": 2024,
         "season": 10
     },
     "ip_000306": {
         "id": "ip_000306",
         "name": "叹气的亡灵想隐退",
-        "name_short": "叹气的亡灵想隐退",
         "year": 2024,
         "season": 10
     },
     "ip_000307": {
         "id": "ip_000307",
         "name": "机械手臂",
-        "name_short": "机械手臂",
         "year": 2024,
         "season": 10
     },
     "ip_000308": {
         "id": "ip_000308",
         "name": "孤单一人的异世界攻略",
-        "name_short": "孤单一人的异世界攻略",
         "year": 2024,
         "season": 10
     },
     "ip_000309": {
         "id": "ip_000309",
         "name": "香格里拉边境～粪作猎人向神作游戏发起挑战～",
-        "name_short": "香格里拉边境～粪作猎人向神作游戏发起挑战～",
         "year": 2023,
         "season": 10
     },
     "ip_000310": {
         "id": "ip_000310",
         "name": "喂！蜻蜓",
-        "name_short": "喂！蜻蜓",
         "year": 2024,
         "season": 4
     },
     "ip_000311": {
         "id": "ip_000311",
         "name": "BEASTARS",
-        "name_short": "BEASTARS",
         "year": 2019,
         "season": 10
     },
     "ip_000312": {
         "id": "ip_000312",
         "name": "去参加联谊，却发现完全没有女生在场",
-        "name_short": "去参加联谊，却发现完全没有女生在场",
         "year": 2024,
         "season": 10
     },
     "ip_000313": {
         "id": "ip_000313",
         "name": "僵尸百分百～变成僵尸之前想做的100件事～",
-        "name_short": "僵尸百分百～变成僵尸之前想做的100件事～",
         "year": 2023,
         "season": 7
     },
     "ip_000314": {
         "id": "ip_000314",
         "name": "斩服少女",
-        "name_short": "斩服少女",
         "year": 2013,
         "season": 10
     },
     "ip_000315": {
         "id": "ip_000315",
         "name": "和山田谈场Lv999的恋爱",
-        "name_short": "和山田谈场Lv999的恋爱",
         "year": 2023,
         "season": 4
     },
     "ip_000316": {
         "id": "ip_000316",
         "name": "Kanon",
-        "name_short": "Kanon",
         "year": 2002,
         "season": 1
     },
     "ip_000317": {
         "id": "ip_000317",
         "name": "式守同学不只可爱而已",
-        "name_short": "式守同学不只可爱而已",
         "year": 2022,
         "season": 4
     },
     "ip_000318": {
         "id": "ip_000318",
         "name": "未来日记",
-        "name_short": "未来日记",
         "year": 2011,
         "season": 10
     },
     "ip_000319": {
         "id": "ip_000319",
         "name": "星之梦",
-        "name_short": "星之梦",
         "year": 2016,
         "season": 7
     },
     "ip_000320": {
         "id": "ip_000320",
         "name": "古见同学有交流障碍症",
-        "name_short": "古见同学有交流障碍症",
         "year": 2021,
         "season": 10
     },
     "ip_000321": {
         "id": "ip_000321",
         "name": "蔷薇少女",
-        "name_short": "蔷薇少女",
         "year": 2004,
         "season": 10
     },
     "ip_000322": {
         "id": "ip_000322",
         "name": "少女终末旅行",
-        "name_short": "少女终末旅行",
         "year": 2017,
         "season": 10
     },
     "ip_000323": {
         "id": "ip_000323",
         "name": "GOSICK",
-        "name_short": "GOSICK",
         "year": 2011,
         "season": 1
     }

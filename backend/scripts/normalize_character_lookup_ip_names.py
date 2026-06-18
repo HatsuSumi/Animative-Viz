@@ -169,7 +169,6 @@ def apply_rename_plan(ip_data: dict, rename_plan: dict[str, str]) -> dict:
 
     for ip_id, page_series in rename_plan.items():
         updated_ip_data[ip_id]['name'] = page_series
-        updated_ip_data[ip_id]['name_short'] = page_series
 
     return updated_ip_data
 
