@@ -20,8 +20,7 @@ class CharacterInfo(TypedDict, total=False):
     id: Optional[str]
     rank: Optional[int]
     name_en: str
-    cv: str
+    cv: list[str]
     ip_id: Optional[str]
     ip_year: Optional[int]
     ip_season: Optional[str]
-

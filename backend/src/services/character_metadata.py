@@ -146,6 +146,18 @@ def build_votes_response(result: VotesByRoundsResult) -> dict[str, Any]:
     }
 
 
+def _normalize_cv(cv_value: Any) -> list[str]:
+    if isinstance(cv_value, list):
+        normalized_cv = [str(item).strip() for item in cv_value if str(item).strip()]
+        return normalized_cv
+
+    if isinstance(cv_value, str):
+        normalized_value = cv_value.strip()
+        return [normalized_value] if normalized_value else []
+
+    return []
+
+
 def build_characters_info_response(
     characters_info: list[CharacterInfo],
     season: Optional[str] = None,
@@ -169,7 +181,7 @@ def build_characters_info_response(
         if character_meta:
             char_info['avatar'] = character_meta.get('avatar') or char_info.get('avatar', '')
             char_info['name_en'] = character_meta.get('name_en', '')
-            char_info['cv'] = character_meta.get('cv', '')
+            char_info['cv'] = _normalize_cv(character_meta.get('cv'))
 
         if ip_meta:
             char_info['ip_id'] = ip_meta.get('id')
