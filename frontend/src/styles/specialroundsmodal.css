@@ -16,7 +16,7 @@
   background: white;
   padding: 2rem;
   border-radius: 12px;
-  min-width: 400px;
+  min-width: 440px;
   max-width: 90%;
   max-height: 90vh;
   overflow-y: auto;
@@ -27,9 +27,16 @@
 
 .special-modal-title {
   font-size: 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   color: #2d3748;
   font-weight: 600;
+  text-align: center;
+}
+
+.special-modal-description {
+  margin: 0 0 1.5rem;
+  color: #4a5568;
+  line-height: 1.7;
   text-align: center;
 }
 
@@ -42,7 +49,8 @@
 
 .special-round-label {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 0.4rem;
   padding: 1rem;
   border-radius: 8px;
   cursor: pointer;
@@ -70,9 +78,37 @@
   transition: color 0.2s ease;
 }
 
+.special-round-label small {
+  color: #718096;
+  line-height: 1.5;
+}
+
 .special-round-label span.selected {
   color: #2d3748;
   font-weight: 500;
+}
+
+.special-round-label.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.special-round-label.disabled:hover {
+  border-color: #e2e8f0;
+}
+
+.special-modal-state {
+  padding: 1rem;
+  border-radius: 8px;
+  background: #edf2f7;
+  color: #2d3748;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.special-modal-error {
+  background: #fff5f5;
+  color: #c53030;
 }
 
 .special-modal-buttons {
@@ -94,7 +130,12 @@
   transition: all 0.2s ease;
 }
 
-.special-confirm-button:hover {
+.special-confirm-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.special-confirm-button:hover:not(:disabled) {
   background-color: #3182ce;
   transform: translateY(-1px);
   box-shadow: 0 4px 6px rgba(66, 153, 225, 0.1);

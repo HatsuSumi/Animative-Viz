@@ -1,17 +1,26 @@
-from typing import TypedDict, cast
+from typing import Literal, TypedDict, cast
 
 from .seasons import NON_VOTE_COLUMNS, SEASONS_CONFIG
 
+SpecialVoteTag = Literal['wildcard', 'ranking']
 
-class EliminatedCharacter(TypedDict):
+
+class CharacterRef(TypedDict):
     character: str
     series: str
 
 
+class SpecialVoteCell(CharacterRef):
+    tags: list[SpecialVoteTag]
+
+
 class SeasonConfig(TypedDict, total=False):
     vote_columns: list[str]
-    eliminated_characters: dict[str, list[EliminatedCharacter]]
-    wildcard_rounds: list[str]
+    eliminated_characters: dict[str, list[CharacterRef]]
+    special_vote_cells: dict[str, list[SpecialVoteCell]]
+
+
+SpecialVoteCellCounts = dict[SpecialVoteTag, int]
 
 
 def _get_season_config(season: str) -> SeasonConfig:
@@ -21,36 +30,29 @@ def _get_season_config(season: str) -> SeasonConfig:
 
 
 def get_season_rounds(season: str) -> list[str]:
-    """
-    获取指定赛季的投票轮次
-
-    :param season: 赛季，如 "2023"
-    :return: 投票轮次列表
-    :raises: KeyError 如果赛季不存在
-    """
     season_config = _get_season_config(season)
     return season_config['vote_columns']
 
 
-def get_eliminated_characters(season: str, round_name: str) -> list[EliminatedCharacter]:
-    """
-    获取指定轮次淘汰的角色列表
-
-    :param season: 赛季，如 "2023"
-    :param round_name: 轮次名称
-    :return: 淘汰角色列表，每个角色包含 character 和 series
-    """
+def get_eliminated_characters(season: str, round_name: str) -> list[CharacterRef]:
     season_config = _get_season_config(season)
-    return season_config.get("eliminated_characters", {}).get(round_name, [])
+    return season_config.get('eliminated_characters', {}).get(round_name, [])
 
 
-def get_wildcard_rounds(season: str) -> list[str]:
-    """
-    获取指定赛季的外卡赛轮次
-
-    :param season: 赛季，如 "2023"
-    :return: 外卡赛轮次列表
-    :raises: KeyError 如果赛季不存在
-    """
+def get_special_vote_cells(season: str) -> dict[str, list[SpecialVoteCell]]:
     season_config = _get_season_config(season)
-    return season_config.get("wildcard_rounds", [])
+    return season_config.get('special_vote_cells', {})
+
+
+def get_special_vote_cell_counts(season: str) -> SpecialVoteCellCounts:
+    counts: SpecialVoteCellCounts = {
+        'wildcard': 0,
+        'ranking': 0,
+    }
+
+    for cells in get_special_vote_cells(season).values():
+        for cell in cells:
+            for tag in cell.get('tags', []):
+                counts[tag] += 1
+
+    return counts

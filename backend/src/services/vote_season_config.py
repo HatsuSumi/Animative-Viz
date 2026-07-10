@@ -5,21 +5,29 @@ from typing import Optional
 import pandas as pd
 
 from config.seasons_rounds import (
-    EliminatedCharacter,
+    CharacterRef,
     NON_VOTE_COLUMNS,
+    SpecialVoteCell,
     get_eliminated_characters,
     get_season_rounds,
-    get_wildcard_rounds,
+    get_special_vote_cell_counts,
+    get_special_vote_cells,
 )
 
 from ..logger import logger
 
 
 class VoteSeasonConfig:
-    def __init__(self, season: str, vote_columns: list[str], wildcard_rounds: list[str]):
+    def __init__(
+        self,
+        season: str,
+        vote_columns: list[str],
+        special_vote_cells: dict[str, list[SpecialVoteCell]],
+    ):
         self.season = season
         self.vote_columns = vote_columns
-        self.wildcard_rounds = wildcard_rounds
+        self.special_vote_cells = special_vote_cells
+        self.special_vote_cell_counts = get_special_vote_cell_counts(season)
 
     @classmethod
     def from_csv(cls, data: pd.DataFrame, csv_path: str, original_filename: Optional[str] = None) -> 'VoteSeasonConfig':
@@ -28,7 +36,7 @@ class VoteSeasonConfig:
         logger.debug(f"加载赛季: {season}")
 
         expected_vote_columns = get_season_rounds(season)
-        wildcard_rounds = get_wildcard_rounds(season)
+        special_vote_cells = get_special_vote_cells(season)
         csv_vote_columns = [col for col in data.columns if col not in NON_VOTE_COLUMNS]
 
         missing_columns = [col for col in expected_vote_columns if col not in csv_vote_columns]
@@ -43,7 +51,7 @@ class VoteSeasonConfig:
         return cls(
             season=season,
             vote_columns=expected_vote_columns,
-            wildcard_rounds=wildcard_rounds,
+            special_vote_cells=special_vote_cells,
         )
 
     @staticmethod
@@ -54,6 +62,5 @@ class VoteSeasonConfig:
             raise ValueError(f"无法从文件名识别赛季: {filename}")
         return season_match.group(1)
 
-    def get_eliminated_characters(self, round_name: str) -> list[EliminatedCharacter]:
+    def get_eliminated_characters(self, round_name: str) -> list[CharacterRef]:
         return get_eliminated_characters(self.season, round_name)
-

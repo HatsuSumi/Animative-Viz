@@ -60,6 +60,8 @@
 - 里程碑事件展示
 - 最终黄前久美子夺冠的完整历程
 
+**[世萌2025赛季角色累计票数统计之初音未来夺冠纪录片](https://www.bilibili.com/video/BV1QadFBdEpY/)**
+
 ## 项目简介
 
 专门用于展示角色投票比赛的过程，支持多轮投票数据的动态展示和细粒度的数据过滤。
@@ -76,8 +78,8 @@
    - 配置化设计，无需修改代码（但需要配置）
 
 2. **数据处理**
-   - 支持排除外卡赛数据
-   - 支持排除已淘汰角色的排位赛数据
+   - 支持排除外卡赛特殊票单元格
+   - 支持排除排位赛特殊票单元格
    - 支持自定义列的排除
    - 智能数据验证和错误处理
 
@@ -160,6 +162,7 @@ backend/
 │   ├── seasons/
 │   │   ├── __init__.py                # 聚合各赛季配置
 │   │   ├── season_2023.py             # 2023 赛季独立配置
+│   │   ├── season_2025.py             # 2025 赛季独立配置
 │   │   └── shared.py                  # 非投票列等共享常量
 │   ├── __init__.py                    # 配置导出入口
 │   ├── seasons_rounds.py              # 赛季配置访问层与类型定义
@@ -168,7 +171,8 @@ backend/
 │   ├── contexts/                      # context_id 到数据文件路径的持久化映射
 │   ├── 2023_season.csv
 │   ├── 2023_season.xlsx
-│   └── 2024_season.csv
+│   ├── 2025_season.csv
+│   └── 2025_season.xlsx
 ├── logs/
 │   ├── animative_viz.log
 │   └── app.log
@@ -249,9 +253,9 @@ backend/
    - 检查赛季配置是否存在
 
 3. **数据过滤**（根据用户选择）
-   - 轮次级别过滤（外卡赛）
-   - 单元格级别过滤（排位赛中已淘汰角色）
    - 自定义列排除
+   - 特殊票单元格过滤（外卡赛 / 排位赛）
+   - 特殊票过滤只会清空命中的角色单元格，不会默认整轮删除数据
 
 4. **数据处理**
    - 计算累计票数
@@ -310,7 +314,9 @@ backend/
   - 返回：
     - `season`: 当前赛季
     - `vote_rounds`: 投票轮次列表
-    - `wildcard_rounds`: 外卡轮次列表
+    - `special_vote_cell_counts`: 特殊票单元格数量统计，形如 `{ wildcard, ranking }`
+    - `has_wildcard_votes`: 当前赛季是否配置了外卡票单元格
+    - `has_ranking_votes`: 当前赛季是否配置了排位票单元格
 
 - `GET /api/v1/characters-info`
   - 功能：获取角色详细信息
@@ -367,7 +373,7 @@ backend/
 
 **`frontend/src/components/ExcludeSpecialRoundsModal.js`**
 - 特殊轮次过滤弹窗
-- 控制外卡赛过滤与排位赛淘汰角色过滤
+- 控制外卡赛与排位赛的特殊票单元格过滤
 
 **`frontend/src/components/FileUploader.js`**
 - 文件导入组件
@@ -450,7 +456,7 @@ backend/
 
 **`backend/src/vote_tracker.py`**
 - 投票数据处理核心
-- 负责读取 CSV、校验列、过滤轮次、处理淘汰角色、输出投票数据结构
+- 负责读取 CSV、校验列、按单元格过滤特殊票、输出投票数据结构
 
 **`backend/src/services/file_storage.py`**
 - 上传文件存储服务
@@ -466,7 +472,7 @@ backend/
 
 **`backend/src/services/vote_season_config.py`**
 - 赛季配置解析服务
-- 负责从文件名识别赛季、校验 CSV 投票列并提供外卡轮次与淘汰角色配置
+- 负责从文件名识别赛季、校验 CSV 投票列并提供特殊票单元格配置
 
 **`backend/src/utils/vote_parsing.py`**
 - 投票值解析工具
@@ -484,7 +490,7 @@ backend/
 
 **`backend/config/seasons/season_2023.py`**
 - 单个赛季配置模块
-- 当前 2023 赛季的轮次、外卡赛、淘汰角色都定义在这里
+- 当前 2023 赛季的轮次、特殊票单元格、淘汰角色都定义在这里
 
 **`backend/config/seasons/shared.py`**
 - 共享配置
@@ -492,7 +498,7 @@ backend/
 
 **`backend/config/seasons_rounds.py`**
 - 赛季配置访问层
-- 对外提供 `get_season_rounds`、`get_wildcard_rounds`、`get_eliminated_characters`
+- 对外提供 `get_season_rounds`、`get_special_vote_cells`、`get_special_vote_cell_counts`、`get_eliminated_characters`
 - 同时承载赛季配置相关类型定义
 
 **`backend/config/settings.py`**
@@ -545,7 +551,7 @@ python -m venv venv
 ### Excel 转换工具使用
 ```powershell
 # 自动生成同名 CSV
-.\backend\venv\Scripts\python.exe excel_to_csv.py "backend\data\2023_season.xlsx"
+.\backend\venv\Scripts\python.exe .\excel_to_csv.py "backend\data\2023_season.xlsx"
 
 # 指定 CSV 输出路径
 .\backend\venv\Scripts\python.exe excel_to_csv.py "backend\data\2023_season.xlsx" "backend\data\2023_season.csv"
@@ -566,8 +572,8 @@ python -m venv venv
 | 赛制特性 | 是否必需 | 说明 |
 |---------|---------|------|
 | 投票轮次（vote_columns） | ✅ **必需** | 定义赛季的所有投票轮次 |
-| 外卡赛（wildcard_rounds） | ❌ 可选 | 用于排除外卡赛数据功能 |
-| 排位赛/淘汰规则（eliminated_characters） | ❌ 可选 | 用于排除已淘汰角色功能 |
+| 特殊票单元格（special_vote_cells） | ❌ 可选 | 用于按单元格排除外卡赛 / 排位赛票数 |
+| 淘汰角色记录（eliminated_characters） | ❌ 可选 | 用于统计每轮参与人数等衍生信息 |
 | 里程碑事件（milestones） | ❌ 可选 | 用于显示重要事件和记录 |
 | 颜色方案（colors） | ❌ 可选 | 自定义赛季配色，不配置则使用默认 |
 
@@ -593,9 +599,20 @@ SEASON_CONFIG = {
         '半决赛',
         '决赛'
     ],
-    'wildcard_rounds': [
-        '复活赛'
-    ],
+    'special_vote_cells': {
+        '小组赛B组': [
+            {
+                'character': '角色名',
+                'series': '作品名',
+                'tags': ['wildcard']
+            },
+            {
+                'character': '另一名角色',
+                'series': '另一部作品',
+                'tags': ['ranking']
+            }
+        ]
+    },
     'eliminated_characters': {
         '小组赛B组': [
             {'character': '角色名', 'series': '作品名'}
@@ -814,30 +831,49 @@ cd backend
 
 **示例1：简单三轮赛制**
 ```python
-"2025": {
-    "vote_columns": ["初赛", "复赛", "决赛"]
+SEASON_ID = '2025'
+
+SEASON_CONFIG = {
+    'vote_columns': ['初赛', '复赛', '决赛']
 }
 ```
 
 **示例2：复杂多阶段赛制**
 ```python
-"2026": {
-    "vote_columns": [
-        "资格赛第一轮", "资格赛第二轮",
-        "正赛A组第一场", "正赛A组第二场", "正赛A组第三场",
-        "正赛B组第一场", "正赛B组第二场", "正赛B组第三场",
-        "季后赛第一轮", "季后赛第二轮", "季后赛第三轮",
-        "总决赛"
+SEASON_ID = '2026'
+
+SEASON_CONFIG = {
+    'vote_columns': [
+        '资格赛第一轮', '资格赛第二轮',
+        '正赛A组第一场', '正赛A组第二场', '正赛A组第三场',
+        '正赛B组第一场', '正赛B组第二场', '正赛B组第三场',
+        '季后赛第一轮', '季后赛第二轮', '季后赛第三轮',
+        '总决赛'
     ],
-    "wildcard_rounds": ["复活赛"],
-    "eliminated_characters": { ... }
+    'special_vote_cells': {
+        '季后赛第一轮': [
+            {
+                'character': '角色A',
+                'series': '作品A',
+                'tags': ['wildcard']
+            },
+            {
+                'character': '角色B',
+                'series': '作品B',
+                'tags': ['ranking']
+            }
+        ]
+    },
+    'eliminated_characters': {}
 }
 ```
 
 **示例3：单轮投票（最简单）**
 ```python
-"2027": {
-    "vote_columns": ["总决选"]
+SEASON_ID = '2027'
+
+SEASON_CONFIG = {
+    'vote_columns': ['总决选']
 }
 ```
 

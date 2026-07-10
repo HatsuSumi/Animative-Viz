@@ -79,6 +79,14 @@ function requireStringField(data, fieldName, endpoint) {
   return data[fieldName];
 }
 
+function requireBooleanField(data, fieldName, endpoint) {
+  if (typeof data[fieldName] !== 'boolean') {
+    throw new Error(`${endpoint} 缺少布尔字段: ${fieldName}`);
+  }
+
+  return data[fieldName];
+}
+
 function requireContextId(contextId) {
   if (!contextId) {
     throw new Error('缺少数据上下文，请重新导入文件');
@@ -144,7 +152,7 @@ export async function getCurrentSeason(contextId) {
 
 /**
  * 获取当前赛季配置契约
- * @returns {Promise<{season: string, vote_rounds: string[], wildcard_rounds: string[]}>} 当前赛季契约
+ * @returns {Promise<{season: string, vote_rounds: string[], special_vote_cell_counts: Object, has_wildcard_votes: boolean, has_ranking_votes: boolean}>} 当前赛季契约
  */
 export async function getSeasonConfig(contextId) {
   try {
@@ -155,7 +163,9 @@ export async function getSeasonConfig(contextId) {
     const responseData = requireObjectResponse(response.data, '/season-config');
     requireStringField(responseData, 'season', '/season-config');
     requireArrayField(responseData, 'vote_rounds', '/season-config');
-    requireArrayField(responseData, 'wildcard_rounds', '/season-config');
+    requireObjectField(responseData, 'special_vote_cell_counts', '/season-config');
+    requireBooleanField(responseData, 'has_wildcard_votes', '/season-config');
+    requireBooleanField(responseData, 'has_ranking_votes', '/season-config');
     return responseData;
   } catch (error) {
     console.error('获取赛季配置失败:', error);
@@ -202,7 +212,12 @@ export async function getCumulativeVotesPageData({ contextId, excludedColumns = 
 
     const responseData = requireObjectResponse(response.data, '/pages/cumulative-votes');
     requireStringField(responseData, 'season', '/pages/cumulative-votes');
-    requireObjectField(responseData, 'season_config', '/pages/cumulative-votes');
+    const seasonConfig = requireObjectField(responseData, 'season_config', '/pages/cumulative-votes');
+    requireStringField(seasonConfig, 'season', '/pages/cumulative-votes.season_config');
+    requireArrayField(seasonConfig, 'vote_rounds', '/pages/cumulative-votes.season_config');
+    requireObjectField(seasonConfig, 'special_vote_cell_counts', '/pages/cumulative-votes.season_config');
+    requireBooleanField(seasonConfig, 'has_wildcard_votes', '/pages/cumulative-votes.season_config');
+    requireBooleanField(seasonConfig, 'has_ranking_votes', '/pages/cumulative-votes.season_config');
     requireArrayField(responseData, 'characters_info', '/pages/cumulative-votes');
     requireObjectField(responseData, 'votes_by_rounds', '/pages/cumulative-votes');
     requireObjectField(responseData, 'final_ranks', '/pages/cumulative-votes');

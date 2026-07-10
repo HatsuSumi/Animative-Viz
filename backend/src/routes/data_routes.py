@@ -66,18 +66,27 @@ def _require_context_id(context_id: Optional[str]) -> str:
     return context_id
 
 
+def _build_season_contract(vote_tracker) -> dict[str, object]:
+    if not vote_tracker.season:
+        raise ApiError(400, 'DATA_NOT_INITIALIZED', '请先导入数据文件')
+    if vote_tracker.season_config is None:
+        raise ApiError(400, 'DATA_NOT_INITIALIZED', '赛季配置未初始化')
+
+    special_vote_cell_counts = vote_tracker.season_config.special_vote_cell_counts
+    return {
+        'season': vote_tracker.season,
+        'vote_rounds': vote_tracker.get_vote_rounds(),
+        'special_vote_cell_counts': special_vote_cell_counts,
+        'has_wildcard_votes': special_vote_cell_counts['wildcard'] > 0,
+        'has_ranking_votes': special_vote_cell_counts['ranking'] > 0,
+    }
+
+
 @router.post(f"{settings.API_V1_STR}/import-vote-data")
 def import_vote_data(
     file: UploadFile = File(...),
     original_path: str = Form(...)
 ) -> dict[str, object]:
-    """
-    导入投票数据并初始化上下文
-
-    :param file: 导入的文件
-    :param original_path: 原始文件路径
-    :return: 导入结果信息
-    """
     try:
         return handle_import_vote_data(file, original_path)
     except HTTPException as error:
@@ -89,7 +98,6 @@ def import_vote_data(
 
 @router.post(f"{settings.API_V1_STR}/votes-by-rounds")
 def get_votes_by_rounds(request: VoteRoundsRequest) -> dict[str, object]:
-    """获取每轮投票数据"""
     try:
         context_id = _require_context_id(request.context_id)
         vote_tracker = _get_initialized_vote_tracker(context_id)
@@ -97,7 +105,7 @@ def get_votes_by_rounds(request: VoteRoundsRequest) -> dict[str, object]:
         result = vote_tracker.get_votes_by_rounds(
             excluded_columns=request.excluded_columns,
             exclude_wildcard=request.exclude_wildcard,
-            exclude_ranking=request.exclude_ranking
+            exclude_ranking=request.exclude_ranking,
         )
 
         return build_votes_response(result)
@@ -111,7 +119,6 @@ def get_votes_by_rounds(request: VoteRoundsRequest) -> dict[str, object]:
 
 @router.get(f"{settings.API_V1_STR}/vote-rounds")
 def get_vote_rounds(context_id: Optional[str] = None) -> dict[str, list[str]]:
-    """获取投票轮次列表"""
     try:
         required_context_id = _require_context_id(context_id)
         vote_tracker = _get_initialized_vote_tracker(required_context_id)
@@ -129,18 +136,10 @@ def get_vote_rounds(context_id: Optional[str] = None) -> dict[str, list[str]]:
 
 @router.get(f"{settings.API_V1_STR}/season-config")
 def get_season_config(context_id: Optional[str] = None) -> dict[str, object]:
-    """获取当前赛季配置契约"""
     try:
         required_context_id = _require_context_id(context_id)
         vote_tracker = _get_initialized_vote_tracker(required_context_id)
-        if not vote_tracker.season:
-            raise ApiError(400, 'DATA_NOT_INITIALIZED', '请先导入数据文件')
-
-        return {
-            'season': vote_tracker.season,
-            'vote_rounds': vote_tracker.get_vote_rounds(),
-            'wildcard_rounds': vote_tracker.wildcard_rounds,
-        }
+        return _build_season_contract(vote_tracker)
 
     except HTTPException as error:
         _rethrow_http_error(error)
@@ -151,7 +150,6 @@ def get_season_config(context_id: Optional[str] = None) -> dict[str, object]:
 
 @router.get(f"{settings.API_V1_STR}/current-season")
 def get_current_season(context_id: Optional[str] = None) -> dict[str, str]:
-    """获取当前赛季"""
     try:
         required_context_id = _require_context_id(context_id)
         vote_tracker = _get_initialized_vote_tracker(required_context_id)
@@ -171,7 +169,6 @@ def get_current_season(context_id: Optional[str] = None) -> dict[str, str]:
 
 @router.get(f"{settings.API_V1_STR}/characters-info")
 def get_characters_info(context_id: Optional[str] = None) -> list[dict[str, object]]:
-    """获取角色信息"""
     try:
         required_context_id = _require_context_id(context_id)
         vote_tracker = _get_initialized_vote_tracker(required_context_id)
@@ -191,7 +188,6 @@ def get_characters_info(context_id: Optional[str] = None) -> list[dict[str, obje
 
 @router.post(f"{settings.API_V1_STR}/pages/cumulative-votes")
 def get_cumulative_votes_page_data(request: CumulativeVotesPageRequest) -> dict[str, object]:
-    """获取累计票数页面初始化数据"""
     try:
         context_id = _require_context_id(request.context_id)
         vote_tracker = _get_initialized_vote_tracker(context_id)
@@ -199,7 +195,7 @@ def get_cumulative_votes_page_data(request: CumulativeVotesPageRequest) -> dict[
         votes_result = vote_tracker.get_votes_by_rounds(
             excluded_columns=request.excluded_columns,
             exclude_wildcard=request.exclude_wildcard,
-            exclude_ranking=request.exclude_ranking
+            exclude_ranking=request.exclude_ranking,
         )
         votes_response = build_votes_response(votes_result)
 
@@ -219,11 +215,7 @@ def get_cumulative_votes_page_data(request: CumulativeVotesPageRequest) -> dict[
 
         return {
             'season': vote_tracker.season,
-            'season_config': {
-                'season': vote_tracker.season,
-                'vote_rounds': vote_tracker.get_vote_rounds(),
-                'wildcard_rounds': vote_tracker.wildcard_rounds,
-            },
+            'season_config': _build_season_contract(vote_tracker),
             'characters_info': characters_response,
             'votes_by_rounds': votes_response,
             'final_ranks': final_ranks,
@@ -234,4 +226,3 @@ def get_cumulative_votes_page_data(request: CumulativeVotesPageRequest) -> dict[
     except Exception as error:
         logger.error(f"获取累计票数页面初始化数据失败: {str(error)}")
         raise ApiError(500, 'GET_CUMULATIVE_VOTES_PAGE_FAILED', '获取累计票数页面初始化数据失败') from error
-

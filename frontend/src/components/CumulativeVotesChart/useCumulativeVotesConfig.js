@@ -47,8 +47,8 @@ function getValidatedSeasonConfig(currentSeason, seasonContract) {
     throw new Error(`后端赛季契约缺少 vote_rounds: ${currentSeason}`);
   }
 
-  if (!Array.isArray(seasonContract.wildcard_rounds)) {
-    throw new Error(`后端赛季契约缺少 wildcard_rounds: ${currentSeason}`);
+  if (!seasonContract.special_vote_cell_counts || typeof seasonContract.special_vote_cell_counts !== 'object') {
+    throw new Error(`后端赛季契约缺少 special_vote_cell_counts: ${currentSeason}`);
   }
 
   seasonContract.vote_rounds.forEach((roundName) => {
@@ -70,12 +70,6 @@ function getValidatedSeasonConfig(currentSeason, seasonContract) {
   Object.keys(currentSeasonConfig.roundDetailsByName).forEach((roundName) => {
     if (!seasonContract.vote_rounds.includes(roundName)) {
       throw new Error(`前端存在后端未声明的轮次展示配置: ${currentSeason} / ${roundName}`);
-    }
-  });
-
-  seasonContract.wildcard_rounds.forEach((roundName) => {
-    if (!seasonContract.vote_rounds.includes(roundName)) {
-      throw new Error(`后端外卡轮次未包含在赛季轮次中: ${currentSeason} / ${roundName}`);
     }
   });
 
@@ -133,4 +127,3 @@ export function useCumulativeVotesConfig({
     getChartTextY
   };
 }
-

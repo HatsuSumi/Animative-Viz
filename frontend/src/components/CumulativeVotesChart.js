@@ -83,7 +83,6 @@ const CumulativeVotesChart = ({
     svgSelection.selectAll('*').remove();
   }, []);
 
-  // 绘制图表的主函数
   const drawChart = useCallback(() => {
     if (!svgRef.current || processedData.length === 0) return;
 
@@ -126,7 +125,6 @@ const CumulativeVotesChart = ({
     voteRounds
   ]);
 
-  // 使用 useEffect 管理动画生命周期
   useEffect(() => {
     if (processedData && processedData.length > 0) {
       clearAnimationTimeouts();
@@ -163,7 +161,9 @@ CumulativeVotesChart.propTypes = {
   seasonContract: PropTypes.shape({
     season: PropTypes.string.isRequired,
     vote_rounds: PropTypes.arrayOf(PropTypes.string).isRequired,
-    wildcard_rounds: PropTypes.arrayOf(PropTypes.string).isRequired
+    special_vote_cell_counts: PropTypes.object.isRequired,
+    has_wildcard_votes: PropTypes.bool.isRequired,
+    has_ranking_votes: PropTypes.bool.isRequired
   }).isRequired,
   charactersInfo: PropTypes.arrayOf(PropTypes.shape({
     character: PropTypes.string.isRequired,

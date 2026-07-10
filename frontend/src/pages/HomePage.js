@@ -8,6 +8,30 @@ import ExcludeSpecialRoundsModal from '../components/ExcludeSpecialRoundsModal';
 import RecordVideoModal from '../components/RecordVideoModal';
 import '../styles/global.css';
 
+function buildCumulativeVotesSearchParams({
+  contextId,
+  excludedColumns = [],
+  excludeWildcard = false,
+  excludeRanking = false,
+}) {
+  const searchParams = new URLSearchParams();
+
+  if (contextId) {
+    searchParams.set('context_id', contextId);
+  }
+
+  excludedColumns.forEach((column) => {
+    if (column) {
+      searchParams.append('excluded_columns', column);
+    }
+  });
+
+  searchParams.set('exclude_wildcard', String(Boolean(excludeWildcard)));
+  searchParams.set('exclude_ranking', String(Boolean(excludeRanking)));
+
+  return searchParams.toString();
+}
+
 const FLOW_STEP = {
   IDLE: 'idle',
   CONFIRM_EXCLUSION: 'confirm-exclusion',
@@ -112,18 +136,16 @@ const HomePage = () => {
     excludeRanking
   } = flowState;
 
-  const navigateToCumulativeVotesPage = useCallback((filterOptions, shouldRecordValue) => {
+  const navigateToCumulativeVotesPage = useCallback((filterOptions) => {
     const requestOptions = {
       contextId,
       ...filterOptions
     };
+    const search = buildCumulativeVotesSearchParams(requestOptions);
 
-    navigate('/cumulative-votes', { 
-      state: {
-        contextId,
-        filterOptions: requestOptions,
-        shouldRecord: shouldRecordValue
-      }
+    navigate({
+      pathname: '/cumulative-votes',
+      search: search ? `?${search}` : ''
     });
   }, [contextId, navigate]);
 
@@ -138,7 +160,7 @@ const HomePage = () => {
       dispatch({ type: 'OPEN_COLUMN_SELECTION' });
     } else {
       try {
-        navigateToCumulativeVotesPage({}, false);
+        navigateToCumulativeVotesPage({});
       } catch (error) {
         setError(error.message || '获取数据失败，请重试');
       }
@@ -192,8 +214,8 @@ const HomePage = () => {
         excludeWildcard,
         excludeRanking
       };
-      
-      navigateToCumulativeVotesPage(filterOptions, shouldRecord);
+
+      navigateToCumulativeVotesPage(filterOptions);
     } catch (error) {
       console.error('Error navigating to chart:', error);
     }
@@ -209,50 +231,51 @@ const HomePage = () => {
 
   return (
     <div className="home-page">
-        <>
-          <motion.h1 
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
-          >
-            动态数据可视化工具
-          </motion.h1>
+      <>
+        <motion.h1
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, type: 'spring', stiffness: 100 }}
+        >
+          动态数据可视化工具
+        </motion.h1>
 
-          {error && (
-            <div className="error-message">
-              {error}
-            </div>
-          )}
+        {error && (
+          <div className="error-message">
+            {error}
+          </div>
+        )}
 
-          <FileUploader onUploadSuccess={handleUploadSuccess} />
+        <FileUploader onUploadSuccess={handleUploadSuccess} />
 
-          <ConfirmationModal
+        <ConfirmationModal
           isOpen={step === FLOW_STEP.CONFIRM_EXCLUSION}
-            onConfirmAction={() => handleColumnExclusionDecision(true)}
-            onCancelAction={() => handleColumnExclusionDecision(false)}
-          />
+          onConfirmAction={() => handleColumnExclusionDecision(true)}
+          onCancelAction={() => handleColumnExclusionDecision(false)}
+        />
 
-          <ColumnExclusionModal
+        <ColumnExclusionModal
           contextId={contextId}
           show={step === FLOW_STEP.SELECT_COLUMNS}
-            initialSelectedColumns={selectedColumns}
-            onClose={handleColumnExclusionCancel}
-            onConfirm={handleColumnSelectionConfirm}
-          />
+          initialSelectedColumns={selectedColumns}
+          onClose={handleColumnExclusionCancel}
+          onConfirm={handleColumnSelectionConfirm}
+        />
 
-          <ExcludeSpecialRoundsModal 
+        <ExcludeSpecialRoundsModal
           show={step === FLOW_STEP.SELECT_SPECIAL_ROUNDS}
-            onHide={handleSpecialRoundsHide}  
-            onCancel={handleSpecialRoundsCancel}  
-            onConfirm={handleSpecialRoundsConfirm}
-          />
+          contextId={contextId}
+          onHide={handleSpecialRoundsHide}
+          onCancel={handleSpecialRoundsCancel}
+          onConfirm={handleSpecialRoundsConfirm}
+        />
 
-          <RecordVideoModal
+        <RecordVideoModal
           show={step === FLOW_STEP.SELECT_RECORDING}
-            onCancel={handleRecordCancel}
-            onConfirm={handleRecordConfirm}
-          />
-        </>
+          onCancel={handleRecordCancel}
+          onConfirm={handleRecordConfirm}
+        />
+      </>
     </div>
   );
 };

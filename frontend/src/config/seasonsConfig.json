@@ -424,7 +424,7 @@
         {
           "id": "remaining",
           "type": "remaining",
-          "template": "剩余角色数：{actualParticipatingCount}"
+          "template": "未淘汰角色数：{actualParticipatingCount}"
         }
       ],
       "roundDetailsByName": {
@@ -601,7 +601,7 @@
         {
           "id": "remaining",
           "type": "remaining",
-          "template": "剩余角色数：{actualParticipatingCount}"
+          "template": "未淘汰角色数：{actualParticipatingCount}"
         }
       ],
       "roundDetailsByName": {

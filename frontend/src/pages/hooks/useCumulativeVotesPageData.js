@@ -1,14 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { getCumulativeVotesPageData } from '../../services/api';
 
-function requireLocationState(locationState) {
-  if (!locationState || typeof locationState !== 'object') {
-    throw new Error('缺少页面初始化参数，请返回首页重新导入文件');
-  }
-
-  return locationState;
-}
-
 function requireVotesByRoundsResponse(votesResponse) {
   if (!votesResponse || typeof votesResponse !== 'object') {
     throw new Error('累计票数数据缺失');
@@ -29,30 +21,43 @@ function requireVotesByRoundsResponse(votesResponse) {
   return votesResponse;
 }
 
+function parseBooleanParam(value, fallback = false) {
+  if (typeof value !== 'string' || value.length === 0) {
+    return fallback;
+  }
+
+  return value === 'true';
+}
+
+function getFilterOptionsFromLocation(location) {
+  const searchParams = new URLSearchParams(location.search || '');
+  const contextId = searchParams.get('context_id');
+
+  return {
+    contextId,
+    excludedColumns: searchParams.getAll('excluded_columns').filter(Boolean),
+    excludeWildcard: parseBooleanParam(searchParams.get('exclude_wildcard')),
+    excludeRanking: parseBooleanParam(searchParams.get('exclude_ranking')),
+  };
+}
+
 export function useCumulativeVotesPageData({
   location,
   setCurrentRoundIndex,
   setNextRoundProgress
 }) {
-  const locationState = useMemo(() => requireLocationState(location.state), [location.state]);
   const mountedRef = useRef(false);
+  const filterOptions = useMemo(() => getFilterOptionsFromLocation(location), [location]);
 
-  const [votesData, setVotesData] = useState(locationState.votesData);
-  const [voteRounds, setVoteRounds] = useState(locationState.voteRounds);
-  const [participatingCounts, setParticipatingCounts] = useState(locationState.participatingCounts);
+  const [votesData, setVotesData] = useState([]);
+  const [voteRounds, setVoteRounds] = useState([]);
+  const [participatingCounts, setParticipatingCounts] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [charactersInfo, setCharactersInfo] = useState([]);
   const [currentSeason, setCurrentSeason] = useState(null);
   const [seasonContract, setSeasonContract] = useState(null);
   const [finalRanks, setFinalRanks] = useState(null);
-
-  const filterOptions = useMemo(() => ({
-    contextId: locationState.filterOptions?.contextId || locationState.contextId || null,
-    excludedColumns: locationState.filterOptions?.excludedColumns || [],
-    excludeWildcard: locationState.filterOptions?.excludeWildcard || false,
-    excludeRanking: locationState.filterOptions?.excludeRanking || false
-  }), [locationState]);
 
   const hasContextId = Boolean(filterOptions.contextId);
 
@@ -68,7 +73,7 @@ export function useCumulativeVotesPageData({
         setError(null);
 
         if (!hasContextId) {
-          throw new Error('缺少数据上下文，请返回首页重新上传文件');
+          throw new Error('缺少数据上下文，请返回首页重新导入文件，或使用带 context_id 的图表页链接');
         }
 
         const pageData = await getCumulativeVotesPageData(filterOptions);
@@ -105,4 +110,3 @@ export function useCumulativeVotesPageData({
     finalRanks
   };
 }
-

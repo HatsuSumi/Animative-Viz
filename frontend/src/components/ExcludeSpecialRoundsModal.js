@@ -1,11 +1,50 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
+import { getSeasonConfig } from '../services/api';
 import '../styles/specialroundsmodal.css';
 
-const ExcludeSpecialRoundsModal = ({ show, onHide, onCancel, onConfirm }) => {
+const ExcludeSpecialRoundsModal = ({ show, contextId, onHide, onCancel, onConfirm }) => {
   const [excludeWildcard, setExcludeWildcard] = useState(false);
   const [excludeRanking, setExcludeRanking] = useState(false);
+  const [seasonConfig, setSeasonConfig] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (!show || !contextId) {
+      return;
+    }
+
+    let isMounted = true;
+
+    const fetchSeasonConfig = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const config = await getSeasonConfig(contextId);
+        if (!isMounted) {
+          return;
+        }
+        setSeasonConfig(config);
+      } catch (fetchError) {
+        if (!isMounted) {
+          return;
+        }
+        setError(fetchError.message || '获取赛季配置失败，请重试');
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchSeasonConfig();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [contextId, show]);
 
   const handleConfirm = () => {
     onConfirm({
@@ -14,6 +53,11 @@ const ExcludeSpecialRoundsModal = ({ show, onHide, onCancel, onConfirm }) => {
     });
     onHide();
   };
+
+  const wildcardCount = seasonConfig?.special_vote_cell_counts?.wildcard || 0;
+  const rankingCount = seasonConfig?.special_vote_cell_counts?.ranking || 0;
+  const hasWildcardVotes = Boolean(seasonConfig?.has_wildcard_votes);
+  const hasRankingVotes = Boolean(seasonConfig?.has_ranking_votes);
 
   return createPortal(
     <AnimatePresence>
@@ -33,7 +77,7 @@ const ExcludeSpecialRoundsModal = ({ show, onHide, onCancel, onConfirm }) => {
               opacity: 1, 
               y: 0,
               transition: {
-                type: "spring",
+                type: 'spring',
                 stiffness: 300,
                 damping: 25
               }
@@ -60,70 +104,84 @@ const ExcludeSpecialRoundsModal = ({ show, onHide, onCancel, onConfirm }) => {
                 }
               }}
             >
-              排除特殊轮次得票数
+              配置特殊票过滤
             </motion.h3>
-            
-            <div className="special-selection-grid">
-              <motion.label 
-                className="special-round-label"
-                initial={{ x: -20, opacity: 0 }}
-                animate={{ 
-                  x: 0, 
-                  opacity: 1,
-                  transition: {
-                    delay: 0.2,
-                    duration: 0.3
-                  }
-                }}
-                whileHover={{ 
-                  backgroundColor: 'rgba(0,0,0,0.05)',
-                  scale: 1.02,
-                  transition: {
-                    duration: 0.2
-                  }
-                }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <input
-                  type="checkbox"
-                  checked={excludeWildcard}
-                  onChange={(e) => setExcludeWildcard(e.target.checked)}
-                />
-                <span className={excludeWildcard ? 'selected' : ''}>
-                  排除外卡赛得票数
-                </span>
-              </motion.label>
 
-              <motion.label 
-                className="special-round-label"
-                initial={{ x: -20, opacity: 0 }}
-                animate={{ 
-                  x: 0, 
-                  opacity: 1,
-                  transition: {
-                    delay: 0.3,
-                    duration: 0.3
-                  }
-                }}
-                whileHover={{ 
-                  backgroundColor: 'rgba(0,0,0,0.05)',
-                  scale: 1.02,
-                  transition: {
-                    duration: 0.2
-                  }
-                }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <input
-                  type="checkbox"
-                  checked={excludeRanking}
-                  onChange={(e) => setExcludeRanking(e.target.checked)}
-                />
-                <span className={excludeRanking ? 'selected' : ''}>
-                  排除排位赛得票数
-                </span>
-              </motion.label>
-            </div>
+            <p className="special-modal-description">
+              特殊票过滤会按赛季配置自动处理对应角色在对应轮次的票数，不会默认整轮删除数据。
+            </p>
+
+            {loading ? (
+              <div className="special-modal-state">正在加载赛季配置...</div>
+            ) : error ? (
+              <div className="special-modal-state special-modal-error">{error}</div>
+            ) : (
+              <div className="special-selection-grid">
+                <motion.label 
+                  className={`special-round-label ${!hasWildcardVotes ? 'disabled' : ''}`}
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ 
+                    x: 0, 
+                    opacity: 1,
+                    transition: {
+                      delay: 0.2,
+                      duration: 0.3
+                    }
+                  }}
+                  whileHover={hasWildcardVotes ? { 
+                    backgroundColor: 'rgba(0,0,0,0.05)',
+                    scale: 1.02,
+                    transition: {
+                      duration: 0.2
+                    }
+                  } : undefined}
+                  whileTap={hasWildcardVotes ? { scale: 0.98 } : undefined}
+                >
+                  <input
+                    type="checkbox"
+                    checked={excludeWildcard}
+                    disabled={!hasWildcardVotes}
+                    onChange={(e) => setExcludeWildcard(e.target.checked)}
+                  />
+                  <span className={excludeWildcard ? 'selected' : ''}>
+                    排除外卡赛得票
+                  </span>
+                  <small>{hasWildcardVotes ? `当前赛季已配置 ${wildcardCount} 个外卡票单元格` : '当前赛季未配置外卡票'}</small>
+                </motion.label>
+
+                <motion.label 
+                  className={`special-round-label ${!hasRankingVotes ? 'disabled' : ''}`}
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ 
+                    x: 0, 
+                    opacity: 1,
+                    transition: {
+                      delay: 0.3,
+                      duration: 0.3
+                    }
+                  }}
+                  whileHover={hasRankingVotes ? { 
+                    backgroundColor: 'rgba(0,0,0,0.05)',
+                    scale: 1.02,
+                    transition: {
+                      duration: 0.2
+                    }
+                  } : undefined}
+                  whileTap={hasRankingVotes ? { scale: 0.98 } : undefined}
+                >
+                  <input
+                    type="checkbox"
+                    checked={excludeRanking}
+                    disabled={!hasRankingVotes}
+                    onChange={(e) => setExcludeRanking(e.target.checked)}
+                  />
+                  <span className={excludeRanking ? 'selected' : ''}>
+                    排除排位赛得票
+                  </span>
+                  <small>{hasRankingVotes ? `当前赛季已配置 ${rankingCount} 个排位票单元格` : '当前赛季未配置排位票'}</small>
+                </motion.label>
+              </div>
+            )}
             
             <motion.div 
               className="special-modal-buttons"
@@ -151,11 +209,12 @@ const ExcludeSpecialRoundsModal = ({ show, onHide, onCancel, onConfirm }) => {
               <motion.button 
                 className="special-confirm-button"
                 onClick={handleConfirm}
+                disabled={loading || Boolean(error)}
                 whileHover={{ 
-                  scale: 1.05,
-                  backgroundColor: '#4299e1'
+                  scale: loading || error ? 1 : 1.05,
+                  backgroundColor: loading || error ? '#4299e1' : '#3182ce'
                 }}
-                whileTap={{ scale: 0.95 }}
+                whileTap={{ scale: loading || error ? 1 : 0.95 }}
               >
                 确认
               </motion.button>
